@@ -7,7 +7,9 @@ Title
 -----
 A simple title should be provided to explain what the module is going to cover. Where possible, the technical "glossary" term for the information being provided. This allows the chapter to essentially function as a reference guide--when a student is struggling with the concept of rendering a template, it should be intuitive to click on "Template Rendering" to find the information they are looking for.
 STYLE:
-`<h1>Title</h1>`
+```
+<h1>Title</h1>
+```
 
 Objectives
 ----------
