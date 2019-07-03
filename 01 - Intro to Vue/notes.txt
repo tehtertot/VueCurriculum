@@ -1,0 +1,12 @@
+- where/how to include MVVM?
+- explain components
+- one vs. two way binding
+- policy types?
+- directives
+
+
+QUESTIONS
+- demo *all* the ways to install it?
+- how much to go into webpack? devtools?
+
+

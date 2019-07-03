@@ -1,0 +1,53 @@
+<h1>Our First Vue Application</h1>
+<h2>Objectives:</h2>
+<ul>
+    <li>Get started using Vue</li>
+    <li>Learn about the Vue class</li>
+</ul>
+<hr>
+<p>One of the nice things about Vue is how lightweight it is compared to other front-end frameworks. While we can spin up a server to host our web application, we can also just import it into our HTML file directly (much like adding the jQuery library to our HTML file).</p>
+<p>Let's get started by creating a folder called hello_vue and add one new HTML file to it. Along with the standard head elements, add the following:</p>
+<!-- mention "mustache" name -->
+<!-- https://vuejs.org/v2/guide/syntax.html -->
+<h4>hello_vue/index.html</h4>
+<pre data-language="html">
+    &lt;head&gt;
+        &lt;!-- other meta tags --&gt;
+        &lt;script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"&gt;&lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;div id="app"&gt;
+            Hello, {{ message }}
+        &lt;/div&gt;
+    &lt;/body&gt;
+</pre>
+<p>If you open this page in your browser, you'll just see: Hello, {{ message }}. In Vue (and in many templating engines), the double curly brackets indicate a variable. In our case, because we haven't defined any variables, it is simply rendered literally.</p>
+<p>Let's go ahead and turn this into a Vue application! Create a file called <code>index.js</code> in the same folder. With the import statement added in the head tags, one of the things we now have access to is to a function called Vue, which takes an object as an argument. There are several different keys we can include in this object, but to start, we'll just focus on a few:</p>
+<ul>
+    <li><b>el</b> - a <em>string</em>e of the id of the element in scope, preceded by a # (same format as an id in css)</li>
+    <li><b>data</b> - an <em>object</em> defining any variables being used, where the keys are the variable names</li>
+</ul>
+<h4>hello_vue/index.js</h4>
+<pre data-language="javascript">
+var app = new Vue({
+    el: "#app",
+    data: {
+        message: "Vue!"
+    }
+})
+</pre>
+<p>That's a lot of curly braces, so take a second to break it down and understand the pieces. In the first line, we're creating <em>a new Vue instance</em> and passing in 1 argument. That argument is an object with 2 key-value pairs. The first key, <code>el</code>, indicates this instance is applicable to the HTML element with the id of "app". The second key, <code>data</code>, is an object that has one key-value pair. Since we used the variable name "message" in our HTML (remember the double curly braces?), we use that same name as the key in our data object.</p>
+<p>Before we see this code in action, we'll need to link to this javascript file in our HTML.</p>
+<h4>hello_vue/index.html</h4>
+<pre data-language="html">
+    &lt;!-- previous html... --&gt;
+    &lt;body&gt;
+    &lt;div id="app"&gt;
+    Hello, {{ message }}
+    &lt;/div&gt;
+        &lt;!-- adding this line: --&gt;
+        &lt;script src="index.js"&gt;&lt;/script&gt;
+    &lt;/body&gt;
+</pre>
+<p>Why did we put it inside the body? We need to add it <em>after</em> we've imported the Vue framework, and also after we've defined the element we'll be applying the code to. Code is read from top to bottom, so go ahead and test that line in different places to see if you can get a couple of different errors! (Open your browser's console to see the errors.)</p>
+<!-- video showing without each of the pieces added, to explain why they are each necessary -->
