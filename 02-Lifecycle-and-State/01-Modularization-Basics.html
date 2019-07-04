@@ -1,0 +1,26 @@
+<h1>Modularization Basics</h1>
+<h2>Objectives:</h2>
+<ul>
+  <li>Understand why modularization is important.</li>
+  <li>Understand the basics of modularizing vue components.</li>
+</ul>
+<h3>A quick overview.</h3>
+<p>Modularization is an important concept for building Vue applications. In fact, it's what helps make Vue so powerful.
+  Before we dive into the details, let's take a step back and talk about modularization in general.</p>
+<p>Modularization is concept of breaking our code into separate files, or modules, so that our code becomes more
+  manageable and maintainable. There's actually nothing Vue specific about modularization. Modulariztaion is widely used
+  in programming in general to help manage codebases of all shapes and sizes. In fact, we've already used modularization
+  in the past. Remember when we took our CSS and put it into a file separate from our HTML files? That's modularization!
+</p>
+<h4>How does modularization make our code more maintainable?</h4>
+<p>Let's imagine a scenario where our app has started to gain traction, but we need to add more features to support our
+  growing user base. After a little while, our App.vue file has gone from 100 lines of code to 5000 lines of code. Now,
+  when we want to find a component, it might take minutes of searching before we can locate where it was defined. Once
+  we find it, we may need to cross-reference it with another component, so we have to search for minutes once again.
+  It's easy to see how this is unmanageable.</p>
+<p>Enter modularization. We'll split all our components into separate files. Each component will be exported from the
+  file where it's defined and imported into each file that relies on it. That way, it's easy to find everything just by
+  looking at our folder hierarchy.</p>
+<h3>Modularization in Vue</h3>
+<p>When we create a new Vue app using the Vue CLI, we can see that Vue is already beginning to start the modularization
+  process for us.</p>
