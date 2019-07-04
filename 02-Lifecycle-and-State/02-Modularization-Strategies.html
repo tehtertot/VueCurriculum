@@ -1,0 +1,36 @@
+<h1>Modularization Strategies</h1>
+<h2>Objectives:</h2>
+<ul>
+  <li>Understand some common modularization strategies.</li>
+  <li>Be able to make choices about component structure.</li>
+</ul>
+<h2>Reusability</h2>
+<p>When we talk about components and the benefits that Vue provides against other front-end solutions, one of the most
+  obvious advantages is reusability. Components can be created once and reused everywhere throughout the front-end.
+  While many front-end frameworks provide this advantage, consider the traditional alternative. For every page on our
+  website we need a separate HTML file. If we wanted to have a relatively complex page, we could end up with hundreds of
+  lines of HTML, CSS, and JavaScript. On top of that, if we want our pages to look consistent, we need to be really
+  careful about organizing our CSS so that it's reusable and adding classes to our HTML in a consistent way. If we want
+  ia page to have an element that looks just like an element on a different page, we have to copy and paste the code we
+  wrote. Worse, if we want to change a common element, we'll have to change it in all of our HTML files. This is no way
+  to work!</p>
+<p>With Vue, we can write our components in such a way that each component is responsible for its own functionality and
+  styling, and composing those smaller components into a larger page. That sounds easy in theory, but can be much more
+  difficult in practice. How do we figure out what should be a component and what shouldn't be? Often times, the answer
+  to this question is more art than science. Fortunately, Vue projects are easy to change as you go, and you'll learn a
+  ton by building apps and reorganizing them. <strong>Don't be afraid to mess things up and rewrite them!</strong></p>
+<h2>Making Component Decisions</h2>
+<p>There are many factors you'll likely be taking into account when you're deciding whether or not an element on your
+  page should be a its own component. Here, we'll give you a few pointers to get started as well as some examples to
+  provide additional clarity. Remember, if you don't know what your app will look like or how it will work, you're not
+  ready to write any code yet. Always start with at least a wireframe to inform your judgment before you start the
+  planning stage. That being said let's jump right in!</p>
+<p>Here are just a few reasons to create a new component:</p>
+<ul>
+  <li>The page element will be found on multiple pages, like a header bar.</li>
+  <li>The page element will have similar styling and functionality, like a button.</li>
+  <li>The page element will manage its own state, and consistently pass properties down to its children. We'll talk more
+    about this in later lessons.</li>
+</ul>
+<p>This is my no means an exhaustive list, but you'll start to get a feel for it in time, and soon enough you'll be
+  making your own tradeoffs. For now, let's look at how you might organize a few popular web pages into components.</p>
