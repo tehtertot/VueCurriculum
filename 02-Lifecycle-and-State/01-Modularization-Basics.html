@@ -4,7 +4,7 @@
   <li>Understand why modularization is important.</li>
   <li>Understand the basics of modularizing vue components.</li>
 </ul>
-<h3>A quick overview.</h3>
+<h3>A quick overview</h3>
 <p>Modularization is an important concept for building Vue applications. In fact, it's what helps make Vue so powerful.
   Before we dive into the details, let's take a step back and talk about modularization in general.</p>
 <p>Modularization is concept of breaking our code into separate files, or modules, so that our code becomes more
@@ -23,4 +23,48 @@
   looking at our folder hierarchy.</p>
 <h3>Modularization in Vue</h3>
 <p>When we create a new Vue app using the Vue CLI, we can see that Vue is already beginning to start the modularization
-  process for us.</p>
+  process for us. If we run <code>npm run serve</code>, we'll see that there's plenty of content available to our
+  browser, but where is it all coming from? Let's start by taking a look at the App.vue file.</p>
+<h4>src/App.vue</h4>
+<pre data-language="javascript">
+  <template>
+    <div id="app">
+      <img alt="Vue logo" src="./assets/logo.png">
+      <HelloWorld msg="Welcome to Your Vue.js App"/>
+    </div>
+  </template>
+  
+  <script>
+    import HelloWorld from './components/HelloWorld.vue'
+
+    export default {
+      name: 'app',
+      components: {
+        HelloWorld
+      }
+    }
+  </script>
+  
+  <style>
+  #app {
+    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
+    margin-top: 60px;
+  }
+  </style>  
+</pre>
+<p>Notice that the html template in this file is rendering the HelloWorld component. We don't just magically get access
+  to an html tag called HelloWorld, check out the javascript between the script tags. Notice that we're importing
+  HelloWorld from a file in the components folder. Now take a look at the export. App.vue is a component
+  <em>itself</em>, and it is registering HelloWorld as one of its child components.</p>
+<p>Moving forward we'll need to remember all three of these steps when we want to start modularizing our component
+  structure.</p>
+<ol>
+  <li>Import the component you'd like to use in your file.</li>
+  <li>Register the component under the `components` key.</li>
+  <li>Make sure the component you're trying to import is being correctly exported from its file.</li>
+</ol>
+<p>That's it! Next, we'll move on to strategies for modularizing Vue apps!</p>
