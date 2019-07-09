@@ -1,0 +1,61 @@
+<h1>Introduction to Directives</h1>
+<h2>Objectives:</h2>
+<ul>
+    <li>Learn what a directive is</li>
+    <li>See an example of a conditional directive</li>
+    <li>See an example of a list directive</li>
+</ul>
+<hr>
+<p>Data binding is pretty neat, but it may seem simple until we start integrating some of the other tools that make Vue much more interesting. One set of tools are <b>directives</b>, which are HTML attributes that give Vue specific direction when rendering the particular element to which they are assigned. These directive attribute names an be identified because they each begin with <code>v-</code>. Most of these directives expect an assigned value, which is expected to be an expression (or a variable). In this module, we're just going to learn about two of them.</p>
+<h2>Conditional Rendering</h2>
+<p>What if we have elements that we only want to display <em>if</em> they meet a certain condition? The <code>v-if</code> directive allows us to indicate whether an element should be displayed. Here's a code snippet:</p>
+<h4>hello_vue/index.html</h4>
+<pre data-language="html">
+    &lt;!-- add inside the "app" div --&gt;
+    &lt;p v-if="isNeat"&gt;Directives are neat&lt;/p&gt;
+</pre>
+<p>Based on this snippet, what do you think will happen? Go ahead and add it to your hello_vue index.html page. Hint: open your browser's console. What do you think we need to add to our JavaScript file? If you said we need to define the variable <code>isNeat</code>, you're absolutely correct!</p>
+<h4>hello_vue/index.js</h4>
+<pre data-language="javascript">
+    var app = new Vue({     // this is existing code from a few modules ago
+        el: "#app",
+        data: {
+            message: "Hello!",
+            isNeat: true   // added this line to define the variable we're using in the v-if directive!
+        }
+    })
+</pre>
+<p>Add that line to your code and refresh your browser. Set <code>isNeat</code> to false. What would you expect to happen?</p>
+<p>As you might hope and/or expect, this directive also comes with an <code>v-else-if</code> and <code>v-else</code> directive. Just as in any programming language, these statements cannot exist independently, but must always follow a <code>v-if</code>. For example:</p>
+<pre data-language="html">
+    &lt;p v-if="someValue &lt; 10"&gt;small number&lt;/p&gt;
+    &lt;p v-else-if="someValue &lt; 100"&gt;medium number&lt;/p&gt;
+    &lt;p v-else&gt;large number&lt;/p&gt;
+</pre>
+<p>What would we need to define in our app variable in our JavaScript file? How many of these p tags will ever display at a given time?</p>
+<h2>List Rendering</h2>
+<p>In our last assignment, we made a list of things to learn. In this assignment, we just hardcoded these values, but in real world applications, it's not realistic to hard code such a list. If we want to add something to our list, we have to re-write our HTML. Imagine if Facebook had to re-write your News Feed's HTML every time you or one of your friends posted a new post. Impossible! This is where being able to use a <em>loop</em> is really handy. We'll worry about where we save and retrieve such data later; right now, we're just going to learn how to move a list from being hardcoded to being dynamically generated.</p>
+<h4>hello_vue/index.html</h4>
+<pre data-language="html">
+    &lt;!-- add inside the "app" div --&gt;
+    &lt;div v-for="oneItem in allItems"&gt;
+        &lt;p&gt;{{ oneItem }}&lt;/p&gt;
+    &lt;/div&gt;
+</pre>
+<p>Which variable(s) do we need to define in our JavaScript file? Remember that in a <code>for</code> loop, the first variable (in the example above: <code>oneItem</code>) is being declared for the first time. The second variable (in the example above: <code>allItems</code>) needs to have been defined previously and should be something we can loop through. That means this is the variable we should add to our Vue instance's data object:</p>
+<h4>hello_vue/index.js</h4>
+<pre data-language="javascript">
+    var app = new Vue({     // this is existing code from a few modules ago
+        el: "#app",
+        data: {
+            message: "Hello!",
+            isNeat: true,   // added this earlier in this module
+            allItems: [
+                "apple",
+                "banana",
+                "kiwi"
+            ]
+        }
+    })
+</pre>
+<p>Ready to give this a try?</p>
