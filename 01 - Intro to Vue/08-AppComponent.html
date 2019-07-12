@@ -1,0 +1,59 @@
+<h1>The App Component</h1>
+<h2>Objectives:</h2>
+<ul>
+    <li>Understand the App.vue file</li>
+    <li>Understand how the App is actually rendered</li>
+</ul>
+<hr>
+<p>Next, let's take a look at the App.vue file. Notice that this is located outside the components folder. This is a special component where we can put everything together. Let's break down each section. The same three sections that we just learned about can be seen here, but there are a few important details to notice:</p>
+<h3>Template</h3>
+<p>Again, the template section is meant for the HTML. Let's take a closer look at this section of code in the App.vue file:</p>
+<pre data-language="html">
+    &lt;template&gt;
+        &lt;div id="app"&gt;
+            &lt;img alt="Vue logo" src="./assets/logo.png"&gt;
+            &lt;HelloWorld msg="Welcome to Your Vue.js App" /&gt;
+            &lt;Second msg="seco" /&gt;
+        &lt;/div&gt;
+    &lt;/template&gt;
+</pre>
+<p>In this example, the root component is the div element with id "app." The first element inside is simply an <code>img</code> element. The "./" of the source indicates that the file being referenced is located in the same folder as the current file.</p>
+<p>Notice the second element is an element with a tag name of "HelloWorld." Does this sound familiar? It's our HelloWorld component! Components are kind of like custom HTML elements. Remember the prop "msg" that was specified to be a String? Here's where we actually specify the value for that property.</p>
+<h3>Script</h3>
+<p>Now let's look at the script section:</p>
+<pre data-language="javascript">
+    import HelloWorld from './components/HelloWorld.vue'
+    
+    export default {
+        name: 'app',
+        components: {
+            HelloWorld
+        }
+    }
+</pre>
+<p>The first line is an import line. This is how the template section knows to retrieve the component from the HelloWorld.vue file whenever we use the <code>&lt;HelloWorld /&gt;</code> component in this component's template.</p>
+<p>Again, the export default section tells Vue compiler about this component so it can be built correctly.</p>
+<p>The <b>name</b> is how this component will be referenced.</p>
+<p>The <b>components</b> key is an object that contains any of the components referenced in this component. In this case, we are only including the HelloWorld component. Note: placing an object variable inside an object is shorthand in ES2015+. For example, in our case, the components section could actually be written like so:</p>
+<pre data-language="javascript">
+    components: {
+        HelloWorld: HelloWorld
+    }
+</pre>
+<h3>Style</h3>
+<p>Notice in this component, there is no scoped designation. This is where you can add any global CSS.</p>
+<h2>Rendering the Application</h2>
+<p>Even though there were slightly different things going on with this component, it's still really just another component. Let's take a quick look at the <b>main.js</b> file:</p>
+<h4>src/main.js</h4>
+<pre data-language="javascript">
+    import Vue from 'vue'
+    import App from './App.vue'
+    
+    Vue.config.productionTip = false
+    
+    new Vue({
+        render: h => h(App),
+    }).$mount('#app')        
+</pre>
+<p>For the forseeable future, we won't actually need to change anything in this file, but it's still good to understand what's here. This is a raw JavaScript file where we are importing the entire Vue module, as well as our main App component. Setting the productionTip to false simply prevents the following message from appearing in our terminal while we're developing locally: "Note that the development build is not optimized. To create a production build, run npm run build." Finally, we see that familiar instantiation of a Vue instance with <code>new Vue</code>. Because all the details are configured in the individual components, here we only need to explain which component to render. Because App is our main component, this is the one we'll render. Finally, with the <code>$mount</code> method, we're indicating which element in the literal DOM will be replaced with our App component.</p>
+<p>Where is that literal DOM, you ask? Take a few seconds to see if you can find it. In the public folder, you'll find the <code>index.html</code> file, which contains all the other necessary HTML for a fully functioning page. We won't actually make any changes to this file either--and now you know the meaning of a single-page application (SPA)! Even though this HTML page is practically bare, and the only one we'll have in our whole project, it is going to be updated and manipulated in many different ways for a very robust user experience.</p>

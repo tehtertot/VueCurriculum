@@ -44,6 +44,16 @@ Videos
 ------
 Videos should not contain any content that is not also provided in text. Rather, videos should be used to help students piece together the content already provided, by perhaps demonstrating how the code works together, and highlighting verbally the main takeaways for the module.
 
+Assignments
+-----------
+For assignments, break down the assignment into specific steps to help give structure and clarity. 
+```
+<ul>
+    <li></li>
+</ul>
+```
+If possible, and not necessarily for every assignment, add NINJA and SENSEI bonuses--these are targeted at those students who are ahead or are seeking more challenging work; sensei bonuses are even more difficult and are deliberately ambiguous to encourage students to stretch and be creative. With discretion, encourage students to challenge themselves with these bonsues, but help the beginner-level students focus on the core portion of the assignment and ensure they understand fundamentals before trying to accomplish more challenging tasks.
+
 Miscellaneous
 -------------
 For content/images to appear side-by-side, inline styling is required. Use divs to section the content, and set the divs to inline-block, vertical-align: top, with a total width of no more than 99%.

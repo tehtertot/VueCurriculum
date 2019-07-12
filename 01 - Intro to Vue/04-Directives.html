@@ -38,11 +38,21 @@
 <h4>hello_vue/index.html</h4>
 <pre data-language="html">
     &lt;!-- add inside the "app" div --&gt;
-    &lt;div v-for="oneItem in allItems"&gt;
+    &lt;div v-for="(oneItem, idx) in allItems" v-bind:key="idx"&gt;
         &lt;p&gt;{{ oneItem }}&lt;/p&gt;
     &lt;/div&gt;
 </pre>
-<p>Which variable(s) do we need to define in our JavaScript file? Remember that in a <code>for</code> loop, the first variable (in the example above: <code>oneItem</code>) is being declared for the first time. The second variable (in the example above: <code>allItems</code>) needs to have been defined previously and should be something we can loop through. That means this is the variable we should add to our Vue instance's data object:</p>
+<p>Which variable(s) do we need to define in our JavaScript file? While this syntax is very similar to a traditional JavaScript for loop, there are a couple of differences.</p>
+<ul>
+    <li>We don't use the <code>var</code> or <code>let</code> keywords to declare our first variable.</li>
+    <li>We can actually declare one or two variables for the iterator.</li>
+    <ul>
+        <li>If we use just one variable, it will represent each element in the list</li>
+        <li>If we add a second variable, it will represent the index position of the given element</li>
+    </ul>
+    <li>Whenever we ask Vue to create a collection of elements for us, it wants a way to uniquely identify each--that's why we've also added the <code>v-bind:key</code> attribute and assigned the value of the index iterator variable to it.</li>
+</ul>
+<p>The last variable in our for loop (in the example above: <code>allItems</code>) is the thing we want to iterate over. That means this is the variable we should add to our Vue instance's data object:</p>
 <h4>hello_vue/index.js</h4>
 <pre data-language="javascript">
     var app = new Vue({     // this is existing code from a few modules ago

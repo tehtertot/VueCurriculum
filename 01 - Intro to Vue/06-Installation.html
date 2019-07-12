@@ -1,0 +1,70 @@
+<h1>Installation and App Creation</h1>
+<h2>Objectives:</h2>
+<ul>
+    <li>Learn about Vue CLI</li>
+    <li>Create a new Vue application using the Vue CLI</li>
+</ul>
+<hr>
+<p>Now that you've experienced some of the basics of Vue, we're going to learn some of the developer tools that are available to us. We wanted you to see that, at the end of the day, the browser still only understands HTML, JavaScript, and CSS. As we learn these new tools, we'll be able to do things like:</p>
+<ul>
+    <li>have a more component-oriented mindset and write code accordingly,</li>
+    <li>easily add third-party packages (i.e. code written by others to enhance Vue's core capabilities),</li>
+    <li>run a server that compiles and auto-updates our code as we write</li>
+</ul>
+<p>That might seem abstract at first, so let's just dive in.</p>
+<h3>Installation Steps</h3>
+<p>CLI stands for command-line interface. The Vue CLI is a specific interface that will allow us to create and run Vue applications via the command line. These steps explain how to install this tool.</p>
+<ol>
+    <li>
+        <p>Check whether you have <b>node</b> installed by opening your command prompt or terminal and typing</p>
+        <pre>node -v</pre>
+        <p>If you see something like: <code>v10.15.0</code>, that tells you what version of Node you have installed.</p>
+        <p>If you have a version lower than 8.11 or got an error like "'node' is not recognized..." or "command not found," you'll need to update/install node:</p>
+        <ol>
+            <li>Go to <a href="https://nodejs.org/en/" target="_blank">https://nodejs.org/en/</a> and download the latest version (the one recommended for most users). Follow the prompts and accept all the defaults.</li>
+            <li>Once installation is complete, close any terminal or command prompt windows you have open and re-try step 1 to confirm it has been installed.</li>
+        </ol>
+    </li>
+    <li>
+        <p>Next, we'll install the Vue CLI by typing the following in the terminal:</p>
+        <pre>npm install -g @vue/cli</pre>
+        <p><code>npm install</code> tells our system we want Node's package manager (npm) to install a package</p>
+        <p><code>-g</code> indicates we want that package installed globally onto our local machine (this means we only need to run this whole command one time)</p>
+        <p><code>@vue/cli</code> tells npm which package we want to install</p>
+    </li>
+</ol>
+<h3>Creating a New Vue Application</h3>
+<p>Now, every time we want to create a new Vue application, rather than manually creating and writing the HTML, CSS, and JavaScript files, the Vue CLI will create that and more for us:</p>
+<ol>
+    <li><p>In the terminal, navigate to where the project should be saved.</p></li>
+    <li>
+        <p>Type:</p>
+        <pre>vue create my-new-app</pre>
+        <p>Where <code>my-new-app</code> should be replaced with whatever you want to call your new app. (Note: the name of your app cannot include any capital letters.)</p>
+    </li>
+    <li>
+        <p>When prompted to pick a preset, leave the arrow on <code>default (babel, eslint)</code> and hit enter. Once you feel more comfortable with Vue, you can start learning about the other options available.</p>
+        <ul>
+            <li><b>What is Babel?</b> Babel is a JavaScript compiler. As you'll see shortly, we'll be writing in more than just plain JavaScript, HTML, and CSS files, but that's the only thing our browser understands. Babel is the tool that will translate the Vue code we'll write into the languages understood by the browser.</li>
+            <li><b>What is ESLint?</b> ESLint is a linter tool. A linter tool is a tool that identifies bugs and pattern warnings and reports them to you as the developer (i.e. those squiggly lines in your code indicating something might be wrong). ESLint is one specifically written for JavaScript. When we select this option, we are actually adding a version of ESLint on our project that understands the patterns of Vue.</li>
+        </ul>
+    </li>
+    <li>
+        <p>Once the app has been created (it may take a few minutes. You'll know it's done when you see the familiar prompt showing what directory you are in.) Type <code>dir</code> or <code>ls</code> to confirm a new folder has been created with the name specified in step 2.</p>
+    </li>
+    <li>
+        <p>Navigate into the newly created folder and type</p>
+        <pre>npm run serve</pre>
+    </li>
+    <li>
+        <p>Once you see saying your project has been compiled and is running:</p>
+        <img src="images/06-runningVueServer.png" alt="" style="height: 150px;">
+        <p>Browse to <a href="http://localhost:8080" target="_blank">http://localhost:8080</a> in your browser.</p>
+    </li>
+    <li>
+        <p>Open the new folder in your text editor and take a look around. Can you find where the code displaying in your browser is coming from?</p>
+    </li>
+    <li>
+        <p>In the HelloWorld.vue file, make a change to some of the text and save the file. Without refreshing the browser, do you see the changes? This is one of the features of the CLI serve function--it automatically detects changes to the Vue files and rebuilds! This makes development that much easier--be sure to keep your eye on the terminal in case of errors.</p>
+    </li>
+</ol>

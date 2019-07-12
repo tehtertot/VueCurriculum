@@ -1,0 +1,12 @@
+<h1>The Data object</h1>
+<h2>Objectives:</h2>
+<ul>
+    <li>Understand the difference between props and data</li>
+    <li>Learn how to use the Vue data object</li>
+</ul>
+<hr>
+<p>If you recall our very first Vue assignment, we used a data object to contain the variable data we were using in our template. Now we've also learned about <b>props</b>. They both seem to be ways of storing data--so what's the difference?</p>
+<h3>Data vs. Props</h3>
+<p><b>Data</b> is the memory of each component that contains <em>variable</em> data. This information can be passed down to child components. When a piece of data is passed down to a child component, to the child component that datum is considered a <b>prop</b>.</p>
+<h3>Using the Data object</h3>
+<p>Now that we are building Vue using components, when we define <b>data</b>, it must be in the form of a function that returns the data object, rather than just an object. This is because objects are passed by reference, and so we may inadvertently make changes to that object as we pass it around to potentially multiple components. By wrapping the object in a function, we can avoid this.</p>
