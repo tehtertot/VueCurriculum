@@ -6,7 +6,71 @@
 </ul>
 <hr>
 <h2>What is routing?</h2>
-<p>Traditionally, as we navigate through a website, the URL found in the browser's address bar tells the site which part of the application we are currently viewing, or which action we are taking. Users can bookmark these URLs so they can get directly to a commonly visited section of the site, rather than having to navigate to it manually on every visit; the browser also uses these URLs to help manage a user's navigation history, thus allowing users to hit the back or forward buttons and navigate the site accordingly.</p>
-<p>Have you ever been to a site where you hit the back button and it took you much further back than you expected or wanted? That's a result of poor routing management, likely in combination with an implementation of a single-page application.</p>
+<p>Routing is the process of finding the correct path or resource given a URL. For example, visiting <em>www.codingdojo.com</em> takes me to a different place than <em>www.codingdojo.com/web-development-courses</em>. The base URL (eg. <em>www.codingdojo.com</em> or <em>localhost:8080</em>) resolves which server is being requested. Every part of the URL that comes after the base URL determines what the specific response from that server will be. This is what we'll be managing through routing.</p>
+<p>Routing is useful for many reasons. Users can bookmark these URLs so they can get directly to a commonly visited section of the site, rather than having to navigate to it manually on every visit; the browser also uses these URLs to help manage a user's navigation history, thus allowing users to hit the back or forward buttons and navigate the site accordingly.</p>
+<p>Have you ever been to a site where you hit the back button and it took you much further back than you expected or wanted? That's a result of poor routing management, likely in combination with an implementation of a single-page application (SPA). Because in a SPA, users aren't <em>actually</em> visiting new web pages, we have to manage the routes to simulate the expected experience.</p>
+<p>Before we get started, run one of your previous Vue applications and try typing an additional path into the URL (for example, localhost:8080/peaches). What do you expect to happen? What actually happened?</p>
 <h2>Vue Router</h2>
-<p>Because this is such a common and important task, even though it is not inherently built in to the Vue framework, the community has collaborated and developed a package called Vue Router that can help manage routing for us.</p>
+<p>While not inherently built in to the Vue framework, the official router for Vue is <b>Vue Router</b>. This is the tool that will help our application actually respond when we change the URL. Whenever we want to add routing to our application, we'll need to first install the package by running this command in our terminal, in the directory of our Vue application:</p>
+<pre>...vue-app$ npm install vue-router --save</pre>
+<p>The <code>--save</code> ensures this package gets added to our project's package.json file, which is the file that is helping us manage all the dependencies our application has.</p>
+<p>Next, in the spirit of modularity, we're going to create a folder and file for routing. In the src folder, as a neighbor to the components folder, create a folder called <em>router</em> with a file called <em>index.js</em>.</p>
+<h4>src/router/index.js</h4>
+<pre data-language="javascript">
+    import Vue from 'vue';
+    import VueRouter from 'vue-router';
+    
+    import HelloWorld from '../components/HelloWorld';
+    
+    Vue.use(VueRouter);    // explicitly install the router
+    
+    export default new VueRouter({
+        routes: [
+            {
+                path: '/', 
+                name: 'Home',
+                component: HelloWorld,
+            },
+        ]
+    })
+</pre>
+<p>In this snippet, we are explicitly telling Vue that we will be using VueRouter (<code>Vue.use(VueRouter)</code>). In the export section, <code>routes</code> will be an array of objects, with each object specifying a path, name, and component:</p>
+<ul>
+    <li><b>path</b> - the part of the URL after the base URL. Though most browsers slice off the trailing '/' visually, this is an important part of the path. A single '/' is often referred to as the <em>root route</em>.</li>
+    <li><b>name</b> - a name we provide for the given route.</li>
+    <li><b>component</b> - which component should be associated with the given route.</li>
+</ul>
+<p>Then, in the file where we are actually creating our Vue instance, we'll need to pass in the router we have just configured:</p>
+<h4>src/main.js</h4>
+<pre data-language="javascript">
+    import Vue from 'vue';
+    import App from './App.vue';
+    import router from './router';  // added this line
+    
+    Vue.config.productionTip = false
+    
+    new Vue({
+        render: h => h(App),
+        router,                     // added this line
+    }).$mount('#app')
+</pre>
+<p>Then in our App.vue, rather than hard-coding a specific component, we are going to replace the section that will change depending on route to use the <code>router-view</code> component instead. The <code>router-view</code> component will be replaced by whatever component is associated with the current URL, as specified in our configurations in the <em>router/index.js</em> file created earlier. Because we are no longer directly referencing specific components, we can also clean up the script section of our Vue file as well. (Note: if we wanted to keep some components across all routes, for example a header or footer component, we would keep those references in the script section.)</p>
+<h4>src/App.vue</h4>
+<pre data-language="html">
+    &lt;template&gt;
+        &lt;div id="app"&gt;
+        &lt;img alt="Vue logo" src="./assets/logo.png"&gt;
+            &lt;router-view /&gt;     &lt;!-- replaced hard-coded component with router-view --&gt;
+            &lt;/div&gt;
+            &lt;/template&gt;
+</pre>
+<pre data-language="javascript">
+    &lt;script&gt;
+        // removed references to other components not being used in template above
+        
+        export default {
+            name: 'app',
+        }
+    &lt;/script&gt;
+</pre>
+<p>With these changes in place, try running the application. Add an additional path to the URL as you did before. What happens this time? What else do you notice? If we put a route that doesn't match one of the routes specified in our router/index.js file, the section that would be showing the component is empty! You may have also noticed that the URL now always appears with a <code>/#/</code>. We'll take care of that later, but for now it's a sign that our router is working!</p>
