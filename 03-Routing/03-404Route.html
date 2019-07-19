@@ -1,0 +1,17 @@
+<h1>Catch All Route</h1>
+<h2>Objectives:</h2>
+<ul>
+    <li>Learn how to add a catch all route</li>
+</ul>
+<hr>
+<p>You may have noticed that if you request a URL that doesn't match any of the pre-determined routes, the <code>router-view</code> component doesn't get replaced and just sits empty. For a better user experience, we can add a catch-all route that displays a 404 page, which means the requested page was not found. To do so, we use the special character <code>*</code> in our path, which matches anything:</p>
+<h4>src/router/index.js</h4>
+<pre data-language="javascript">
+    // imports
+    // all other routes (removed for brevity)
+    {
+        path: '*',
+        component: NotFound     // assuming we've made a NotFound component
+    }
+</pre>
+<p>Again, remember that route order matters! The catch all route should always be last.</p>

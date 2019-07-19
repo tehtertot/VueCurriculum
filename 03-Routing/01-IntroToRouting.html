@@ -20,7 +20,7 @@
     import Vue from 'vue';
     import VueRouter from 'vue-router';
     
-    import HelloWorld from '../components/HelloWorld';
+    import MainMenu from '../components/MainMenu';  // assuming we've made such a component
     
     Vue.use(VueRouter);    // explicitly install the router
     
@@ -28,8 +28,7 @@
         routes: [
             {
                 path: '/', 
-                name: 'Home',
-                component: HelloWorld,
+                component: MainMenu
             },
         ]
     })
