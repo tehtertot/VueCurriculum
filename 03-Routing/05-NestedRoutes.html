@@ -1,0 +1,20 @@
+<h1>Nested Routes</h1>
+<h2>Objectives:</h2>
+<ul>
+    <li>Understand how to coordinate nested components with routes</li>
+</ul>
+<hr>
+<p>Just as components can be nested, routes can also be nested. While we don't necessarily need a route for every single nested component, designing with nested components and associated routes can help us design and organize our application in an intuitive and user-friendly way. Think back to the last assignment and consider the single restaurant page. Perhaps we want to have a component for the whole restaurant, but within that component want to switch between photos, reviews, and other information. Nested components make this relatively easy, and adding routing helps us keep track of what our user is doing and can provide a better navigated experience.</p>
+<p>To add child routes, we just need to add the key <code>children</code> to our route object, which will be an array of one or more route objects. Here's a visual example to help understand how these nested routes will work:</p>
+<div style="text-align: center;">
+    <img src="images/nestedRouting.gif" alt="">
+</div>
+<p>Notice that the child routes do not begin with a '/', as that is implied. Again, order matters, so do pay attention to what routes you are expecting to match!</p>
+<p>The last piece to remember is that for any component with child routes, the parent component should have a <code>router-view</code> component in its template wherever the child component should appear. For the example above, it might be something like this:</p>
+<h4>src/components/HomeComponent.vue</h4>
+<pre data-language="html">
+    &lt;div&gt;
+        &lt;p&gt;This is in the parent component&lt;/p&gt;
+        &lt;router-view&gt;&lt;/router-view&gt;
+    &lt;/div&gt;
+</pre>
