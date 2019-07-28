@@ -1,0 +1,76 @@
+<h1>Modularization Basics</h1>
+<h2>Objectives:</h2>
+<ul>
+  <li>Understand parent and child components and their relationship.</li>
+</ul>
+<h2>Parents vs Children</h2>
+<p>Now that we have a better idea for how we might make our modularization decisions, it's important to understand a common pattern in Vue. Often times, we have components that don't quite make sense in isolation, but instead make more sense when thought of in a more hierarchical relationship. Let's think back to the html box model for a moment. Often times, it makes sense to build a div that contains a logical group of content. Even more often, those divs are nested within other divs. This logical coupling doesn't go away with Vue, it just changes a bit, because now we have more control of how our content is coupled with our application's data.</p>
+<h4>A quick example</h4>
+<p>It's helpful to use an example to illustrate this point. Let's take a look at a simple example using Spotify's website as our guide.</p>
+<img src="./images/spotifyMenu.png" alt="Spotify Navigation Menu">
+<p>Let's first imagine that the entire menu itself is a component called NavMenu. Now let's break this into sub-components. Inside NavMenu, let's make a component for the "Premium", "Help", and "Download" section called NavLinkList. Now let's consider another component for "Sign up" and "Log In" called AuthLinkList. Finally, -LinkList can now be composed of multiple LinkListItem components.</p>
+<img src="./images/annotatedSpotifyMenu.png" alt="Annotated Spotify Navigation Menu">
+<p>Whew, who knew there could be so many components in such a simple interface? It may seem like overkill now, but these components can all be reused if we want to switch up the menu on different parts of the site! Notice how components are taking the place of our logical div hierarchy. But that's not all. Vue components have the ability to manage data, making them vastly more powerful and reusable. Let's take a look at how data might come into play here. But before you move on to the next section, try to imagine how data could be used to our advantage here.</p>
+<h4>Data</h4>
+<p>So far, we've explored enough to know that building components helps eliminate html, or markup, and allows us to build smaller pieces that are reusable, but reusability isn't just about not having to copy and paste html. If our components manage their own data, they can become truly reusable. Let's take a look at the LinkListItem component. If we make this component responsible for rendering an anchor tag (link) it hardly saves any code duplication. But, if we make it render an anchor tag that sets its hyperlink location and styling based on properties passed from its parent, now we can reuse this component endlessly. It doesn't need to know in advance how it will behave, we just need to specify that it should expect to behave like a link. This allows us to further reduce the amount of html and increase reusability. Let's see how the parent component might use LinkListItem to compose a list of links.</p>
+<h4>LinkListItem.vue</h4>
+<h5>template</h5>
+<pre data-language="html">
+  &lt;template&gt;
+    &lt;a :href="this.linkLocation"&gt;{{ this.linkName }}&lt;/a&gt;
+  &lt;/template&gt;
+</pre>
+<h5>script</h5>
+<pre data-language="javascript">
+  export default {
+    name: 'LinkListItem',
+    props: {
+      link: {
+        url: String,
+        name: String
+      }
+    }
+  }
+</pre>
+<h5>style</h5>
+<pre data-language="css">
+  a {
+    display: block;
+  }
+</pre>
+<h4>NavLinkList.vue</h4>
+<h5>template</h5>
+<pre data-language="html">
+  &lt;template&gt;
+    &lt;LinkListItem v-for="currLink in links" :link="currLink" :key="currLink.url" /&gt;
+  &lt;/template&gt;
+</pre>
+<h5>script</h5>
+<pre data-language="javascript">
+  import LinkListItem from '@/components/LinkListItem.vue'
+
+  export default {
+    name: 'NavLinkList',
+    components: {
+      LinkListItem
+    },
+    data: function() {
+      return {
+        links: [
+          {
+            name: 'other',
+            url: 'other.com'
+          },
+          {
+            name: 'example',
+            url: 'example.com'
+          },
+          {
+            name: 'codingdojo',
+            url: 'codingdojo.com'
+          },
+        ],
+      }
+    }
+  }
+</pre>
