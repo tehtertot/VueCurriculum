@@ -1,0 +1,33 @@
+<h1>Named Routes</h1>
+<h2>Objectives:</h2>
+<ul>
+    <li>Learn about named routes</li>
+    <li>Learn how to pass parameters with named routes</li>
+</ul>
+<hr>
+<p>Sometimes string interpolation or concatenation can get a bit messy, as path names can get rather lengthy. For convenience in routing, there is an additional option, <code>name</code>, we can add when declaring our routes:</p>
+<h4>src/router/index.js</h4>
+<pre data-language="javascript">
+    {
+        path: '',
+        component: Home,
+        name: 'home',   // added this; does not have to match the component name, but it sure helps!
+    }
+</pre>
+<p>Then, in our RouterLink component, rather than providing the literal path, we can specify the name:</p>
+<pre data-language="html">
+    &lt;router-link v-bind:to="{ name: 'home' }"&gt;Home&lt;/router-link&gt;
+</pre>
+<p>If we've got any additional parameters, we can pass an object specifying those value(s). Suppose, for example, we had a route like so:</p>
+<h4>src/router/index.js</h4>
+<pre data-language="javascript">
+    {
+        path: '/user/:id',
+        component: User,
+        name: 'user',
+    }
+</pre>
+<p>We would pass the value for <code>id</code> through the <code>params</code> key as an object, where the object's keys correspond to the variable names specified in the path.</p>
+<pre data-language="html">
+    &lt;router-link v-bind:to="{ name: 'user', params: { id: '42' } }"&gt;Link to Specific User Page&lt;/router-link&gt;
+</pre>

@@ -1,0 +1,22 @@
+<h1>Router Link</h1>
+<h2>Objectives:</h2>
+<ul>
+    <li>Learn how to add href links that use our app's routes</li>
+    <li>Learn about the router-link component</li>
+</ul>
+<hr>
+<p>Up to this point, we've had to manually type in the URL to navigate to different views. This is certainly not the ideal user experience, so VueRouter has a <b>RouterLink</b> component that allows us to add internal links. Of course, if needed, the regular <code>&lt;a&gt;</code> tag is available, but should be reserved for external links; but the RouterLink component is built to intercept the link to ensure the browser doesn't reload the page (which is important in a SPA). When we use the RouterLink component, we don't actually have to create the <code>&lt;a&gt;</code> tag--it will be created for us. When we implement this, be sure to inspect the element to see what actually gets rendered.</p>
+<p>To use the RouterLink component, we just need to put the clickable text between the opening and closing tags (just as we would with an anchor tag), and then use the <code>v-bind:to</code> prop to specify which route this link should be tied to. <b>When specifying the path, be sure to give the full path, starting with the first /</b>. In our last assignment, suppose we wanted to add a link to always be able to get back to the home screen (root route). In our template, we would just need to add this:</p>
+<pre data-language="html">
+    &lt;!-- somewhere in our .Vue template section --&gt;
+    &lt;router-link v-bind:to="{ path: '/' }"&gt;Home&lt;/router-link&gt;
+</pre>
+<p>Which vue file should we put this in? There's not necessarily a right answer to this, but to try to be as DRY (don't repeat yourself) as possible, if we put this line in our App.vue file, we only have to write it once, and now it's available on every page! (Hopefully this is helping you to see the value of thinking in components!)</p>
+<p>If we need to include variables in the path, we can use string concatenation or interpolation. Again, make sure you've got that leading /:</p>
+<pre data-language="html">
+    &lt;!-- with string concatenation --&gt;
+    &lt;router-link v-bind:to="{ path: '/' + variableNameHere }"&gt;Some Section&lt;/router-link&gt;
+
+    &lt;!-- with string interpolation (notice the back tick characters) --&gt;
+    &lt;router-link v-bind:to="{ path: `/${variableNameHere}` }"&gt;Some Section&lt;/router-link&gt;
+</pre>

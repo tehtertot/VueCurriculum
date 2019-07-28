@@ -1,0 +1,38 @@
+<h1>Passing Props to Route Components</h1>
+<h2>Objectives:</h2>
+<ul>
+    <li>Learn how to move route parameters to props</li>
+    <li>Understand why this is desirable</li>
+</ul>
+<hr>
+<p>It is a little cumbersome to always refer to the route via <code>$route.params</code>. From a programmming standpoint, it is also tightly coupled, which, as a rule, is something we try to avoid where possible. To be tightly coupled means that this component will only be available when the route specifies a value and directs to the component. By moving the value to the component's props, we now have the flexibilty of using this component as described above, or using it by passing a prop value to it via other means.</p>
+<p>VueRouter actually abstracts much of this away from us, so the process is quite simple. In the route, we just need to set the <code>props</code> option to <code>true</code>:</p>
+<h4>src/router/index.js</h4>
+<pre data-language="javascript">
+    {
+        path: '/user/:id',
+        component: User,
+        name: 'user',
+        props: true         // added this line
+    }
+</pre>
+<p>Now, in the component where we previously had something like this in our template -- <code>{{ $route.params.id }}</code> -- we can specify the props using the variable name we specified in our path definition:</p>
+<h4>src/components/User.vue</h4>
+<pre data-language="javascript">
+    &lt;script&gt;
+        export default {
+            name: 'User',
+            props: {
+                id: Number
+            }
+        }
+    &lt;/script&gt;
+</pre>
+<p>This means we can now reference the variable directly in our template:</p>
+<h4>src/components/User.vue</h4>
+<pre data-language="html">
+    &lt;template&gt;
+        &lt;p&gt;Viewing user #{{ id }}&lt;/p&gt;
+    &lt;/template&gt;
+</pre>
+<p>For more advanced information on the topic of passing props to the route components, <a href="https://router.vuejs.org/guide/essentials/passing-props.html#boolean-mode" target="_blank">here's VueRouter's supporting documentation</a>.</p>
