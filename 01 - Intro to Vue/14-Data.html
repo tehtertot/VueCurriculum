@@ -1,0 +1,66 @@
+<h1>The Data object</h1>
+<h2>Objectives:</h2>
+<ul>
+    <li>Understand the difference between props and data</li>
+    <li>Learn how to use the Vue data object</li>
+</ul>
+<hr>
+<p>If you recall our very first Vue assignment, we used a data object to contain the variable data we were using in our template. Now we've also learned about <b>props</b>. They both seem to be ways of storing data--so what's the difference?</p>
+<h3>Data vs. Props</h3>
+<p><b>Data</b> is the memory of each component that contains <em>variable</em> data. This information can be passed down to child components. When a piece of data is passed down to a child component, to the child component that datum is considered a <b>prop</b>.</p>
+<h3>Using the Data object</h3>
+<p>Now that we are building Vue using components, when we define <b>data</b>, it must be in the form of a function that returns the data object rather than just an object. This is because objects in JavaScipt are passed by reference, and so we if we left it as an object, all instances of a given component would share the same data object, which could lead to unexpected and unintended results. By wrapping the object in a function, we can avoid this. Here's what that looks like:</p>
+<pre data-language="javascript">
+    export default {
+        name: 'SomeComponent',
+        data: function() {
+            return {
+                key: value
+            };
+        }
+    }
+</pre>
+<p>You can add as many key-value pairs as needed into the object being returned by the function. In the templates, we are able to refer to the data object simply by using the names of the keys in the data object.</p>
+<p>It was pretty cumbersome trying to list out the url objects in the template. That seems like something more well-suited for JavaScript,doesn't it? That's exactly how the data object can help us:</p>
+<h4>src/App.vue</h4>
+<pre data-language="javascript">
+    // import statements 
+
+    let pluginLinks = [
+        { 
+            label: 'babel',
+            link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel',
+        },
+        {
+            label: 'eslint',
+            link: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint',
+        }
+    ];
+    // skipping other variables for brevity; feel free to add the additional objects 
+    
+    export default {
+        name: 'app',
+        data: function() {
+            return {
+                plugins: {
+                    title: "Installed CLI Plugins",
+                    links: pluginLinks
+                },
+                essentials: {
+                    // removed for brevity; what do you think should go here?
+                },
+                ecosystem: {
+                    // removed for brevity; what do you think should go here?
+                },
+            };
+        }
+    }
+</pre>
+<p>Now we can clean up our template by referrring to these variables, rather than hardcoding the lists directly:</p>
+<h4>src/App.vue</h4>
+<pre data-language="html">
+    &lt;!-- HelloWorld component --&gt;
+    &lt;ExtraInfo v-bind:title="plugins.title" v-bind:links="plugins.links" /&gt;
+    &lt;!-- complete the other two ExtraInfo components --&gt;
+</pre>
+<p>Remember, we need the <code>v-bind</code> directive because otherwise, Vue will interpret "plugins.title" literally as a string (try it without v-bind and see what happens). With <code>v-bind</code>, it now knows to consider the value as a reference to a variable.</p> 

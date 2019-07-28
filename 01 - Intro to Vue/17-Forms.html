@@ -1,0 +1,61 @@
+<h1>Making Forms</h1>
+<h2>Objectives:</h2>
+<ul>
+    <li>Learn how to use model binding with forms</li>
+    <li>Understand two-way vs. one-way binding</li>
+</ul>
+<hr>
+<p>One of the most common ways for users to interact with an application is through a form. Whether it's registering as a new user, logging in, or posting a message, the HTML form and associated input elements are how data from the user is passed to a backend server. While we're not going to be working on actually sending the data quite yet, we can still learn how to build forms using Vue.</p>
+<p>Let's create a new Vue project with just a single FormPractice component to start. Recalling back to HTML basics, let's create a basic form, with a few different input types:</p>
+<h4>src/components/FormPractice.vue</h4>
+<pre data-language="html">
+    &lt;template&gt;
+        &lt;form action="" method="POST"&gt;
+            &lt;h1&gt;Menu Builder&lt;/h1&gt;
+            &lt;p&gt;Dish name: &lt;input type="text"&gt;&lt;/p&gt;
+            &lt;p&gt;Price: $&lt;input type="text"&gt;&lt;/p&gt;
+            &lt;p&gt;Category:
+                &lt;select&gt;
+                    &lt;option value="1"&gt;Appetizer&lt;/option&gt;
+                    &lt;option value="2"&gt;Main Dish&lt;/option&gt;
+                    &lt;option value="3"&gt;Side&lt;/option&gt;
+                    &lt;option value="4"&gt;Dessert&lt;/option&gt;
+                &lt;/select&gt;
+            &lt;/p&gt;
+            &lt;p&gt;Description: &lt;textarea&gt;&lt;/textarea&gt;&lt;/p&gt;
+            &lt;p&gt;&lt;input type="submit" value="Add Item"&gt;&lt;/p&gt;
+        &lt;/form&gt;
+    &lt;/template&gt;
+</pre>
+<p>Since these values have the potential to change, we should create a data object to maintain the values of each of the inputs:</p>
+<h4>src/components/FormPractice.vue</h4>
+<pre data-language="javascript">
+    export default {
+        name: "FormPractice",
+        data: function() {
+            return {
+                name: '',
+                price: 0,
+                categoryId: 2,
+                desc: 'default description'
+            };
+        }
+    }
+</pre>
+<p>Previously, we've learned how to associate values from our data object to values in the template using <code>v-bind</code>. This might lead us to thinking we could use that for our input values:</p>
+<pre data-language="html">
+    &lt;p&gt;Dish name: &lt;input type="text" v-bind:value="name" &gt;&lt;/p&gt;
+</pre>
+<p>While not a bad idea, when we change the contents of the element, notice what happens to its value in the Vue DevTools window--nothing changes. This is because with <code>v-bind</code>, we only get one-way binding. When we just need to display a value, this works fine. But when we want the value to change as the input value is updated, in real-time, we'll want <b>two-way binding</b>. This can be accomplished by using the <code>v-model</code> directive instead:</p>
+<pre data-language="html">
+    &lt;p&gt;Dish name: &lt;input type="text" v-model="name" &gt;&lt;/p&gt;
+    &lt;p&gt;Price: $&lt;input type="text" v-model="price" &gt;&lt;/p&gt;
+    &lt;p&gt;Category:
+        &lt;select v-model="categoryId" &gt;
+            &lt;-- options removed for brevity --&gt;
+        &lt;/select&gt;
+    &lt;/p&gt;
+    &lt;p&gt;Description: &lt;textarea v-model="desc" &gt;&lt;/textarea&gt;&lt;/p&gt;
+</pre>
+<p>With these updates, watch the Vue DevTools data values as you change the values in the form. Cool, right?!</p>
+<p>This is a great opportunity to familiarize yourself with the Vue documentation. Now that you've got a feel for how forms work in Vue, practice reading <a href="https://vuejs.org/v2/guide/forms.html" target="_blank">the documentation</a>. This documentation will provide you with more insights about the underworkings of this seemingly magical capability, and will also provide examples for other input types.</p>

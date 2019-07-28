@@ -1,0 +1,37 @@
+<h1>Components in a Vue Application</h1>
+<h2>Objectives:</h2>
+<ul>
+    <li>Understand the basics of the pre-written code provided by the CLI</li>
+</ul>
+<hr>
+<p>If you took a peek inside the folder, you may be feeling a little overwhelmed. How did we go from 3 files to more than a dozen? We started you off with the basics because we wanted you to see fundamentally how Vue works. Now, we're going to change our mindset and approach Vue with a developer mindset.</p>
+<h2>Modularizing by Components</h2>
+<p>Now that we know we can do a lot with just a single HTML page, let's take a moment to think about working on a project with a team. Do you think it would be a good idea to all work on the same HTML file? How will you coordinate what you're working on to make sure it doesn't conflict with a teammate's work? What about that app variable? It will continue to grow as each teammate needs to add their own variables and other functionality. The assignments you've been working on so far have been small enough that you can complete them independently, but real world solutions will have a lot more moving parts, and this coordination problem will become significant.</p>
+<p>With the rise of front-end frameworks, the notion of <b>components</b> has become the prominent approach to designing and working on the front end. Think of a component as a small subsection of a page. In Vue terms, components are reusable Vue instances with a name.</p>
+<p>Take a look at the HelloWorld.vue file inside the src/components folder. This file defines <b>a component named HelloWorld</b>. Notice that there are three sections:</p>
+<h3>Template</h3>
+<p>Within the <code>&lt;template&gt;</code> tags is a snippet of HTML code. Notice there are no <code>&lt;head&gt;</code> or <code>&lt;html&gt;</code> sections. Instead, there is <b><em></em>one and only one</em> root element</b> (in the example, the root element is the div with the class "hello"). The root element can have any number of child html elements, but each component can have only one root element, which is commonly a div.</p>
+<h3>Script</h3>
+<p>As you might expect, the script tags will hold the associated JavaScript code for a given component. As you can see from the pre-made template, now that we're using the Vue CLI to compile our code, the object being created is slightly different than the one we made previously:</p>
+<pre data-language="javascript">
+    export default {
+        name: 'HelloWorld',
+        props: {
+            msg: String
+        }
+    }
+</pre>
+<ul>
+    <li>The <b>export default</b> line indicates that the following object will contain the information needed for Vue to create the component.</li>
+    <li>The <b>name</b> will be the name to be used when referencing this component. It's a good idea to make this the same name as the file, for consistency.</li>
+    <li>The <b>props</b> will be an object where the keys are any variable names you'll need in this component (similar to the <code>data</code> object defined in previous projects), but the values will be the data type. We'll learn where to define the actual values for these properties shortly.</li>
+</ul>
+<h3>Style</h3>
+<p>The style section is pretty straightforward. This is where we'll put the CSS we want to be applied to this component's HTML.</p>
+<p>If you want the style to be <em>scoped</em>, or in other words, applied only to this component, be sure to include the <code>scoped</code> attribute in your style tag, like so: <code>&lt;style scoped&gt;</code>. For example, the HelloWorld component has the following styling:</p>
+<pre data-language="css">
+    h3 {
+        margin: 40px 0 0;
+    }
+</pre>
+<p>Even though this is generically applied to any h3 tag, because it is scoped, it will only be applied to h3 elements <em>in instances of the HelloWorld component</em>. If you want to apply global styling (i.e. across all components in the entire application), we'll see in the next module where this should go.</p>

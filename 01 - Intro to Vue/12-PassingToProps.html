@@ -1,0 +1,49 @@
+<h1>Passing Values to Props</h1>
+<h2>Objectives:</h2>
+<ul>
+    <li>Learn how to pass more complex values as props</li>
+    <li>Understand the v-bind directive</li>
+</ul>
+<hr>
+<p>Let's take care of those lists. Because the values are a little more complex than strings, we need to a way to tell Vue that a value we're passing is more than a string that happens to contain square brackets. In fact, <em>any</em> value that isn't a string (including any actual variables) needs to use the <code>v-bind</code> directive:</p>
+<pre data-language="html">
+    &lt;!-- an array --&gt;
+    &lt;SomeComponent v-bind:somePropName="[1,1,2,3,5]" /&gt;
+
+    &lt;!-- an array of strings; notice how we have to alternate quotation marks  --&gt;
+    &lt;SomeComponent v-bind:somePropName="['a', 'b', 'c']" /&gt;
+
+    &lt;!-- a boolean --&gt;
+    &lt;SomeComponent v-bind:somePropName="true" /&gt;
+
+    &lt;!-- an object; again, notice how we have to alternate quotation marks --&gt;
+    &lt;SomeComponent v-bind:somePropName="{
+        name: 'Veronica Mars',
+        profession: 'detective'
+    }" /&gt;
+    
+    &lt;!-- a variable --&gt;
+    &lt;SomeComponent v-bind:somePropName="variableName" /&gt;
+</pre>
+<p>In our current application, we'll need something like this in our App.vue template that can loop through our list of links:</p>
+<pre data-language="html">
+    &lt;ul&gt;
+        &lt;li v-for="(listItem, index) in somePropName" v-bind:key="index"&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+</pre>
+<p>Since each link actually has 2 pieces of information, a link and a label, an object seems like the best data structure to represent each link. Since we have several links, we'll need a list of these objects. Here's how we would pass it:</p>
+<h4>src/App.vue</h4>
+<pre data-language="html">
+    &lt;ExtraInfo title="Installed CLI Plugins" v-bind:links="[
+        { label: 'babel', url: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel' },
+        { label: 'eslint', url: 'https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint' }
+    ]" /&gt;
+</pre>
+<p>Because this is a slightly more complex structure than we've worked with previously, here's how we'd use it in the ExtraInfo component:</p>
+<h4>src/components/ExtraInfo.vue</h4>
+<pre data-language="html">
+    &lt;ul&gt;
+        &lt;li v-for="(listItem, i) in links" v-bind:key="i"&gt;&lt;a v-bind:href="listItem.url"&gt;{{ listItem.label }}&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+</pre>
+<p>Remember, we use the double curly braces for variables that will be visible in HTML, but when variables are used in attribute values, we need to use the <code>v-bind</code> directive. Also, because we know the <code>listItem</code> variable is an object, we can use dot notation with the keys to retrieve the associated values.</p>

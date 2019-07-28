@@ -1,0 +1,37 @@
+<h1>Conditional Styling</h1>
+<h2>Objectives:</h2>
+<ul>
+  <li>Understand conditional styling and usage</li>
+</ul>
+<h2>Red or Green?</h2>
+<p>If we truly want to make our components reusable, we need to cover all facets of what might compose a "component". We know how to deal with a component's data. We can pass different props or let the component be responsible for its own data, but what we haven't been able to do is let the component determine its own styling. This is the last step in reusability, and it allows us to make components that can conform to various needs as our application grows. What's amazing about the way Vue deals with styling is that it gives us a really convenient syntax to drastically change styling at-will.</p>
+<p>What if, when a number is positive we'd like the component to be green, and if the number is negative we'd like it to be red? One way we could solve this problem is that we could make two separate components and decide which one to render based on our number. The problem is that the component would be essentially the same. We'd have lots of code duplication so if we wanted to change one, we'd almost definitely have to change the other, and it would open up plenty of opportunity for error. Another way (the better way) to solve this would be to use Vue's built-in conditional styling syntax. We can always render the same component and let the component decide whether or not it should be red or green. Let's see what this looks like:</p>
+<h4>RandomComponent.vue</h4>
+<pre data-language="html">
+  &lt;template&gt;
+    &lt;p 
+      v-bind:class="{ green: number > 0, red: number < 0 }"
+    &gt;{{ message }}&lt;/p&gt;
+  &lt;/template&gt;
+</pre>
+<pre data-language="javascript">
+  export default {
+    name: 'RandomComponent',
+    data() {
+      return {
+        number: 10,
+      }
+    }
+  }
+</pre>
+<pre data-language="css">
+  .green {
+    background-color: green;
+  }
+  
+  .red {
+    background-color: red;
+  }
+</pre>
+<p>Check this out! First, we bind our class to some data using v-bind. We can also use just <code>:class</code> as a shorthand. Second, we pass an object as a value to the attribute. The keys in the object represent the possible classes, while the values represent a conditional. In other words, we can specify whether or not we want to apply a class based on a certain condition!</p>
+<p>Vue's conditional styling syntax makes it really easy to change our styles based on our data. In fact, this is a good time for us to get more comfortable reading documentation, so check out what else you can do with conditional styles <a href="https://vuejs.org/v2/guide/class-and-style.html">here</a> and ask your instructor for help if you get lost!</p>

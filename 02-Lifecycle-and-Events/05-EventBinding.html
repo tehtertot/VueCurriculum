@@ -1,0 +1,45 @@
+<h1>Event Binding</h1>
+<h2>Objectives:</h2>
+<ul>
+  <li>Understand what DOM events are</li>
+  <li>Learn about common DOM events</li>
+  <li>Use basic Vue event binding</li>
+</ul>
+<h2>The DOM, a precursor</h2>
+<p>As a preface to the rest of this lesson, it's prescient to understand what the DOM is. DOM stands for "Document Object Model". Web developers throw this term around all the time, but it's important to understand that the DOM is really just the structure of the html represented as a JavaScript object. Each element has a series of properties and methods that give insight into anything you could ever want to know about the element and what is possible on the page. With that out of the way, let's move on to events.</p>
+<h2>DOM Events</h2>
+<p>DOM events give us the ability to wait and listen for something to happen on the page so we can react to it in our code. Some events are pretty self explanatory, like waiting for someone to click on an element. Others, we might not have thought about at first, like the text selection event. In fact, there are a ton of events we can use to our advantage. A full list can be found <a href="https://developer.mozilla.org/en-US/docs/Web/Events">here</a>. Below are some of the most common events we'll use in our daily lives:</p>
+<ul>
+  <li>click</li>
+  <li>keyup</li>
+  <li>mouseenter</li>
+  <li>mouseleave</li>
+  <li>dblclick</li>
+  <li>drag</li>
+  <li>drop</li>
+</ul>
+<h2>Vue Event Binding</h2>
+<p>Vue, like jQuery and other front-end libraries, makes it simple to listen for DOM events and react to them. Let's imagine that we have a button on our page and we want to print "clicked" in the console every time someone clicks the button. We'll do this using the <code>v-on</code> directive. <code>v-on</code> can be used to listen to any DOM event, but usually we'll be attaching events to a specific html element. For this example, we'll make a new vue app and put a button straight into the App.vue file.</p>
+<h4>App.vue</h4>
+<h5>template</h5>
+<pre data-language="html">
+  &lt;template&gt;
+    &lt;button v-on:click="onClick()"&gt;Click Me!&lt;/button&gt;
+  &lt;/template&gt;
+</pre>
+<h5>script</h5>
+<pre data-language="javascript">
+  export default {
+    name: 'app',
+      methods: {
+      onClick: function() {
+        // eslint-disable-next-line
+        console.log('clicked');
+      }
+    }
+  }
+</pre>
+<p>Notice that the v-on directive is listening for the <code>click</code> event. Since the v-on directive is on the <code>button</code> tag, it will be triggered whenever the button is clicked. The <code>v-on:click</code> value specifies which method you'd like to run when the event gets triggered. Notice the <code>onClick</code> method in the component. Whenever someone clicks on the button, the <code>onClick</code> method will run! If you recreate this code and open up your web inspector you can see "clicked" print in the console! The <code>// eslint-disable-next-line</code> is to remove some default warnings that Vue will provide for us if we accidentally leave a console.log statement in our code.</p>
+<p>This is a trivial example, but it truly is a fundamental building block for much more interesting applications. We'll see in the next assignment just how powerful this is.</p>
+<h4>A handy shortcut</h4>
+<p>Instead of using <code>v-on:click</code>, we can use a Vue provided shortcut. We can replace <code>v-on</code> with <code>@</code>. You can use <code>@click</code> instead of <code>v-on:click</code>. Just a heads up, you'll probably see <code>@</code> more often in the real world, so keep an eye out!</p>

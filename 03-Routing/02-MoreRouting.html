@@ -1,0 +1,57 @@
+<h1>Dynamic Routes</h1>
+<h2>Objectives:</h2>
+<ul>
+    <li>Add additional routes to our application</li>
+    <li>Understand how/why/when to retrieve variable data from the route</li>
+</ul>
+<hr>
+<p>It's hard to see the impact of routing with just one route, so let's go ahead and add some additional routes. Let's create a simple second component:</p>
+<h4>src/components/Second.vue</h4>
+<pre data-language="html">
+    &lt;template&gt;
+        &lt;h1&gt;This is the Second component!&lt;/h1&gt;
+    &lt;/template&gt;
+</pre>
+<pre data-language="javascript">
+    &lt;script&gt;
+        export default {
+            name: 'Second'
+        }
+    &lt;/script&gt;
+</pre>
+<p>When we visit localhost:8080/second, we want this component to show up instead of the MainMenu component, so let's add this to our routes:</p>
+<h4>src/router/index.js</h4>
+<pre data-language="javascript">
+    import Second from '../components/Second';
+    // other statements skipped for brevity
+
+    export default new VueRouter({
+        routes: [
+            {
+                path: '/', 
+                component: MainMenu
+            },
+            {
+                path: '/second',
+                component: Second
+            }
+        ]
+    })
+</pre>
+<p>Now try navigating to localhost:8080/#/second. What do you see? Neat!</p>
+<h2>Dynamic Route Matching</h2>
+<p>Think about a popular website like Facebook or Instagram. Routes are an important part of letting the server know which user we're interested in viewing. But do you think they have 1+ billion routes? No way! This seems like a great time to use a variable: the general format and purpose of the page is the same, but the specific contents will just depend on which user is being selected. So how do we get and use a variable in the URL? It's quite simple. Let's assume we've made a component called UserPage. Here's how we could route to that component:</p>
+<h4>src/router/index.js</h4>
+<pre data-language="javascript">
+    {
+        path: '/user/:username',
+        component: UserPage
+    }
+</pre>
+<p>To indicate that any part of the path is expected to be a variable, we use the colon (<code>:</code>). The <em>user</em> portion requires a literal match, while the colon indicates a variable referenced by whatever word we put after the colon. With this path in place, we are able to capture <em>any</em> username used in the route, rather than having to manually create as many routes as we have users. This means we can go to localhost:8080/#/user/bruce or localhost:8080/#/user/fitz or localhost:8080/#/user/georgie, with a single component! Now let's see how we can use the variable in our code. It's saved into a special variable <code>$route.params</code>:</p>
+<h4>src/components/UserPage.vue</h4>
+<pre data-language="html">
+    &lt;p&gt;This is the username from the url: {{ $route.params.username }}&lt;/p&gt;
+</pre>
+<p>Test this out for yourself! Check out this component in the Vue console. Can you find the variable values?</p>
+<p>We can include as many literal and variable route segments as needed in the path. Just be sure that each variable segment has a unique name so it can be appropriately referenced later. Also, take note that the order of our routes matters. Suppose we had route paths in this order: <code>'/', '/:id', '/register'</code>. If we went attempted to go to the <code>/register</code> route, even though we want it to match with the literal pattern, routes are resolved in order and it matches the <code>/:id</code> route first, giving us unexpected results. It's a pretty simple fix--just make sure the dynamic route is last (<code>'/', '/register', '/:id'</code>)!</p>

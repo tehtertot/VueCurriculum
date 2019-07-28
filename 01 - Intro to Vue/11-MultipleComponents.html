@@ -1,0 +1,74 @@
+<h1>Reusing Components</h1>
+<h2>Objectives:</h2>
+<ul>
+    <li>Start thinking about webpages in terms of components</li>
+    <li>Learn how to reuse components</li>
+</ul>
+<hr>
+<p>At this point, components might seem kind of arbitrary. But thinking like a developer, we want to reduce redunancy and get the most bang for our buck when coding. Our entire project is going to be organized in terms of components. Because we have been thinking in terms of components and the markup, view logic, and styling are all housed in one place, our components are reusable, which makes scaling easier on us even as our application grows in complexity. How do we think in terms of components? Let's consider the default template and break it down:</p>
+<div style="text-align: center; ">
+    <img src="images/11-components.png" alt="component breakdown" style="border: 1px solid black; height: 300px;">
+</div>
+<p>Let's focus on the last 3--they are all in blue because they are effectively the same thing, though their contents are different. This is a great scenario for making a single component and reusing it 3 times. Let's start by creating a new file in the src/components folder that contains the part of code that repeats (feel free to code along). For simplicity right now, we're just going to hard code a couple of the links:</p>
+<h4>src/components/ExtraInfo.vue</h4>
+<pre data-language="html">
+    &lt;h3&gt;{{ title }}&lt;/h3&gt;
+    &lt;ul&gt;
+        &lt;li&gt;&lt;a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener"&gt;babel&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener"&gt;eslint&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+</pre>
+<p>In the script section, let's make sure we give this component a name and specify we're expecting a string title in props.</p>
+<h4>src/components/ExtraInfo.vue</h4>
+<pre data-language="javascript">
+    export default {
+        name: 'ExtraInfo',
+        props: {
+            title: String
+        }
+    }
+</pre>
+<p>For the style, bring over the applicable CSS. Don't forget to mark it as scoped.</p>
+<h4>src/components/ExtraInfo.vue</h4>
+<pre data-language="css">
+    h3 {
+        margin: 40px 0 0;
+    }
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
+    li {
+        display: inline-block;
+        margin: 0 10px;
+    }
+    a {
+        color: #42b983;
+    }          
+</pre>
+<p>Now we need to make this component part of our actual application. That means we need to add it to our App.vue file in a few places. First, let's add it to the templates. Because this list component occurs 3 times, we'll need to add it 3 times, with each one receiving its title:</p>
+<h4>src/App.vue</h4>
+<pre data-language="html">
+    &lt;div id="app"&gt;
+        &lt;img alt="Vue logo" src="./assets/logo.png"&gt;
+        &lt;HelloWorld msg="Welcome to Your Vue.js App"/&gt;
+        &lt;ExtraInfo title="Installed CLI Plugins" /&gt;
+        &lt;ExtraInfo title="Essential Links" /&gt;
+        &lt;ExtraInfo title="Ecosystem" /&gt;
+    &lt;/div&gt;
+</pre>
+<p>The App.vue file doesn't magically know what we're referring to, so we'll need to make sure we important and reference it in the script section:</p>
+<h4>src/App.vue</h4>
+<pre data-language="javascript">
+    import HelloWorld from './components/HelloWorld.vue'
+    import ExtraInfo from './components/ExtraInfo.vue'  // added this import
+    
+    export default {
+        name: 'app',
+        components: {
+            HelloWorld,
+            ExtraInfo       // added the ExtraInfo to the components object
+        }
+    }
+</pre>
+<p>Let's take a look in our browser! How does it look? Now we see each of the lists twice. Go ahead and clean up the HelloWorld component by removing the parts in the template and css that we have moved to our ExtraInfo component. In the next module, we'll figure out how to get the list of links to be dynamically generated.</p>
