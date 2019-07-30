@@ -1,0 +1,24 @@
+<h1>Intro to Vuex</h1>
+<h2>Objectives:</h2>
+<ul>
+  <li>Understand the purpose of the Vuex library</li>
+  <li>Understand when to use Vuex</li>
+</ul>
+<h2>What the heck is Vuex?</h2>
+<p>We've alluded to Vuex before when we were talking about state management, and now it's finally time to dive in. Vuex is simply a state management library that allows us to maintain a global store of information. Just like we did on our own, Vuex will create a single state object, and we can access that state from any component. We'll also only ever modify state indirectly by calling a function from our components. There may be some new concepts in this chapter that feel overwhelming, so if you start to feel overwhelmed, just come back to this section and remind yourself what Vuex is all about.</p>
+<h3>So what's different about Vuex and why do we care?</h3>
+<p>When we use Vuex, it's going to feel very similar to the store pattern that we used earlier. Eerily similar in fact. That's because it is! So why do we need it? Vuex does two major things for us:</p>
+<ol>
+  <li>Provides conventions for how we structure and modify our data using mutations, actions, and modules.</li>
+  <li>Gives us debugging tools "out of the box" that allow us to track how our application's data changes over time.</li>
+</ol>
+<p>Vuex also gives us a few additional helpful tools and "nice-to-haves", but the two reasons above are the meat of the library's usefulness.</p>
+<h3>When should we use Vuex?</h3>
+<p>Vuex is really useful for debugging and structuring applications that we expect to get reasonably complex. Typically, you'll want Vuex if you know your project is going to be medium or large in size or complexity. Well that's great to know, but how do we know when our app is medium or large? The thing is, you kind of just know when you know. But here are some things to look for:</p>
+<ul>
+  <li>You find yourself struggling to debug how data is changing in your application.</li>
+  <li>You find yourself wishing that you could break your store up into separate parts.</li>
+  <li>You just want the structure because you know you want your app to grow to be pretty large.</li>
+</ul>
+<p>Any of the above are good reasons to switch, but you might find that sometimes you're fine with your own custom store. Either way, if you're handling data using your own store pattern, it should be really easy to switch to Vuex when you need to, so rest easy and feel it out!</p>
+<p>Now let's get Vuex installed and get started using a very simple store example.</p>
