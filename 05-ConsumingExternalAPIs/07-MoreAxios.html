@@ -1,0 +1,56 @@
+<h1>More Practice with Axios</h1>
+<h2>Objectives:</h2>
+<ul>
+    <li>Make an asynchronous call associated with a specific event</li>
+</ul>
+<hr>
+<p>While it's pretty cool to be able to retrieve data from another server and integrate it into our own application, it's not that useful if we can only make that call when the page first loads. What if we want the user to be able to input a value, make the call again, and display the new results? Instead of placing our code in the mounted lifecycle method, let's associate it with a specific action instead. We'll add an input field and button to our template:</p>
+<h4>first-vue-with-api/src/components/HelloWorld.vue</h4>
+<h4>template section</h4>
+<pre data-language="html">
+    &lt;div class="hello"&gt;
+        &lt;p&gt;Look up by id: &lt;input v-model="id" /&gt;&lt;button @click="updateResults"&gt;Search&lt;/button&gt;&lt;/p&gt;
+        &lt;p&gt;The result of our request: {{ info }}&lt;/p&gt;
+    &lt;/div&gt;
+</pre>
+<p>Here, we've added a new data variable, <code>id</code>, that we'll want to keep track of. We're also specifying that we want the <code>updateResults</code> method to run when the button is clicked, so we'll need to create that method as well.</p>
+<h4>first-vue-with-api/src/components/HelloWorld.vue</h4>
+<h4>script section</h4>
+<pre data-language="javascript">
+    export default {
+        name: 'HelloWorld',
+        data() {
+            return {
+                info: null,
+                id: 42,     // added this, setting 42 as the default value
+            };
+        },
+        mounted() {
+            this.getBerryData();
+        },
+        methods: {
+            updateResults() {
+                this.getBerryData();
+            },
+            async getBerryData() {
+                try {
+                    let response = await this.$http.get(`https://pokeapi.co/api/v2/berry/${this.id}`);  // instead of hardcoding a value, let's use whatever has been typed in the input box
+                    this.info = response.data;
+                }
+                catch(error) {
+                    console.log(`Something went wrong: ${error}`);
+                }
+            }
+        }
+    }
+</pre>
+<p>The displayed info is not pretty at all, but that's something you can experiment with! Don't forget that it's just one giant object, so we can make references to specific keys if we want to pull out specific information. This is a great use case for using Postman while developing, as you can reference the keys available to you in a much more readable format.</p>
+<h4>first-vue-with-api/src/components/HelloWorld.vue</h4>
+<h4>template section</h4>
+<pre data-language="html">
+    &lt;div class="hello"&gt;
+        &lt;p&gt;Look up by id: &lt;input v-model="id" /&gt;&lt;button @click="updateResults"&gt;Search&lt;/button&gt;&lt;/p&gt;
+        &lt;p&gt;The result of our request: {{ info.firmness }}&lt;/p&gt;
+        &lt;p&gt;The result of our request: {{ info.flavors }}&lt;/p&gt;
+    &lt;/div&gt;
+</pre>

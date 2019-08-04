@@ -1,0 +1,47 @@
+<h1>Introduction to Axios</h1>
+<h2>Objectives:</h2>
+<ul>
+    <li>Learn about axios</li>
+</ul>
+<hr>
+<p>Now that we understand how to make a request to an API, we're going to learn how to have our Vue application make the call rather than manually running them through Postman. To get started, we're going to install a package called <b>axios</b> that will assist us in making the calls. Axios is a promise-based HTTP client. What does that mean?</p>
+<p>In the code we've written to this point, all the code is contained within the application. When we make an external API call, we can't be sure how long it will take to get a response--so how can we make sure something in our code happens only <em>after</em> the call has completed (i.e. we've received a response)? This is where <b>promises</b> and <b>asynchronicity</b> come in. This means we can specify what call we want to make, and then wait until that call is complete before proceeding. To make a call with axios, we'll use the method name associated with request method type, for example:</p>
+<pre data-language="javascript">
+    // GET request
+    axios.get('the url we want to make a request to')
+
+    // POST request
+    axios.post('url goes here', dataObjectGoesHere)
+</pre>
+<p>Because axios is specifically designed for HTTP requests, its methods reflect the HTTP verbs we've learned about (i.e. GET, POST, etc.) Check out the <a href="https://github.com/axios/axios" target="_blank">axios documentation</a> for a full list of available HTTP methods. With the <code>get</code> function, we need to pass as an argument the string of the url we are trying to request.</p>
+<p>As you learn axios, you may find a couple of different ways of handling these requests. We'll show you both so you can be familiar with whatever you find.</p>
+<h3>Promises</h3>
+<p>Here's a basic breakdown of what an axios promise looks like in code. After making the request, there are 3 common methods to be included:</p>
+<pre data-language="javascript">
+    function makeAxiosCall() {
+        axios.get('the url we want to make a request to')
+            .then(function(response) {
+                // the input passed to this function, response, is the resulting response from the request
+            })
+            .catch(function(error) {
+                // the input passed to this function, error, is an error object indicating what went wrong
+            })
+            .finally(function() {
+                // this function does not receive any inputs
+            })
+    }
+</pre>
+<p>The 3 different methods, <code>then</code>, <code>catch</code>, and <code>finally</code>, each take a function to execute once the call is complete. For a given request, only the <code>then</code> <em>or</em> the <code>catch</code> function will run. After those are complete, the function provided to <code>finally</code> will run. When a function is passed as an argument, it is referred to as a <em>callback</em>. This syntax can sometimes be confusing to manage, especially when we've got a lot of things to do upon success or failure.</p>
+<h3>Async/Await</h3>
+<p>While this concept of promises is still relevant, the <code>async/await</code> notation makes our code easier to follow. This will be the notation we use throughout the rest of the course. Instead of a series of callback functions, we'll instead be able to write our code in a more traditional way, using the keywords <code>async</code> and <code>await</code> to let the program know when to expect asynchronous behavior. To do this, we'll also introduce the <code>try/catch</code> block. A try/catch statement is used whenever there is a possibility that our block of code might throw an error. Rather than allowing our program to just break, we can <em>catch</em> the error and handle it, making for a much better user experience.</p>
+<pre data-language="javascript">
+    async function makeAxiosCall() {    // notice the declaration of "async" when defining the function!
+        try {
+            let response = await axios.get('url we want to make a request to'); // notice the "await" before the call to axios.get
+            // this line of code will run after the previous line is completed successfully
+        }
+        catch(error) {
+            // what to do if something goes wrong
+        }
+    }
+</pre>

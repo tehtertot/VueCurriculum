@@ -1,0 +1,88 @@
+<h1>Consider the User Experience</h1>
+<h2>Objectives:</h2>
+<ul>
+    <li>Learn how to provide feedback for asynchronous behaviors</li>
+    <li>Learn a strategy for handling errors</li>
+</ul>
+<hr>
+<p>If the server we're calling to is taking a little while to respond, how will our users know the call is working? What happens if the user enters a value that doesn't return a valid response? What if the server we're calling to is completely down? There are lots of things that could potentially go wrong, and we want to ensure we're developing an application that handles those issues in a user-friendly, hopefully seamless way. We've already got some of the code in place with our <code>catch</code> statement, but let's think a little bit more about what we might want to do. In this case, there isn't one right answer, but it is a very important set of use cases to plan and design for.</p>
+<h3>Loading Time</h3>
+<p>Think about some of the most user-friendly technical interactions you've had. Do you love having those little dots telling you the other person is typing a response? How about a loading bar to let you know your request is being processed? These are simple but powerful ways to provide feedback to our users about what's happening behind the scenes. Instead of having to constantly refresh a page and wonder if something is happening, we can provide visual indications to our users.</p>
+<p>One strategy that we can implement is adding a <code>loaded</code> boolean that we can toggle while a request is being made. Using <code>v-if</code>, we can display something on the page conditionally to indicate that something is happening.</p>
+<h4>first-vue-with-api/src/components/HelloWorld.vue</h4>
+<h4>template section</h4>
+<pre data-language="html">
+    &lt;div class="hello"&gt;
+        &lt;p&gt;Look up by id: &lt;input v-model="id" /&gt;&lt;button @click="updateResults"&gt;Search&lt;/button&gt;&lt;/p&gt;
+        &lt;img src="someImg.gif" v-if="isLoading" /&gt;
+        &lt;p v-if="info && !isLoading"&gt;The result of our request: {{ info }}&lt;/p&gt;
+    &lt;/div&gt;
+</pre>
+<p>This example assumes we've downloaded a loading gif into our application. We'll only display it when the variable <code>isLoading</code> is true. So let's add that variable and set it as needed:</p>
+<h4>first-vue-with-api/src/components/HelloWorld.vue</h4>
+<h4>script section</h4>
+<pre data-language="javascript">
+    export default {
+        name: 'HelloWorld',
+        data() {
+            return {
+                info: null,
+                id: 42,
+                isLoading: false    // it's not loading initially
+            };
+        },
+        mounted() {
+            this.getBerryData();
+        },
+        methods: {
+            updateResults() {
+                this.getBerryData();
+            },
+            async getBerryData() {
+                try {
+                    this.isLoading = true;      // we're about to start the call, so that means we're loading
+                    let response = await this.$http.get(`https://pokeapi.co/api/v2/berry/${this.id}`);
+                    this.info = response.data;
+                    this.isLoading = false;     // since this is after the await, we've completed the loading
+                }
+                catch(error) {
+                    console.log(`Something went wrong: ${error}`);
+                    this.isLoading = false;     // even though something went wrong, the response is complete
+                }
+            }
+        }
+    }
+</pre>
+<p>And voilà! A simple way of letting our users know that their request is being processed.</p>
+<h3>Error Messages</h3>
+<p>It is also very helpful to provide users with a message if something goes wrong. Was it a user error or a server error? We've already got the catch block set up, and we can use the error object that is sent back to provide useful feedback to the user. There are several different keys and values in the error object; we'll just take a look at a few. In the catch block, try logging the values of these different keys and then making a bad request to see what information is available to you in the error object.</p>
+<ul>
+    <li>error.message - a generic string associated with the error type</li>
+    <li>error.response - an object that contains the error details</li>
+    <ul>
+        <li>error.response.status - the status code for the error; generally speaking, errors in the 400 range are usually a result of user error (including our own code), while errors in the 500s are a result of issues on the server side</li>
+    </ul>
+    <li>error.request - an object that contains the request details</li>
+</ul>
+<p>One way you might see this handled in code is to display a custom error message depending on the status of the error:</p>
+<h4>first-vue-with-api/src/components/HelloWorld.vue</h4>
+<h4>script section</h4>
+<pre data-language="javascript">
+    // other sections skipped for brevity
+    catch(error) {
+        console.log(`Something went wrong: ${error}`);
+        this.isLoading = false;     // we'll still want this regardless
+        if (error.response) {
+            // here, you may want to drill even further to handle 400 and 500 level errors differently
+            console.log(error.response);
+        }
+        else if (error.request) {
+            // this will only be reached if the request didn't ever receive a response
+            console.log(error.request);
+        }
+        else {
+            // something in the setup of the request triggered an error
+            console.log(error.message);
+        }
+    }
+</pre>
