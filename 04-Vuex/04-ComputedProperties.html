@@ -1,0 +1,52 @@
+<h1>Computed Properties</h1>
+<h2>Objectives:</h2>
+<ul>
+  <li>Learn about derived state and computed properties</li>
+</ul>
+<p>Getters are an incredibly powerful and useful aspect of Vuex that we can leverage to our advantage, but before we can truly understand their power, we need to understand a common issue we run into with applications. Let's start by painting a bit of a picture.</p>
+<h2>Derived State</h2>
+<p>We're tasked with building an application that displays information about movies. In this app, we're required to build a separate section for each genre, as well as filters by other properties. Let's start by examining what our store's global state looks like.</p>
+<h4>store</h4>
+<pre data-language="javascript">
+  const store = new Vuex.Store({
+    state: {
+      movies: [
+        { id: 1, title: 'The Hangover', genre: 'Comedy' },
+        { id: 2, title: 'I Love You Man', genre: 'Comedy' },
+        { id: 3, title: 'Cars', genre: 'Family' },
+        { id: 4, title: 'Toy Story', genre: 'Family' },
+      ]
+    },
+    // more stuff will go here later
+  })
+</pre>
+<p>Now let's assume that we have the following components.</p>
+<ul>
+  <li>App</li>
+  <li>FamilyMovieList</li>
+  <li>ComedyMovieList</li>
+</ul>
+<p>Each "Genre"MovieList component needs to know about only the movies in its defined genre. In other words, rather than using the whole state object at face value, we're going to modify it for each of our components. This is derived state. Each component needs its own version of state "derived" from the original version of state. This can be as complex or as simple as we need it to be, and we can mix and match getters with state that doesn't need to be derived. Let's see what locally derived state would look like in the FamilyMovieList component.</p>
+<h4>FamilyMovieList.vue--html</h4>
+&lt;template&gt;
+  &lt;div&gt;
+    &lt;h2&gt;Comedy&lt;/h2&gt;
+    &lt;ul&gt;
+      &lt;li v-for="movie in comedyMovies" :key="movie.id"&gt;{{ movie.title }}&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/div&gt;
+</template>
+<h4>FamilyMovieList.vue--script</h4>
+<pre data-language="javascript">
+export default {
+  name: "ComedyMovieList",
+  computed: {
+    comedyMovies() {
+      return this.$store.state.movies.filter(movie => movie.genre === "Family");
+    }
+  }
+};
+</pre>
+<p>Here, we're creating a computed property. Computed properties are functions that return a value that will be accessible to the rest of the component as a property. The key difference is that we can use computed properties to return <em>derived state</em>. What we're doing here, is we're getting <em>only</em> comedy movies by using the built-in <code>filter</code> function on our movies array. More on the filter function can be found <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter">here</a>.</p>
+<h3>A few notes about computed properties</h3>
+<p>There are a few things you absolutely have to remember when using computed properties. First, notice how we're able to access comedyList in our template. We can access a computed property by name anywhere in the component, <em>without</em> the parentheses. Next, remember to <em>always</em> <code>return</code> a value in your function. The return statement is how you define what we'll access when we try to use <code>{{ comedyMovies }}</code> in our template or elsewhere in the component. If we don't return anything, javascript will just return <code>undefined</code>. This might seem like a pain now, but the great thing about computed properties is that they will be cached and only reload when they are changed!</p>
