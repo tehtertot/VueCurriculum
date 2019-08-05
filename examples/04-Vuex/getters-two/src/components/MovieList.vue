@@ -11,8 +11,12 @@
 export default {
   name: "MovieList",
   props: {
-    genre: String,
-    movies: Array
+    genre: String
+  },
+  computed: {
+    movies() {
+      return this.$store.getters.moviesByGenre(this.genre);
+    }
   }
 };
 </script>

@@ -16,11 +16,8 @@ const store = new Vuex.Store({
     ],
   },
   getters: {
-    comedyMovies(state) {
-      return state.movies.filter(movie => movie.genre === 'Comedy');
-    },
-    familyMovies(state) {
-      return state.movies.filter(movie => movie.genre === 'Family');
+    moviesByGenre: state => genre => {
+      return state.movies.filter(movie => movie.genre === genre);
     },
   },
 });
