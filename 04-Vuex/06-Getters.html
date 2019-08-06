@@ -1,0 +1,161 @@
+<h1>Vuex Getters</h1>
+<h2>Objectives:</h2>
+<ul>
+  <li>Learn about state and Vuex getters</li>
+  <li>Learn about when and how to use Vuex getters</li>
+</ul>
+<p>
+  Now that we know about derived state and computed properties, we can properly
+  dive into the power of Vuex's getters. Vuex getters are computed properties,
+  but they're stored in the Vuex store, rather than being computed in each
+  individual component. We're still deriving some state from the raw state
+  object, but we have global access to said state from all components. There are
+  a few huge benefits to this pattern. Firstly, if more than one component uses
+  the same computed style, we can reuse it (remember how Vue components are
+  supposed to be reusable?). Second, it allows us to store all of our state
+  management "logic" in one concise location. When we are dealing with state, we
+  can put all that code in the store.
+</p>
+<h2>Getters in action</h2>
+<p>
+  Okay so we know what getters do, but how do we use them? Let's take a look at
+  an example. Using the same movie app project from before, we can greatly
+  simplify our application by rewriting our computed properties as getters.
+  Eventually, we'd like to get to the point where we don't need separate
+  components for <code>ComedyMovieList</code> and
+  <code>FamilyMovieList</code> so we can write just one component,
+  <code>MovieList</code> and reuse it. This is a great example of refactoring
+  that we mentioned in previous chapters. It might not always be immediately
+  obvious how we would reuse a component, but now that we know it's possible,
+  let's solve the problem of making it happen. To start, let's examine our new
+  desired component structure:
+</p>
+<ul>
+  <li>App</li>
+  <li>MovieList</li>
+</ul>
+<p>
+  This is a powerful step in our journey because we can now imagine that there
+  are more genres for movies in our state like "Horror", "Thriller", and
+  "Romantic Comedy". We can use the same MovieList component for all of the
+  genres without doing any additional work!
+</p>
+<p>
+  For our first step, let's rewrite our app to use two distinct getters: one for
+  comdies and the other for family movies.
+</p>
+<h4>main.js</h4>
+<pre data-language="javascript">
+const store = new Vuex.Store({
+  state: {
+    movies: [
+      { id: 1, title: 'The Hangover', genre: 'Comedy' },
+      { id: 2, title: 'I Love You Man', genre: 'Comedy' },
+      { id: 3, title: 'Cars', genre: 'Family' },
+      { id: 4, title: 'Toy Story', genre: 'Family' },
+    ],
+  },
+  getters: {
+    comedyMovies(store) {
+      return store.movies.filter(movie => movie.genre === 'Comedy');
+    },
+    familyMovies(store) {
+      return store.movies.filter(movie => movie.genre === 'Family');
+    },
+  },
+});
+</pre>
+<p>
+  Notice the new property in our store called "getters". This is where we can
+  set up our global computed properties and export them to the rest of the Vue
+  app. Now let's look at how we can make MovieList its own component.
+</p>
+<h4>MovieList.vue--html</h4>
+<pre data-language="html">
+  &lt;template&gt;
+    &lt;div&gt;
+      &lt;h2&gt;{{ genre }}&lt;/h2&gt;
+      &lt;ul&gt;
+        &lt;li v-for="movie in movies" :key="movie.id"&gt;{{
+    movie.title
+  }}&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  &lt;/template&gt;
+</pre>
+<h4>MovieList.vue--script</h4>
+<pre data-language="javascript">
+  export default {
+    name: "MovieList",
+    props: {
+      genre: String,
+      movies: Array
+    }
+  };
+</pre>
+<p>
+  There are a few things you should notice. First, notice how little our actual
+  list has changed. All we did was change 'comedyMovies' or 'familyMovies' to
+  <code>movies</code> in our <code>v-for</code> block. Second, instead of
+  statially rendering the header of the component, we're taking in some dynamic
+  information called <code>genre</code>. Finally, notice that we're using props
+  here, so where are those props coming from? Remember that props have to be
+  passed to a component by a parent, so let's take a look at what
+  <code>App.vue</code> looks like.
+</p>
+<h4>App.vue--html</h4>
+<pre data-language="html">
+  &lt;template&gt;
+    &lt;div id="app"&gt;
+      &lt;MovieList :movies="familyMovies" genre="Comedy" /&gt;
+      &lt;MovieList :movies="comedyMovies" genre="Family" /&gt;
+    &lt;/div&gt;
+  &lt;/template&gt;
+</pre>
+<p>
+  Again, so far not much has changed. Instead of rendering specific components,
+  we're rendering one more genral component twice and passing properties into
+  them from the App component. Let's see what the script looks like.
+</p>
+<h4>App.vue--script</h4>
+<pre data-language="javascript">
+  import { mapGetters } from "vuex";
+  import MovieList from "./components/MovieList.vue";
+  
+  export default {
+    name: "app",
+    components: {
+      MovieList
+    },
+    computed: {
+      ...mapGetters(["comedyMovies", "familyMovies"])
+    }
+  };
+</pre>
+<p>
+  Here's where things are probably starting to venture into the uncomfortable.
+  The only new concept we're introducing here is the
+  <code>mapGetters</code> function. Notice that <code>mapGetters</code> is
+  imported from Vuex above. Also, notice that because
+  <code>mapGetters</code> returns an object, we can use the
+  <strong>spread operator</strong> to our advantage. Find out more about the js
+  spread operator
+  <a
+    href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax#Spread_in_object_literals"
+    >here</a
+  >. What <code>mapGetters</code> is doing is going to the store object to find
+  the "getters" property. If one of the properties in that object matches one of
+  the strings in the given array, it will add that computed property to the
+  object it will return. Once it returns said object, we use the spread operator
+  to make a new computed property for each getter on our component. We can do
+  this for any number of computed properties, and we can even include local
+  computed properties that don't need to exist in the store.
+</p>
+<p>
+  This code works, and it's already a huge improvement from our previous
+  version, but there's still room for improvement. Both of our getters do almost
+  the same thing. Just as we'd like to reuse components as much as possible,
+  we'd also like to reuse any of our functions when we can. In the next lesson,
+  we'll continue building our knowledge of getters to make our application
+  better.
+</p>
