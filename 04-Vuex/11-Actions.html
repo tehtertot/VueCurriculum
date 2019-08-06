@@ -1,0 +1,67 @@
+<h1>Vuex Actions</h1>
+<h2>Objectives:</h2>
+<ul>
+  <li>Learn about Vuex actions and when to use them</li>
+</ul>
+<p>
+  Mutations are the de facto way to mutate state in Vuex. But sometimes they
+  just can't do the job. We're going to deal with asynchronicity in the next
+  chapter, but let's talk about what Vuex actions do and why we might use them
+  in theory.
+</p>
+<h2>Asynchronicity</h2>
+<p>
+  The key reason we need Vuex actions is to deal with asynchronous code. For
+  one, all mutations <em>must</em> be synchronous, or we'll start losing the
+  ability to debug our application using our devtools (more on that later). But
+  what does that really mean?
+</p>
+<p>
+  Synchronous code is code that will start and finish at a predictable point in
+  time. All the code we've dealt with so far has been synchronous. When we
+  commit a mutation, it mutates state directly and then it's done. We know that
+  that mutation will happen right when we call it and before anything else
+  happens. However, there are various reasons code may be asynchronous,
+  especially in JavaScript. One reason might be that we have a list of thousands
+  of movies in a database somewhere, but it's not stored directly in our Vue
+  app. We'll need to request that information from a server somewhere and we
+  have no idea when that information will return to us. In that case, we'll need
+  to rely on actions.
+</p>
+<p>Let's see an action in action in a contrived example.</p>
+<h4>main.js</h4>
+<pre data-language="javascript">
+  const store = new Vuex.Store({
+    // ...state
+    mutations: {
+      arbitraryMutation() {
+        // some code
+      },
+    },
+    actions: {
+      async arbitraryAction(context) {
+        const somethingWeAreWaitingFor = await getStuffFromDatabases();
+        context.commit('arbitraryMutation');
+      }
+    }
+  })
+</pre>
+<p>
+  Obviously this isn't a very realistic example but the important thing is that
+  we can use actions to wait for certain things to happen, especially useful for
+  when we have to interact with an external server, and then we can commit
+  mutations synchronously. Just remember that Vuex actions are really useful
+  when:
+</p>
+<ul>
+  <li>You need to commit multiple different mutations at once</li>
+  <li>
+    You need to do something asynchronous, like code that interacts with an
+    external server
+  </li>
+</ul>
+<p>
+  Take a look at the documentation
+  <a href="https://vuex.vuejs.org/guide/actions.html">here</a> and see what you
+  can gather. We'll be using actions in the next section.
+</p>
