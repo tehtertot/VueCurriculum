@@ -1,0 +1,70 @@
+<h1>Mapping Vuex Mutations</h1>
+<h2>Objectives:</h2>
+<ul>
+  <li>Learn a more concise syntax for mutating state</li>
+</ul>
+<p>
+  If you look at our last lesson, you'll see a lot of code, and some of it is
+  definitely unnecessary. Let's pick off a low-hanging fruit and modify our
+  <code>MovieListItem</code> component to use the
+  <code>mapMutations</code> function.
+</p>
+<h4>Before:</h4>
+<pre data-language="javascript">
+  export default {
+    name: "MovieListItem",
+    props: {
+      movie: {
+        id: Number,
+        score: Number,
+        title: String,
+        genre: String
+      }
+    },
+    methods: {
+      onUpvote() {
+        this.$store.commit("incrementMovieScore", this.movie.id);
+      },
+      onDownvote() {
+        this.$store.commit("decrementMovieScore", this.movie.id);
+      }
+    }
+  };
+</pre>
+<h4>After--html:</h4>
+<pre data-language="html">
+  &lt;template&gt;
+    &lt;div class="movie"&gt;
+      &lt;h5&gt;{{ movie.title }}&lt;/h5&gt;
+      &lt;span class="score"&gt;score: {{ movie.score }}&lt;/span&gt;
+      &lt;div class="voting-buttons-container"&gt;
+        &lt;button @click="incrementMovieScore(movie.id)"&gt;Upvote&lt;/button&gt;
+        &lt;button @click="decrementMovieScore(movie.id)"&gt;Downvote&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/template&gt;
+</pre>
+<h4>After--script:</h4>
+<pre data-language="javascript">
+  import { mapMutations } from "vuex";
+  
+  export default {
+    name: "MovieListItem",
+    props: {
+      movie: {
+        id: Number,
+        score: Number,
+        title: String,
+        genre: String
+      }
+    },
+    methods: {
+      ...mapMutations(["incrementMovieScore", "decrementMovieScore"])
+    }
+  };
+</pre>
+<p>
+  Look at how much more concise our methods property is. And all we had to do
+  was use the <code>mapGetters</code> helper and update the html click handlers.
+  Don't forget to use <code>mapMutations</code> when you can!
+</p>

@@ -3,13 +3,15 @@
     <h5>{{ movie.title }}</h5>
     <span class="score">score: {{ movie.score }}</span>
     <div class="voting-buttons-container">
-      <button @click="onUpvote()">Upvote</button>
-      <button @click="onDownvote()">Downvote</button>
+      <button @click="incrementMovieScore(movie.id)">Upvote</button>
+      <button @click="decrementMovieScore(movie.id)">Downvote</button>
     </div>
   </div>
 </template>
 
 <script>
+import { mapMutations } from "vuex";
+
 export default {
   name: "MovieListItem",
   props: {
@@ -21,12 +23,7 @@ export default {
     }
   },
   methods: {
-    onUpvote() {
-      this.$store.commit("incrementMovieScore", this.movie.id);
-    },
-    onDownvote() {
-      this.$store.commit("decrementMovieScore", this.movie.id);
-    }
+    ...mapMutations(["incrementMovieScore", "decrementMovieScore"])
   }
 };
 </script>
