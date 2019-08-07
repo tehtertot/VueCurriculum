@@ -1,0 +1,25 @@
+<h1>Authentication</h1>
+<h2>Objectives:</h2>
+<ul>
+    <li>Learn why authentication is important</li>
+    <li>Learn how to authenticate with Firebase</li>
+</ul>
+<hr>
+<p>As we develop web applications for users, authentication is a very important process to consider. <b>Authentication</b> is the process of verifying that someone is who they say they are. So far, none of our applications have utilized this process--anyone could walk up and play Ninja Gold or browse through the applications we've made; but suppose we did want it to matter. What if we wanted to keep track of Ninja Gold high scores or a history of game play per user? You have probably used dozens of sites that require you to <em>authenticate</em> by signing in with some combination of username and password or log in via an existing account like Google, Facebook, or GitHub.</p>
+<p>While this is certainly something we could manage internally in our application (by saving usernames and encrypted passwords into a database and then checking that database each time a user logs in), we are going to utilize a third-party API, namely Firebase, to assist us with this process. We can trust a provider like Google to ensure our data is secure, and that way, we don't have to be experts in security; instead, we can focus on the heart of our application!</p>
+<h3>Setting Up Firebase Authentication</h3>
+<p>This assumes you have already set up your Firebase account at the end of the last module. If you haven't, be sure to do that now (<a href="https://firebase.google.com/" target="_blank">https://firebase.google.com/</a>)</p>
+<ol>
+    <li>Create a new Vue application</li>
+    <li>Sign in to Firebase and click on "Go to console" in the upper right corner.</li>
+    <li>Click on the "Create a project" button in the middle of the screen (or "+ Add a project" if you have any existing projects).</li>
+    <li>Walk through each of the next steps:</li>
+    <ol>
+        <li>Give your project a name. This will be be how you reference it later.</li>
+        <li>Leave the default "Not right now." (If you already have a Google Analytics account set up, feel free to leave this on. We just won't be exploring it as part of this track.)</li>
+    </ol>
+    <li>Once your project is ready, click "Continue."</li>
+    <li>On the left navigation bar, under "Develop," click "Authentication."</li>
+    <li>In the main pane, select the "Sign-in method" tab.</li>
+    <li>Under "Provider," click on Email/Password to edit it. Click the "Enable" toggle to turn this option on. (For now, leave the Email link (passwordless sign-in toggled off).</li>
+</ol>
