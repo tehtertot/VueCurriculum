@@ -1,0 +1,25 @@
+<h1>Intro to APIs</h1>
+<h2>Objectives:</h2>
+<ul>
+    <li>Understand what an API is</li>
+</ul>
+<hr>
+<p>Sometimes when we are building an application, we may want to take advantage of existing data and/or tools rather than doing everything ourselves. Consider, for example, building an online store and using an external service to process payment information, or an event site that incorporates the weather, or a tool that integrates maps and directions. We could, conceivably, do all these things ourselves, but there are others in the community who specialize in these things specifically, so let's take advantage of that!</p>
+<p>This means we'll have to leave our own application and make a call to an external server. An <b>API</b>, or <em>application programming interface</em>, is basically a given application's set of definitions that tell other applications how to access its services. Before integrating this immediately into our applications, let's first get some practice interacting with APIs. When working with web APIs, we use the HTTP request-response cycle to communicate with another server. Depending on the API, we'll need to consider a few different parts:</p>
+<h4>Request</h4>
+<ul>
+    <li><b>method</b> - indicates what type of action will be performed; most common HTTP verbs include GET, POST, PUT, PATCH, DELETE</li>
+    <li><b>headers</b> - pass additional request information, commonly including authorization, authentication, or caching specifications</li>
+    <li><b>body</b> - the specific data to send in the request</li>
+</ul>
+<h4>Response</h4>
+<ul>
+    <li><b>status</b> - codes indicate whether the request was successful or what went wrong; eg. 200 - OK, 404 - Not Found, 500 - Server Error (you can find a full list of status codes here: <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status" target="_blank">https://developer.mozilla.org/en-US/docs/Web/HTTP/Status</a>)</li>
+    <li><b>content</b> - the actual data returned from the request</li>
+    <ul>
+        <li>In the request-response cycle generally, this is most commonly some combination of HTML, CSS, and JavaScript</li>
+        <li>When working with APIs, this is most commonly JSON data</li>
+    </ul>
+</ul>
+<p>To get a better understanding of how this works, we're going to use a tool called <em>Postman</em>. After getting comfortable with how APIs work, we'll drop Postman and integrate these calls directly into our applications, but Postman is a great tool during the development process to ensure the calls we intend to make are working as we expect.</p>
+<p>Click on this link to download the tool for your OS: <a href="https://www.getpostman.com/downloads/" target="_blank">https://www.getpostman.com/downloads/</a>.</p>

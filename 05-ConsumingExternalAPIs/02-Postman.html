@@ -1,0 +1,30 @@
+<h1>Postman</h1>
+<h2>Objectives:</h2>
+<ul>
+    <li>Learn how to use the Postman tool</li>
+    <li>Observe the request-response cycle in action by making a call to an API</li>
+</ul>
+<hr>
+<h4>Making a Basic GET Request</h4>
+<p>Now that we've got Postman set up, we can make our first call! The first one we're going to make is to the Pokemon API, which documentation can be found here: <a href="https://pokeapi.co/" target="_blank">PokeApi</a>. We're starting with this one because they don't require any authorization, and because Pokemon! It also has a great interface and decent documentation for getting started. (If you don't know anything about Pokemon, they're basically cute characters from a video game that can be caught and then used to battle; each Pokemon has different attacking abilities and strength, and some of them can even evolve into other Pokemon.)</p>
+<p>To get started, make a new request in Postman, if one isn't open already:</p>
+<div style="text-align: center;">
+    <img src="images/newpostman.png" style="height: 100px" alt="">
+</div>
+<p>Then in main bar, type the URL as shown on the main page of the PokeApi website, like so:</p>
+<div style="text-align: center;">
+    <img src="images/postmanrequest.PNG" style="height: 300px" alt="">
+</div>
+<ol>
+    <li>Request Method - here is where you can specify the request method (GET, POST, PUT, etc.)</li>
+    <li>Request URL - the actual route for the API, including any required variables</li>
+    <li>Send - actually make the request</li>
+    <li>Response Body - the response from our request; notice Postman also records the status (200 OK in the example above), how long the request took, and how big the response is</li>
+</ol>
+<p>Go ahead and try entering a few different Pokemon. What happens if you enter a name that doesn't correspond to an existing Pokemon? (Check the status!)</p>
+<p>Now let's practice using the docs. Click on the "Check out the docs!" link on the main page or go to this URL: <a href="https://pokeapi.co/docs/v2.html" target="_blank">https://pokeapi.co/docs/v2.html</a>. Not all documentation is equal, and as you enter the development world, you'll begin to appreciate good documentation. After the initial introductory and legal information, the left navigation provides a breakdown of the various resources that are available in this API. For example, if we click on "Berries", it shows us that, in order to retrieve berry information, we'll use the GET method on the endpoint "https://pokeapi.co/api/v2/berry/{id or name}".</p>
+<p>Go ahead and peruse the documentation and try several different requests!</p>
+
+<!-- public API with query parameters? -->
+<!-- public API with POST requests? -->
+<!-- public API with required headers? -->
