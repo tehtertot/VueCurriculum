@@ -1,0 +1,69 @@
+<h1>Quasar</h1>
+<h2>Objectives:</h2>
+<ul>
+  <li>Learn about a different kind of Vue framework</li>
+</ul>
+<h2>Cross-platform Development</h2>
+<p>
+  Nowadays, users are getting engaged with applications from all over the world,
+  on all kinds of different devices. Whether it's a mobile phone, desktop
+  computer, voice activated assistant, or another device, developers are
+  consistently having to meet consumers where they are. This has created a
+  pretty significant demand for creating apps that meet multiple needs. For
+  instance, our web app may need to be delivered on a mobile phone, or even on
+  desktop! Think about how silly it would be if we couldn't use an app like
+  Slack or Mattermost from our phones, desktop, and the web! They wouldn't be
+  nearly as compelling as products! However, this can be problematic. What if
+  our app is gaining traction and we just don't have the expertise on the team
+  to build native computer and mobile apps? Well, we're in luck because of
+  frameworks like Quasar! Quasar is Vue's answer to similar products like React
+  Native or Flutter. It allows us to take our Vue application and deliver it as
+  a native application on all sorts of different major platforms without
+  changing the codebase!
+</p>
+<h4>A caveat before we start</h4>
+<p>
+  Quasar is really, really cool. It's amazing how far some of the developer
+  tools have come in recent years. However, many, many companies still find the
+  need to create their own custom native applications. While tools like Quasar
+  can do a lot, there's still a lot of work to do in the field before an option
+  like this is compelling to large companies. Quasar promises a host of
+  different applications with one codebase, but in reality things are always
+  more complicated than that. For instance, if you need to implement native
+  alerts on iOS and Android, you'll have to implement custom solutions for each
+  platform. While your user interface might be in Vue, you're still going to
+  find yourself in a situation where custom native code is required. Depending
+  on the number of applications you need to support, your code base is also
+  liable to get bloated and unruly. Separating concerns is a tried-and-true
+  computer programming technique and this can make your code much harder to work
+  with. Quasar also still requires a decent amount of platform specific
+  knowledge to get up and running. All that being true, here are some good times
+  to use Quasar for your application:
+</p>
+<ul>
+  <li>
+    You're working on a hobby project and just want to play around with it
+  </li>
+  <li>Your team can't afford to hire native engineers</li>
+  <li>
+    Your app is small and won't need access to many device APIs (things the
+    phone software does natively like send an alert)
+  </li>
+</ul>
+<h4>Moving on</h4>
+<p>
+  Okay, now that that's out of the way, let's talk about some of the underlying
+  technology that makes Quasar work and some similar options. Quasar uses a tool
+  called <a href="https://cordova.apache.org/">Cordova</a> to create native
+  mobile apps. Cordova is used in tools like Ionic for Android and is made by
+  the Apache foundation. Another option for doing this particular task in Vue is
+  <a href="https://www.nativescript.org/vue">NativeScript</a>. Quasar also
+  handles SPA, SSR, and PWA support, which are pretty well supported by both
+  <code>vue-cli</code> and <code>Nuxt</code>. Finally, we can build native
+  desktop applications in Quasar using
+  <a href="https://electronjs.org/">Electron</a>. Electron can be used with Vue
+  on its own, and is what many popular apps are built with, including VSCode and
+  Slack. Whether you choose to run with Quasar or pick and choose from
+  competitors based on your needs is up to you, but we'll cover a simple Quasar
+  powered app in the next example!
+</p>
