@@ -1,0 +1,51 @@
+<h1>Using Quasar</h1>
+<h2>Objectives:</h2>
+<ul>
+  <li>Learn how to use Quasar and Vue to build a desktop application</li>
+</ul>
+<h2>Why just desktop?</h2>
+<p>
+  While Quasar is a super powerful tool, bundling for mobile phones requires
+  access to devices and software that we can't guarantee. It also introduces
+  platform-specific considerations that go above and beyond the scope of this
+  course. You can always read the full Quasar documentation
+  <a href="https://quasar.dev/start/pick-quasar-flavour">here</a>. For now,
+  we'll follow the instructions for Quasar and Electron to build a really
+  simple, usable desktop application.
+</p>
+<p>
+  Let's start by installing all the necessary tools and packages. First, run
+  <code>npm install -g @quasar/cli</code> to install the quasar cli globally.
+  Once that's complete, run <code>quasar create cross-platform</code>. Just like
+  the vue-cli or Nuxt, the create command will make a new project called
+  cross-platform. The defaults are fine for now until it prompts you to use yarn
+  or npm, but take note of the prompts. Use npm and let's see what our app looks
+  like! Open up your app and run <code>quasar dev</code> to get it running. A
+  window should open in your default browser with your Quasar app! Notice the
+  similarities between Quasar and Nuxt. While all of the code is in the
+  <code>src</code> folder now, there are some noticeable similarities between
+  file structures! Unlike Nuxt, you'll have to setup your own router, but it
+  should look familiar because it uses vue-router!
+</p>
+<p>
+  Now let's kill our running server and build a desktop app. In development,
+  it's pretty straightforward. Let's just run
+  <code>quasar dev -m electron</code>. If you watch the logs in the console,
+  you'll see it install electron and get your app up and running! In your native
+  operating system, a brand new application should open with the browser dev
+  tools open. What's happening is Electron has created a version of Chrome and
+  using your app, bundled all of the code into one specific desktop application
+  that can use modern web languages! Since VSCode and Slack are built on
+  Electron, you can even open up the chrome dev tools inside those apps if
+  you're feeling adventurous!
+</p>
+<p>
+  Quasar can do a ton, but hopefully this example illustrates the sheer power in
+  the framework. If you want to learn more about security concerns, deployment,
+  creating app icons, configuration, or anything else about Quasar, follow the
+  guide <a href="https://quasar.dev/quasar-cli/quasar-conf-js">here</a>. You
+  should have enough skills in your pocket to be able to pick things up. Play
+  around for a while and ask your instructor if you need help with any concepts
+  you're seeing in the documentation! Can you notice any similarities between
+  preFetch and any other concepts we've covered before?
+</p>
