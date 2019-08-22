@@ -4,3 +4,84 @@
   <li>Use Nuxt for SSR</li>
   <li>Learn how to handle SSR pages</li>
 </ul>
+<h2>asyncData</h2>
+<p>
+  When we're talking about optimizing pages for search engines, often that means
+  we have to retrieve data and insert it into our page before we ever send it to
+  the browser. That way, search engines can look through the content. If we were
+  just rendering Vue as an SPA, we'd typically be getting information from a
+  server somewhere and rendering the page before we have some of the data.
+  Sometimes this is okay and unimportant for indexing. Sometimes it's not. Let's
+  talk about your options if we need to pre-load data before we send our page to
+  the browser.
+</p>
+<p>
+  Just like we can use the built-in Vue method <code>data</code> to set our data
+  on our component, Nuxt gives us the ability to use a method called
+  <code>asyncData</code>. We use it in almost the exact same way we would use
+  data, except with a bit of additional flexibility. Let's see it in action
+  using data from the star wars api.
+</p>
+<h4>index.vue--template</h4>
+<pre data-language="html">
+  &lt;template&gt;
+    &lt;div class="container"&gt;
+      &lt;h1&gt;Star Wars Example&lt;/h1&gt;
+      &lt;ul&gt;
+        &lt;li v-for="planet in planets" :key="planet.id"&gt;{{
+    planet.name
+  }}&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  &lt;/template&gt;
+</pre>
+<h4>index.vue--script</h4>
+<pre data-language="javascript">
+  import axios from "axios";
+  
+  export default {
+    async asyncData({ params }) {
+      const { data, err } = await axios.get("https://swapi.co/api/planets");
+      return {
+        planets: data.results
+      };
+    }
+  };
+</pre>
+<p>
+  There are a few things going on here so let's break it all down. First, our
+  template is looping through data that is seemingly called
+  <code>planets</code>. Notice how nothing in the template has fundamentally
+  changed. Now notice that instead of using <code>data()</code> we've used
+  <code>asyncData()</code>. At the end of the day we still need to return an
+  object, but now we can use the power of
+  <a
+    href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function"
+    >async/await</a
+  >
+  to make network requests before the component is loaded. We're then
+  <a
+    href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment#Object_destructuring"
+    >destructuring</a
+  >
+  the axios response and inserting the data from the server into our
+  application. This all happens on the back-end so we don't have to worry about
+  search engines seeing the content we want them to see! Just know that this
+  async request will happen before the component is loaded, so if you want to
+  use <code>this</code>, you're out of luck.
+</p>
+<h3>One more thing</h3>
+<p>
+  You may have noticed something in the <code>asyncData()</code> method that
+  surprised you. We included <code>{ params }</code> as a parameter definition
+  for our function, so what exactly is happening there? As we know, Nuxt will
+  actually call asyncData <em>for us</em>. We never call it ourselves directly.
+  Every time Nuxt calls <code>asyncData()</code> it will pass any url parameters
+  we got from our route as an argument to our function. So why aren't we just
+  using <code>params</code>, what's with the curly braces? Well, the params
+  aren't the only thing being sent into our function. In fact, our function gets
+  an object with various keys. We know that this object will always be
+  predictable because it's coming from Nuxt, so we can use destructuring syntax
+  on the object we're given right in the function definition! Now we can access
+  <code>params</code> from anywhere in the function!
+</p>
