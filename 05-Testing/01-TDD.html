@@ -1,0 +1,87 @@
+<h1>TDD</h1>
+<h2>Objectives:</h2>
+<ul>
+  <li>Understand the advantages of TDD</li>
+  <li>Understand when TDD is useful</li>
+  <li>Understand the types of tests</li>
+</ul>
+<h2>Test Driven Development</h2>
+<p>
+  As applications grow in size and complexity, it becomes much easier to make a
+  change that has unforeseen implications across multiple pieces of the
+  codebase. Modularization helps with this, but it can only go so far. At some
+  point, writing code and testing things manually requires significantly more
+  overhead than one person can handle. Ideally, we'd be able to change
+  something, test the thing we changed, and run some code that makes sure all of
+  the other pieces of the app are still in working order. Enter, testing.
+</p>
+<p>
+  Applications can be tested in multiple ways, but typically tests fall into one
+  of 4 categories:
+</p>
+<ul>
+  <li>Unit Testing</li>
+  <li>Integration Testing</li>
+  <li>End-to-End Testing</li>
+  <li>Manual Testing/QA</li>
+</ul>
+<p>
+  Hopefully, you've already been using manual testing as part of your normal
+  workflow, and while manual testing alone can be a huge topic to cover, we're
+  going to focus on the other three types of automated testing.
+</p>
+<h4>Unit Testing</h4>
+<p>
+  A unit test usually tests one small piece of your codebase, like a function.
+  It gives you confidence that when you receive a certain input, you get a
+  consistent and predictable output. Unit tests are usually the easiest to write
+  and understand, and can give you much more confidence about your codebase as a
+  whole.
+</p>
+<h4>Integration Testing</h4>
+<p>
+  Integration tests typically test one or more unit of your code in tandem. They
+  also regularly test functionality that couldn't be achieved with unit testing
+  alone. For instance, an integration test might test how a component works when
+  a specific event occurs. We don't actually need a user to click a button, and
+  we don't need to watch the screen closely, but we're also potentially
+  involving more than just one function that we've written.
+</p>
+<h4>End-to-End Testing</h4>
+<p>
+  End-to-End tests (or e2e) tests, are exactly what they sound like. They test
+  an application from the user's perspective. Should a component appear when a
+  user clicks a button in a different component? An e2e test is the only way to
+  cover it. They should only cover functionality that unit tests or integration
+  tests cannot cover.
+</p>
+<h2>When is testing right for me?</h2>
+<p>
+  People have had different opinions about this since the dawn of programming.
+  Michael Choi, founder of Coding Dojo argued that automated testing is only
+  useful for big companies, some people won't even work on a project without
+  writing tests. Here are some of the arguments from each camp:
+</p>
+<h4>The argument against testing</h4>
+<p>
+  People who think testing is for big companies say that tests take a long time
+  to write and that they can slow down the development process for startups that
+  need to move quickly. They say that tests can always be added later, but when
+  the product is always changing, you'll constantly have to go back and rewrite
+  your tests anyway.
+</p>
+<h4>The argument for testing</h4>
+<p>
+  People who test everything they write say that tests allow them to write code
+  more quickly because they don't have to spend as much time worrying about code
+  that they wrote in the past. They say that tests make it easier to change
+  products and improve a codebase because it's clear right away that there are
+  breaking changes that need to be addressed.
+</p>
+<h4>The verdict</h4>
+<p>
+  At the end of the day, you'll have to decide for yourself whether testing is
+  right for you. We tend to feel that tests are an integral part of development
+  on projects big or small. But whether tests are for your team or not, it's
+  important to learn how they work and be able to write them effectively
+</p>
