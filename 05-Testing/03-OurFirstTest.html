@@ -1,0 +1,95 @@
+<h1>Our First Test</h1>
+<h2>Objectives:</h2>
+<ul>
+  <li>Learn about testing frameworks and how they work</li>
+  <li>Write your first unit test suite</li>
+  <li>
+    Understand the difference between a test framework and an assertion library
+  </li>
+</ul>
+<h2>Test Frameworks</h2>
+<p>
+  In JavaScript there are various "testing frameworks" and "assertion engines"
+  we can use to write tests. You may have already heard of Mocha, Chai, Jest,
+  Jasmine, or a host of others. They don't all do exactly the same thing in the
+  exact same way. But just as Vue and React accomplish the same end-goal.
+  Testing frameworks will start to look more and more similar as you gain
+  familiarity with them. We'll use Jest for our examples, which is also
+  supported by the vue-cli. Jest uses Jasmine as its assertion library behind
+  the scenes. We'll get into what that means once we've written our first test
+  suite!
+</p>
+<p>
+  It's easiest to understand unit testing in a simple environment before we
+  apply its concepts to a Vue application, so let's start by making a simple
+  function and using Jest to test it. Let's start by creating a new folder
+  anywhere on our computer. We'll call ours "my-first-test" but you can call it
+  whatever you want. Now, navigate into the "my-first-test" folder and create a
+  file called "sigma.js". We'll use the Sigma algorithm from the Coding Dojo
+  algorithm book as the explanation of this algorithm. In this case, the
+  algorithm itself is not the focus, so we'll provide you with the code. The
+  focus here is the tests. Copy the following code into your
+  <code>sigma.js</code> file.
+</p>
+<h4>sigma.js</h4>
+<pre data-language="javascript">
+  function sigma(num) {
+    let sum = 0;
+    for (let i = 0; i <= num; i++) {
+      sum +=i;
+    }
+    return sum;
+  }
+</pre>
+<h2>Our first test suite</h2>
+<p>
+  Tests are typically organized into chunks called "suites". A suite is a series
+  of individual tests, or specs, that test individual assertions about our code.
+  Each suite is a logical container for a specific set of tests that all belong
+  together, and within each suite we can have any number of tests or even any
+  number of "sub-suites", which represent a further denomination within our
+  suite. Let's go ahead and initialize npm in this project and install Jest.
+  Navigate to your project folder in your command line and run
+  <code>npm init -y</code>. Now, let's install the Jest command line tools into
+  our project by running <code>npm install -D jest-cli</code>. This will save
+  the jest-cli to your development dependencies in your
+  <code>package.json</code>. Now update the "scripts" property in your
+  <code>package.json</code> to look like this:
+</p>
+<h4>package.json</h4>
+<pre data-language="json">
+  "scripts": {
+    "test": "jest --watch"
+  },
+</pre>
+<p>
+  This tells npm that when you run <code>npm run test</code>, it should run
+  <code>jest --watch</code>, which will run all of our tests automatically! Now,
+  let's create a file called <code>sigma.test.js</code> and add a suite with one
+  test using the following code.
+</p>
+<pre data-language="javascript">
+  describe('`sigma(num)`', () => {
+    it('runs this test!', () => {
+      expect(true).toBe(true);
+    });
+  });
+</pre>
+<p>
+  The <code>describe</code> function tells Jest that this is a new suite. Notice
+  that the <code>describe</code> function takes two parameters: a string and a
+  function. The string is for us, the developer. It will make it easier to read
+  what's happening when we run our tests. The function is defining what the
+  suite will do! The <code>it</code> function is very similar to the
+  <code>describe</code> function in that it takes a string as a parameter that
+  will be used to describe it for the end user, and a function to define what it
+  does. Finally, the <code>expect</code> function is what's known as our
+  "assertion". The assertion is what we're actually testing. It takes a value,
+  and using chaining, we can use any of Jasmine's "assertion matchers" to ask
+  questions about that value. In this case, we're just expecting
+  <code>true</code> to be equal to <code>true</code>. It's important to know
+  that while this all looks like English, the code under the hood is all just
+  code. Take a moment to think about how you yourself would write each of the
+  functions you see here or how they might actually work!
+</p>
+<p>Now, let's get to writing some real tests!</p>

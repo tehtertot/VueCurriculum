@@ -1,0 +1,49 @@
+<h1>Testing Fundamentals</h1>
+<h2>Objectives:</h2>
+<ul>
+  <li>Understand the philosophy behind a well-written test</li>
+</ul>
+<h2>An Effective Test</h2>
+<p>
+  When we first start our testing journey, it can be hard to figure out what is
+  worth testing and what isn't. It can be difficult to tell whether or not
+  you've written enough tests or if you should write any tests at all. The
+  bottom line is that if you add a feature, you should at least
+  <em>consider</em> writing tests for it. You'll almost definitely be able to
+  find one useful test case that you can check for. You'll also almost
+  definitely find one or more test cases that aren't useful to you at all. An
+  effective test should be consistent, relevant, and robust.
+</p>
+<h4>Consistency</h4>
+<p>
+  A consistent test is a test that will reliably produce a result. When the
+  function isn't producing the correct result, the test should
+  <em>always</em> break. When the function is producing the correct result, the
+  test should <em>always</em> pass. This can sometimes feel like more of an art
+  than a science, but typically you want to test a specific input criteria
+  against a specific output criteria.
+</p>
+<h4>Relevancy</h4>
+<p>
+  A test needs to be useful in the context of your application, but you can make
+  certain assumptions. Often times, first-time testers fall into the trap of
+  "testing the framework". In other words, people will attempt to test
+  functionality that JavaScript, Vue, or another library handles for us. For
+  instance, let's say we're testing a function that sums all the numbers from 1
+  to n, n being given as a parameter. We don't need to test whether or not
+  JavaScript's addition (<code>+</code>) operator works. We can trust that the
+  people who wrote JavaScript are testing their language on their end.
+</p>
+<h4>Robustness</h4>
+<p>
+  Another pitfall we often run into is fragility. We want to write tests that
+  can test the entire app without breaking every time we add a new feature. This
+  is often a challenge and requires experience to get it right. It's also
+  inevitable even with the best of intentions, but we should always be thinking
+  about how to make our tests as robust as possible so that they can run
+  independently of the feature-set.
+</p>
+<p>
+  Let's take a look at what testing looks like with a simple unit test in the
+  next lesson!
+</p>
