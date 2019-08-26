@@ -5,3 +5,7 @@ function sigma(num) {
   }
   return sum;
 }
+
+module.exports = {
+  sigma
+};

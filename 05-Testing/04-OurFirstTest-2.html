@@ -1,0 +1,30 @@
+<h1>Our First Test - Part 2</h1>
+<h2>Objectives:</h2>
+<ul>
+  <li>Learn how to separate blocks of tests into sub-suites</li>
+  <li>Learn how to test for expected errors</li>
+</ul>
+<p>
+  Our test suite is pretty robust. It's consistently passing when our code is
+  active, and consistently failing when our code block is commented out. If we
+  changed the function to work a completely different way, it wouldn't matter
+  because our tests only care about the input and the output. So we're on the
+  right track. But there are times when users (including ourselves) may use our
+  function incorrectly, and we need to make sure our function has the desired
+  behavior. In our example, we may even be interested in throwing a custom
+  error. Don't worry, we won't get too crazy, but there are a couple goals that
+  we're targeting here:
+</p>
+<ul>
+  <li>Introduce you to throwing your own errors</li>
+  <li>
+    Introduce you to considering more graceful handling of unexpected data
+  </li>
+  <li>Introduce you to testing for specific errors</li>
+</ul>
+<p>
+  First, let's break our suite up into two sub-suites. A sub-suite usually
+  defines the context for a series of tests. The context in this case is the
+  type of data we're given. Let's create a sub-suite for when we're given a
+  number, and a sub-suite for when we're given a non-number.
+</p>

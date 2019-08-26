@@ -92,4 +92,89 @@
   code. Take a moment to think about how you yourself would write each of the
   functions you see here or how they might actually work!
 </p>
-<p>Now, let's get to writing some real tests!</p>
+<p>
+  Now, let's get to writing some real tests! When we start writing tests, it's
+  important to think about all the possible ways your code could be used. In
+  this case, the obvious case is when we're given a positive number to count up
+  to, we should return the sum of all the numbers from 1 to that number. Let's
+  write a test that will test whether or not our function does that. First,
+  we'll need to take a few steps to import our function into our test file.
+  Unfortunately, we're not going to be able to use the same import/export syntax
+  that we're familiar with in Vue, but when we start testing Vue that will
+  change. Go ahead and copy the syntax below.
+</p>
+<h4>sigma.js</h4>
+<pre data-language="javascript">
+  function sigma(num) {
+    // unchanged...
+  }
+
+  module.exports = {
+    sigma
+  }
+</pre>
+<h4>sigma.test.js</h4>
+<pre data-language="javascript">
+  const sigma = require("./sigma").sigma;
+  //the rest is unchanged...
+  describe('`sigma(num)`', () => {
+</pre>
+<p>
+  What we've done here is used the "old" way of exporting and importing in a
+  node-based environment. We're exporting an object from the
+  <code>sigma.js</code> file that has a key called sigma that stores the sigma
+  function. Then, we're importing that function and saving it into a variable
+  called sigma. Now that that's out of the way, let's compose our test.
+</p>
+<h4>sigma.test.js</h4>
+<pre data-language="javascript">
+  it("returns the sum of 1 to n when given a positive number", () => {
+    const result = sigma(5);
+    expect(result).toBe(15);
+  });
+</pre>
+<p>
+  In this simple example, the number that we're using to test the sigma function
+  is irrelevant as long as it's positive and doesn't clash with any of our other
+  tests. If you run <code>npm run test</code>, you should see all your tests
+  pass! If we were truly following the principles of TDD, we'd write our tests
+  <em>first</em> before we write our function. Let's try commenting out the code
+  inside our sigma function and saving the file. Did you see your tests fail?
+  Notice how Jest is running our tests and telling us exactly which tests passed
+  and failed. This is why the strings we pass to the <code>describe</code> and
+  <code>it</code> functions are important. They help us understand what's going
+  right and what's going wrong. Typically, our <code>it</code> blocks are
+  phrased along the lines of "this outcome is expected with this set of
+  inputs/criteria". Our <code>describe</code> blocks will help us specify groups
+  of tests that make sense together. Let's add a few more tests to see this in
+  action.
+</p>
+<p>
+  So far, we're testing the basic use case for this function, but what about if
+  someone tries to pass a negative number? What about 0? What if someone passes
+  a string or an object? First, we need to know what we <em>want</em> to happen.
+  Then we can test it. Try writing tests for the other cases involving numbers
+  on your own and peek below to see our version.
+</p>
+<pre data-language="javascript">
+  describe("`sigma(num)`", () => {
+    it("returns the sum of 1 to n when given a positive number", () => {
+      const result = sigma(5);
+      expect(result).toBe(15);
+    });
+  
+    it("returns 0 when given 0", () => {
+      expect(sigma(0)).toBe(0);
+    });
+  
+    it("returns 0 when given a negative number", () => {
+      expect(sigma(-2)).toBe(0);
+    });
+  });
+</pre>
+<p>
+  Notice that we changed up our syntax slightly for the next two tests. There's
+  no real need to save the result of the sigma function in a variable if we
+  don't want to. You can use whatever you're comfortable with. Let's handle the
+  cases where we're given an unexpected data type in the next lesson!
+</p>
