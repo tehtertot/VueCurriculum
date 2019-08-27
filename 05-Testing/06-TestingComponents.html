@@ -1,0 +1,29 @@
+<h1>Testing Components</h1>
+<h2>Objectives:</h2>
+<ul>
+  <li>Learn how to test a component in a Vue app</li>
+  <li>Learn about vue-test-utils</li>
+  <li>Understand where testing components fits into the larger architecture</li>
+</ul>
+<h2>New testing tools</h2>
+<p>
+  So far, what we've done is written unit tests for JavaScript functions. This
+  is really similar to what we would be doing if we were testing some
+  functionality in Vue that lived in a service or util file. Usually, those
+  files exist to provide functions to the rest of the application that are
+  useful, but aren't entirely necessary until the app grows in complexity or
+  there is a good reason to put something into its own file (like being able to
+  reuse it in multiple components). Now, we'll dive a bit deeper into testing by
+  writing our first integration test. The classification here is a bit loose.
+  Some people might say that testing a single component is a unit test. We're of
+  the opinion that components can be complex with lots of moving parts, and that
+  the term "integration test" better describes the reality of testing
+  components. That being said, let's take a look at how we can test a component!
+</p>
+<p>
+  First, we'll need to build an app so that we have some components to test.
+  Then, we'll need to learn about some new matchers and tools that Vue makes
+  available to us. To start, <a href="">download</a> this simple counter app.
+  We've gone through the setup process using the vue command line tools and have
+  manually selected unit tests with Jest as an option.
+</p>
