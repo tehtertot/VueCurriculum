@@ -1,0 +1,25 @@
+<h1>Testing Fundamentals</h1>
+<h2>Objectives:</h2>
+<ul>
+  <li>Learn about when to use certain matchers</li>
+  <li>Write a simple test suite using just JS and Jest</li>
+</ul>
+<p>
+  Often times, when we're comparing objects in JavaScript like arrays and
+  objects, we can't use the simple <code>toBe</code> matcher. We'll instead need
+  to use <code>toEqual</code>. This is because objects and arrays are passed by
+  reference, not by value. Therefore, comparing two arrays that seem identical,
+  won't work because they are technically two <em>separate</em> arrays that
+  contain the same values. To get around this, we can use the
+  <code>toEqual</code> matcher for comparison.
+</p>
+<p>
+  Use the steps from the last few lessons along with the
+  <code>toEqual</code> matcher to write a solution for the Array: Pop Front
+  challenge in the
+  <a
+    href="http://algorithms.dojo.news/static/Algorithms/index.html#LinkTarget_2091"
+    >algorithm book</a
+  >
+  and test it using a simple test suite.
+</p>
