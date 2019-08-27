@@ -1,8 +1,8 @@
 <template>
   <div class="counter">
     <h1>{{ count }}</h1>
-    <button @click="incrementCount()">Increment Count</button>
-    <button @click="resetCount()">Reset Count</button>
+    <button id="increment-button" @click="incrementCount()">Increment Count</button>
+    <button id="reset-button" @click="resetCount()">Reset Count</button>
   </div>
 </template>
 

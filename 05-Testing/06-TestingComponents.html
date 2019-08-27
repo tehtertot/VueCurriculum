@@ -56,8 +56,7 @@
 <ul>
   <li>
     Our initial state is working properly. While it may feel like "testing the
-    framework", it can help down the road if we accidentally change something.
-    It's also just a good illustration of what is possible with vue-test-utils
+    framework", it's a good illustration of what is possible with vue-test-utils
   </li>
   <li>The functionality of the increment button</li>
   <li>The functionality of the reset button</li>
@@ -72,3 +71,71 @@
     describe("reset button", () => {});
   });
 </pre>
+<p>
+  Before we can write any specific tests, we'll have to understand a few things
+  about vue-test-utils. Testing a component is much more complex behind the
+  scenes than testing a function. We need to essentially make the Vue framework
+  work to run the needs of the component, build the component in a sort of
+  pseudo-runtime environment (similar to a browser but just using the js
+  interpreter), and make sure all the dependencies are met. This can be a bit of
+  a tall order, so the Vue maintainers have built vue-test-utils. At the core of
+  the test-utils are the mounting methods <code>shallowMount</code> and
+  <code>mount</code>. Mounting a component basically accomplishes all the goals
+  listed above, and wraps our component in a wrapper that gives us access to all
+  sorts of useful methods that we can use to test our component! For now, we
+  won't worry too much about the differences between mounting options and use
+  <code>shallowMount</code>. You can read more about them
+  <a href="https://vue-test-utils.vuejs.org/api/#mount">here</a>.
+</p>
+<p>
+  Let's start with some simple tests to ensure that our initial data is being
+  properly displayed in the header.
+</p>
+<h4>counter.spec.js</h4>
+<pre data-language="javascript">
+describe("Counter.vue", () => {
+  it("displays the correct data in the header", () => {
+    const wrapper = shallowMount(Counter, {
+      propsData: {
+        count: 0
+      }
+    });
+    const header = wrapper.find("h1");
+    expect(header.text()).toBe("0");
+  });
+
+  describe("increment button", () => {});
+  describe("reset button", () => {});
+});
+</pre>
+<p>
+  There are a few new things going on here. First, shallowMount is accepting our
+  component as a parameter. That means the template and all the component's
+  other properties will be used to create a standalone version of the component
+  in isolation that we can use for testing. We'll save the component's wrapper
+  in a variable called wrapper. Now that the wrapper exists, we can use all its
+  helpful methods in conjunction with the familiar Jest methods to test some of
+  our assumptions! Notice that we're using both the <code>find</code> method and
+  the <code>text</code> method. Hopefully from the example you can get an idea
+  what they might do, but it's worthwhile to read through all the available
+  methods
+  <a href="https://vue-test-utils.vuejs.org/api/wrapper/#properties">here</a>.
+</p>
+<h4>A few things...</h4>
+<p>
+  This test is a bit fragile because it is dependent on the number continuing to
+  be rendered inside an <code>h1</code> tag. It's also dependent on the initial
+  value of the count in data being 0 and being called "count". If we change
+  anything we'll have broken our test! It's also essentially just testing that
+  Vue's data binding works. While the example isn't perfect, it does illustrate
+  a lot of the fundamentals of testing a Vue component. Also, you may have
+  noticed that there are a few possible ways to test the same thing. Every
+  developer will have a different approach to the same test, but as long as
+  you're testing the same thing effectively, it doesn't matter how you do it.
+  Try reading the documentation linked above and thinking about one or two
+  different approaches to this test.
+</p>
+<p>
+  In the next lesson, we'll continue testing our component by simulating user
+  actions!
+</p>
