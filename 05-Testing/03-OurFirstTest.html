@@ -68,6 +68,13 @@
   let's create a file called <code>sigma.test.js</code> and add a suite with one
   test using the following code.
 </p>
+<h4>Note:</h4>
+<p>
+  The name <code>sigma.test.js</code> is important here because it tells Jest
+  that it should run it as a test file. Jest uses a few different matching
+  patterns, which ultimately are a matter of preference, but for now just use
+  <code>.test.js</code> as your file extension for any test files you create.
+</p>
 <pre data-language="javascript">
   describe('`sigma(num)`', () => {
     it('runs this test!', () => {

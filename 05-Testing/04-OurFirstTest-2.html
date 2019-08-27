@@ -28,3 +28,101 @@
   type of data we're given. Let's create a sub-suite for when we're given a
   number, and a sub-suite for when we're given a non-number.
 </p>
+<h4>sigma.test.js</h4>
+<pre data-language="javascript">
+const { sigma } = require("./sigma");
+
+describe("`sigma(num)`", () => {
+  describe("when given a number as an argument", () => {
+    // our current tests live here
+  });
+
+  describe("when given a non-number as an argument", () => {
+    // other tests will go here
+  });
+});
+</pre>
+<p>
+  Notice how we use additional <code>describe</code> blocks to create
+  sub-suites. Other testing frameworks use the alias <code>context</code> to
+  define specific context blocks rather than full suites, but the idea is the
+  same. What we're doing is organizing our unit tests into logically separated
+  categories. This becomes really useful when we start using
+  <code>setup</code> and <code>teardown</code> blocks, which allow us to perform
+  specific actions before or after each test in a suite or sub-suite.
+</p>
+<p>
+  Before we add any tests to our new sub-suite, let's first run the function
+  with a non-number and see how it behaves. Try calling sigma in your
+  <code>sigma.js</code> file with <code>undefined</code> as a parameter and
+  logging the output. What do you see? What happens with other data types? You
+  may have noticed that most of the other inputs return 0. Can you find a
+  non-number argument that produces the number 1? This may or may not be
+  intended behavior. In this case, we weren't specifically given the requirement
+  of handling non-numbers. However, let's go ahead and throw a native JavaScript
+  <code>TypeError</code> when we're given a parameter that isn't a number. That
+  way, our users won't be misled into thinking that their output is okay if they
+  accidentally pass a data type that is different from what they expected. Add
+  the following code to the very beginning of your code block.
+</p>
+<h4>sigma.js</h4>
+<pre data-language="javascript">
+function sigma(num) {
+  // insert the following code
+  // we can't use instanceof because numbers are primitive types
+  if (typeof num !== "number") {
+    throw new TypeError("Argument must be a number");
+  }
+
+  let sum = 0;
+  // omitted for brevity
+}
+</pre>
+<p>
+  Now, we can expect to throw an error any time our function receives a
+  non-number. So how do we test for it? Unfortunately, testing for errors can be
+  a bit tricky because of how JavaScript scope works. We'll also have to learn
+  about a new Jasmine matcher called <code>toThrow</code>. In fact, this is a
+  great time to talk about Jasmine's matchers.
+</p>
+<h4>Assertion Engines</h4>
+<p>
+  Jasmine is what's known as an assertion engine. At its core, it allows us to
+  compare two values or watch for some behavior in an expressive way. Both the
+  <code>expect</code> function and the <code>toBe</code> function come from
+  Jasmine and there are many many more matchers available to us, like
+  <code>toThrow</code>! You can see a full list of Jasmine's matchers
+  <a href="https://jasmine.github.io/api/3.4/matchers.html">here</a>. Let's see
+  <code>toThrow</code> in action!
+</p>
+<h4>sigma.test.js</h4>
+<pre data-language="javascript">
+  describe("`sigma(num)`", () => {
+    // omitted for brevity
+    describe("when given a non-number as an argument", () => {
+      it("throws a TypeError when given `undefined`", () => {
+        expect(() => {
+          sigma(undefined);
+        }).toThrow(TypeError);
+      });
+    });
+  });
+</pre>
+<p>
+  The syntax is a bit difficult to unpack at first. What's happening is that we
+  need to pass an anonymous function to the expect function. If we just pass
+  <code>sigma(undefined)</code>, the whole test file will stop running because
+  it has thrown an error. That's because we ran code that threw an error and
+  expected to use that code as a value in a matcher. If we wrap the code that
+  will throw an error in an anonymous function, the expect block can find out
+  what happened inside the anonymous function without breaking execution. We're
+  still chaining <code>toThrow</code> onto our <code>expect</code> function, but
+  we're calling <code>sigma</code> from inside an enclosed scope.
+</p>
+<p>
+  We can continue testing our functionality with all the different non-number
+  types, but that may be overkill in this case. We should be able to add a few
+  cases that we expect to be common and trust JavaScript's typeof keyword to
+  work properly. And with that, you should have all the tools you need to build
+  your own simple test suite!
+</p>
