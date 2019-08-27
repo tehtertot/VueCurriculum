@@ -25,5 +25,50 @@
   Then, we'll need to learn about some new matchers and tools that Vue makes
   available to us. To start, <a href="">download</a> this simple counter app.
   We've gone through the setup process using the vue command line tools and have
-  manually selected unit tests with Jest as an option.
+  manually selected unit tests with Jest as an option. Take a moment to run the
+  app and familiarize yourself with the code, once you're comfortable let's get
+  testing!
 </p>
+<p>
+  The good news is that the Vue command line tools have already done most of the
+  initial setup work for us. Go ahead and look in the "tests" folder. Vue uses
+  <code>.spec.js</code> as the file extension rather than <code>.test.js</code>,
+  but it means essentially the same thing and can be used interchangeably. Also
+  notice that it's in a folder called unit. This just goes to show you that
+  naming and categorization can be a matter of opinion. We'll leave it in a
+  folder called unit for now. If you want to test your chops in a bit of a real
+  world scenario, you can stop reading here and check out the vue-test-utils
+  <a href="https://vue-test-utils.vuejs.org/guides/#getting-started"
+    >documentation</a
+  >. Try to use them to build a test suite for this app and use the rest of the
+  lesson as a reference. Either way, you should take a look at the documentation
+  for a few minutes before moving on.
+</p>
+<p>
+  So, what do we want to test? Well, let's remember that we want our tests to be
+  consistent, relevant, and robust. That means we don't want to test every
+  single thing. And we definitely don't want to fall into a trap where we're
+  just testing how Vue works. For instance, we don't need to check that the
+  click handler will call upon our function, we can assume that works. Let's
+  instead test whether or not the click of the buttons produces the correct
+  result. There are a few distinct things we should test:
+</p>
+<ul>
+  <li>
+    Our initial state is working properly. While it may feel like "testing the
+    framework", it can help down the road if we accidentally change something.
+    It's also just a good illustration of what is possible with vue-test-utils
+  </li>
+  <li>The functionality of the increment button</li>
+  <li>The functionality of the reset button</li>
+</ul>
+<p>Let's use those categories to break our suite down into sub-suites.</p>
+<h4>counter.spec.js</h4>
+<pre data-language="javascript">
+  describe("Counter.vue", () => {
+    // tests for initial state will go here
+    // we're not going to make a sub-suite for those
+    describe("increment button", () => {});
+    describe("reset button", () => {});
+  });
+</pre>
