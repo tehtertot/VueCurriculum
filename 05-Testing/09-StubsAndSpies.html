@@ -1,0 +1,77 @@
+<h1>Stubs and Spies</h1>
+<h2>Objectives:</h2>
+<ul>
+  <li>Learn about when to use stubs and spies</li>
+  <li>Understand the difference between different types of mocks</li>
+</ul>
+<h2>Mocking</h2>
+<p>
+  One of the most powerful features of Jest (or Mocha) is mocking. Mocking is
+  incredibly useful when our component relies on functions or data from
+  different files, libraries, or any other external source. It allows us to test
+  the component in isolation without having to worry about the specific
+  implementation details of the functions we're relying on externally. For
+  instance, we often write components that request data from a server somewhere.
+  In our test environment we don't want to actually send requests to our real
+  server for multiple reasons. First, we don't want to overload our server or
+  send unnecessary requests in general. Second, the request itself shouldn't
+  decide whether the test passes or fails. If the internet goes out when we run
+  our tests, we shouldn't have to wait until the internet comes back up just to
+  test our component. It makes our tests fragile and betrays the robustness that
+  we're striving for! Finally, we want to be able to control what the actual
+  result of the request is. A request in real life may have a number of
+  different possible outcomes and we need to test our component in each one
+  without manually changing our server. So what can be done?
+</p>
+<p>
+  Ideally, what we'd like to do is: pretend to be the server, send back some
+  data that we can control, and let the component respond to that data
+  accordingly. This way, we can mimic both successful and unsuccessful requests
+  as well as a variety of different responses in either case that may impact our
+  component differently. Jest allows us to do this through what it calls
+  "mocks", whereas Mocha would call similar behavior "stubs". Because Mocha's
+  terminology is more prevalent throughout testing frameworks in different
+  languages, let's learn some of the basics and then apply them to a demo app
+  using Jest and Vue.
+</p>
+<h2>Types of Mocks</h2>
+<p>
+  We'll be going into specific detail about how to use Jest to mock certain
+  functionality in the next lesson, but let's take a quick look at the different
+  types of general behaviors we can expect to use and their associated names.
+</p>
+<ul>
+  <li>
+    Spies - Allow us to test whether or not a function was called, typically
+    we're also able to see what arguments were passed to the function and how
+    many times the function was called.
+  </li>
+  <li>
+    Stubs - Allow us to replace a function entirely with a new function that
+    does what we dictate. We can do nothing, resolve or reject promises, or
+    return data. We can also see all of the same information a spy would offer
+    us.
+  </li>
+  <li>
+    Mocks - Jest's overarching name for the general concept of spying and
+    stubbing. A mock can be either a spy or a stub.
+  </li>
+</ul>
+<h2>When to use Mocks</h2>
+<p>
+  We've briefly alluded to the idea that mocking is useful when we are relying
+  on something external, but there are a few cases where mocking can be
+  particularly useful.
+</p>
+<ul>
+  <li>When calling an external function would otherwise break our test</li>
+  <li>
+    When we care about how many times a function was called or what it was
+    called with as success criteria for our test
+  </li>
+  <li>
+    When we want to isolate a component to its function without worrying about
+    how the functions it relies on work
+  </li>
+</ul>
+<p>Let's take a look at mocking in Jest in the next lesson!</p>
