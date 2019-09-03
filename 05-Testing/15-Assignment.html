@@ -1,12 +1,30 @@
-<h1>Testing Components 2</h1>
+<h1>Testing From Scratch</h1>
 <h2>Objectives:</h2>
 <ul>
-  <li>
-    Write a test suite from scratch for an application
-  </li>
+  <li>Practice writing unit tests from scratch</li>
 </ul>
 <p>
-  Download the example project <a href="">here</a> and write a test suite! We've
-  included a few ideas to get you started, but there are a few suites to tackle
-  from scratch!
+  Write an app where a user plays rock, paper, scissors against a computer
+  opponent. Your app should be well-tested.
 </p>
+<ul>
+  <li>
+    Create a new Vue app using the CLI that adds Vuex, Vue Router, unit testing
+    (using jest), and e2e testing (using cypress)
+  </li>
+  <li>User can choose between rock, paper, or scissors.</li>
+  <li>Scissors beats paper, paper beats rock, rock beats scissors.</li>
+  <li>After each game, user can see their total wins and losses.</li>
+  <li>User has the option to start a new game.</li>
+  <li>Ninja Bonus: User can reset their score.</li>
+</ul>
+<p>
+  Hint: To create a random number within a range, you can use the following
+  code:
+</p>
+<pre data-language="javascript">
+function createRandomInteger(min, max) {
+  const range = max - min;
+  return Math.round((Math.random() * range) + min)
+}
+</pre>

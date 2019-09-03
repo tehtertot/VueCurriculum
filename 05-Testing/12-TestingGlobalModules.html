@@ -1,0 +1,228 @@
+<h1>Testing Global Modules</h1>
+<h2>Objectives:</h2>
+<ul>
+  <li>Learn how to mock global functions and modules in Vue</li>
+</ul>
+<h2>Mocking Global Functions</h2>
+<p>
+  Our method is a complicated one because it calls upon both vuex and
+  vue-router. It also uses an external function that we wrote called
+  'createRandomInteger'. If we want to really test the functionality of our
+  <code>makeChoiceMock()</code> function, we have to make sure all of our
+  dependencies are stubbed. Let's take a look at what needs to be stubbed:
+</p>
+<ul>
+  <li><code>createRandomInteger</code></li>
+  <li><code>this.$store.commit()</code></li>
+  <li><code>this.$router.push()</code></li>
+</ul>
+<p>
+  Each of these pieces has a unique way that it needs to be stubbed, and
+  unfortunately, we're not going to be able to test them out until we fully stub
+  all of them. But why do these need to be stubbed? Can't we just run our code
+  using <code>shallowMount</code> and let Vue do its thing? Unfortunately, no.
+  Global modules/functions are special cases because
+  <code>vue-test-utils</code> doesn't import things like Vuex and Vue Router by
+  design. This does a few things for us: it makes us think about how we actually
+  need to implement the global dependencies we're using and it prevents our unit
+  tests from importing unnecessary modules that would cause bloat and generally
+  add confusion to our tests. For functions like
+  <code>createRandomInteger</code>, we still want to mock the functionality, but
+  it will work as-is if we leave it to its own devices.
+</p>
+<h3>localVue</h3>
+<p>
+  If we want to test Vuex and Vue Router, we'll need to learn about a feature of
+  vue-test-utils called <code>createLocalVue</code>. The documentation says:
+  "createLocalVue returns a Vue class for you to add components, mixins and
+  install plugins without polluting the global Vue class". That sounds fine, but
+  what does it mean? <code>createLocalVue</code> allows us to use global
+  packages that are installed as plugins using <code>Vue.use()</code> without
+  having to use the real router or real Vue instance that we're using globally
+  for our app. This keeps our tests isolated and ensures that our unit tests are
+  self-contained. We're also given a <code>mocks</code> option in our mounting
+  options object that we can use. We can see both demonstrated below. We'll be
+  testing Vuex with option 1 and Vue Router with option 2 and break them down
+  individually into their respective parts.
+</p>
+<h4>Vue Router Test</h4>
+<pre data-language="javascript">
+import { shallowMount, createLocalVue } from '@vue/test-utils';
+import Home from '@/views/Home.vue';
+import Vuex from 'vuex';
+
+const localVue = createLocalVue();
+localVue.use(Vuex);
+const store = new Vuex.Store();
+store.commit = jest.fn();
+
+describe('Home.vue', () => {
+  describe('user chooses heads', () => {
+    it('calls `router.push()` with argument: "/results"', () => {
+      const pushMock = jest.fn();
+
+      const wrapper = shallowMount(Home, {
+        localVue,
+        store,
+        mocks: {
+          $router: {
+            push: pushMock,
+          },
+        },
+      });
+
+      wrapper.find('#heads-button').trigger('click');
+      expect(pushMock).toHaveBeenCalledWith('/results');
+    });
+  });
+});
+</pre>
+<p>
+  First, it's important to note that for our test to even work we need to mock
+  both Vue Router and Vuex, so to test Vue Router, we have to include the mocks
+  for Vuex. That being said, let's just focus on the router mock for now. Notice
+  how the only thing we have to do to use the <code>mocks</code> option is
+  provide an object. The object passed to <code>mocks</code> will be attached to
+  the component instance directly. Basically, that means we're overwriting
+  properties on the component's <code>this</code>. Here, we're overwriting
+  <code>$router</code> with an object and setting <code>push</code> to be a
+  mocked function in that object. Now, when our method calls
+  <code>this.$router.push</code>, it'll actually just call our mock function,
+  which in this case is called <code>pushMock</code>! Now we're testing that our
+  function redirects to the new view once someone clicks on the button. Cool!
+  Now let's make sure that our method commits the correct mutation whether the
+  user wins or loses the game.
+</p>
+<p>
+  Let's break this up into a few steps. First, let's make sure we can see what
+  our vuex store is doing, then let's make sure that we can control the
+  environment so we can isolate wins and losses.
+</p>
+<h4>Working with commit</h4>
+<pre data-language="javascript">
+  import { shallowMount, createLocalVue } from '@vue/test-utils';
+import Home from '@/views/Home.vue';
+import Vuex from 'vuex';
+
+const localVue = createLocalVue();
+localVue.use(Vuex);
+const store = new Vuex.Store();
+store.commit = jest.fn();
+
+describe('Home.vue', () => {
+  describe('user chooses heads', () => {
+    it('calls `store.commit()`', () => {
+      const wrapper = shallowMount(Home, {
+        localVue,
+        store,
+        mocks: {
+          $router: {
+            push: jest.fn(),
+          },
+        },
+      });
+
+      wrapper.find('#heads-button').trigger('click');
+      console.log(store.commit.mock.calls);
+      expect(store.commit).toHaveBeenCalled();
+    });
+  });
+});
+</pre>
+<p>Let's start at the very top of the file. Notice that we're:</p>
+<ol>
+  <li>Importing Vuex</li>
+  <li>
+    Creating a variable called localVue and storing a new test Vue instance in
+    it
+  </li>
+  <li>
+    Creating a new instance of a vuex store and saving it in a variable called
+    store
+  </li>
+  <li>Overwriting store.commit with a mock function</li>
+  <li>
+    Adding <code>localVue</code> and <code>store</code> to our mounting options
+  </li>
+</ol>
+<p>
+  All of this is necessary to get this mock to work. It seems like more work,
+  and it is, but the advantage is that we have an actual Vuex instance created
+  in an actual test Vue instance. That means we have access to all the stuff
+  Vuex can do without having to write it all by hand like we did in the mocks
+  object. This isn't incredibly useful in this case, but it can be an advantage
+  to using this approach. We're adding localVue and store globally in the
+  mounting options object. <code>localVue</code> is actually an official
+  mounting option in vue-test-utils, so as long as our instance has the same
+  name, it can be used in the <code>localVue</code> key in our mounting options
+  as we've done above. We also want the store to be global to mimic how it works
+  in the real app, so we're doing the same thing with our store. Notice that our
+  store is empty. While we could fill it with all of our store objects, in this
+  case we don't need to. We really only want to check that we're calling the
+  right mutation, so if we overwrite <code>commit</code>, we can check what
+  arguments it was called with and not worry about the mutations themselves.
+  Also notice that we have a <code>console.log</code> statement. If you look at
+  the output you'll see something like
+  <code>[ [ 'incrementWins' ], [ 'incrementLosses' ] ]</code>.
+</p>
+<p>
+  Why is this function being called twice? And why does the output keep
+  changing? Since we're mocking the Vuex store globally instead of in a
+  <code>beforeEach</code>, <code>store.commit</code> is always the same exact
+  instance of a function in each test. It doesn't get overwritten. It's always
+  there. That's an issue, because our mock holds on to information that our
+  individual tests aren't prepared for. We could fix this issue by putting the
+  function in a <code>beforeEach</code>, which would create an entirely new mock
+  each time. We could also use a teardown block called <code>afterEach</code>.
+  We're going to do the latter because we want to expose you to some additional
+  considerations with Jest mocks as well as a use-case for the
+  <code>afterEach</code> block. Let's add the <code>afterEach</code> block to
+  our suite so we can ensure our mock gets cleared after each test, ensuring
+  that we have an entirely controlled mock function.
+</p>
+<pre data-language="javascript">
+import { shallowMount, createLocalVue } from '@vue/test-utils';
+import Home from '@/views/Home.vue';
+import Vuex from 'vuex';
+
+const localVue = createLocalVue();
+localVue.use(Vuex);
+const store = new Vuex.Store();
+store.commit = jest.fn();
+
+describe('Home.vue', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  describe('user chooses heads', () => {
+    it('calls `store.commit()`', () => {
+      const wrapper = shallowMount(Home, {
+        localVue,
+        store,
+        mocks: {
+          $router: {
+            push: jest.fn(),
+          },
+        },
+      });
+
+      wrapper.find('#heads-button').trigger('click');
+      console.log(store.commit.mock.calls);
+      expect(store.commit).toHaveBeenCalled();
+    });
+  });
+});
+</pre>
+<p>
+  What we're doing here is ensuring that all of our mocked functions get
+  completely reset after each test. You can read more about some of the options
+  <a href="https://jestjs.io/docs/en/jest-object#jestclearallmocks">here</a>.
+  Notice that our <code>afterEach</code>, much like a <code>beforeEach</code>,
+  will apply to all the tests within the scope where it is defined. That means
+  this <code>afterEach</code> will apply to every unit test. We can nest our
+  setup and teardown logic for more granular control if necessary, just be
+  careful not to make your logic too convoluted. Now that we have full control
+  over our test mocks. Let's finally get into how we'll test wins and losses in
+  the next lesson!
+</p>
