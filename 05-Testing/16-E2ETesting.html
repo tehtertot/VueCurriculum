@@ -1,0 +1,110 @@
+<h1>E2E Testing</h1>
+<h2>Objectives:</h2>
+<ul>
+  <li>
+    Learn about the philosophy behind e2e testing and how to implement basic
+    tests
+  </li>
+</ul>
+<h2>Philosophy</h2>
+<p>
+  Ideally, your application's tests should look like a pyramid. Unit tests
+  should be by far the most prevalent and live at the bottom, followed by
+  integration tests and finally e2e tests. End-to-end tests, or e2e tests test
+  an application from the user's perspective. They open a browser window, click
+  buttons like a user, can take screenshots, and otherwise do whatever a user
+  can do. At first glance, it might seem like this is the way to write every
+  test. Why not just test the app the way the user would have to use it?
+</p>
+<p>
+  e2e tests are much, much more fragile than unit or integration tests because
+  the app's functionality, look, or structure can often change. When we change
+  some core feature or responsibility for our app, unit tests tend to be less
+  likely to break because they test every little feature in isolation. For
+  instance, if we change how our <code>generateRandomInteger</code> function
+  works behind-the-scenes, it doesn't matter because we only care that it
+  returns a 0 or a 1 (in the coin change example). e2e tests on the other hand
+  are specifically reliant on the end-result product of html, css, and js that
+  is eventually bundled and sent to the browser. What if we were testing whether
+  or not our app's title was listed in an <code>h1</code> tag on the page and we
+  wanted to change the name of the app from "Coin Flip" to "Flip Coins"? We'd
+  have to go change all of our e2e tests that test that specific content!
+  Furthermore, most of our app's functionality, especially in the case of our
+  simple coin-flip app can be easily and reliably tested using unit or
+  integration tests.
+</p>
+<p>
+  For the reasons listed above, and based on industry standard practices, we
+  recommend that you only implement e2e tests for things that you cannot
+  otherwise test in unit or integration tests. Additionally, you may add e2e
+  tests to your project to test absolutely critical pieces of your application
+  that must pass before release. However, it is usually useful to trust your
+  unit and integration tests.
+</p>
+<h2>Frameworks</h2>
+<p>
+  Just as with everything in software, e2e testing has its popular frameworks
+  and the Vue community has its favorites. The old industry standard chrome
+  driver is called Selenium. It can be used to create a new chrome browser and
+  operate it as a user in many different programming languages. Many frameworks
+  wrap around selenium to provide additional functionality. Vue recommends a
+  selenium framework called Nightwatch as a primary option for e2e testing.
+  However, the Vue community has also selected a second favorite: Cypress.
+  Cypress is an e2e test framework that doesn't use Selenium. Its API is easier
+  to understand and get started with and it has some compelling new features.
+  Vue CLI supports both, but we've selected Cypress for our framework. You can
+  read the documentation
+  <a
+    href="https://docs.cypress.io/guides/overview/why-cypress.html#In-a-nutshell"
+    >here</a
+  >.
+</p>
+<h2>Our First Test</h2>
+<p>
+  Since we used the Vue CLI to create an app with Cypress preinstalled, you'll
+  notice a folder called e2e in the coin-flip project. Notice that the syntax is
+  eerily similar to Jest and vue-test-utils. Let's see a simple test in action.
+</p>
+<h4>tests/e2e/specs/home.js</h4>
+<pre data-language="javascript">
+describe('Home', () => {
+  beforeEach(() => {
+    cy.visit('/');
+  });
+
+  it('contains a header with the name of the app', () => {
+    cy.contains('h1', 'Coin Flip');
+  });
+});
+</pre>
+<p>
+  Run <code>npm run test:e2e</code>. Notice that Cypress has opened up an
+  interactive test window. We can click "Run all specs" in the top right corner
+  of the new window, or we can just click on the file we want to test. Try
+  clicking on the file "home.js" in the Cypress window to see what happens.
+</p>
+<p>
+  This functionality is actually pretty cool. It opens up our app in a new
+  chrome browser, runs the test, and shows us the state it's in when it
+  finishes. It gives us a live feed of what the test is seeing and doing. While
+  this is awesome, it can be a bit cumbersome to do this process by hand each
+  time we want to run our tests. Let's edit our package.json to change our
+  default script to run all the tests automatically. You can also quit Cypress
+  by typing <code>ctrl + c</code> in your command line window. The following
+  snippet has been edited for brevity, please edit only the
+  <code>scripts/test:e2e</code> key in your <code>package.json</code>.
+</p>
+<h4>package.json</h4>
+<pre data-language="javascript">
+  {
+    "scripts": {
+      "test:e2e": "vue-cli-service test:e2e --headless"
+    }
+  }
+</pre>
+<p>
+  The <code>--headless</code> flag will run all of our tests without opening the
+  Cypress window. We can always remove it for debugging, but running the e2e
+  tests headlessly is usually sufficient and typically quicker. Go ahead and
+  make your own call on which you prefer.
+</p>
