@@ -1,0 +1,63 @@
+<h1>Add Firebase to Vue</h1>
+<h2>Objectives:</h2>
+<ul>
+    <li>Learn how to add Firebase to a Vue application</li>
+</ul>
+<hr>
+<p>How can we get all these great features into our Vue application? It's quite simple! These instructions assume you set up your Firebase account at the end of the last module. If you haven't, be sure to do that now (<a href="https://firebase.google.com/" target="_blank">https://firebase.google.com/</a>)</p>
+<h4>Firebase Setup</h4>
+<ol>
+    <li>Sign in to Firebase and click on "Go to console" in the upper right corner.</li>
+    <li>Click on the "Create a project" button in the middle of the screen (or "+ Add a project" if you have any existing projects).</li>
+    <li>Walk through each of the next steps:</li>
+    <ol>
+        <li>Give your project a name (in the screenshots, we use "FirstFirebaseProject"). A <em>project</em> can potentially contain multiple <em>apps</em>. (As you type, you'll notice a unique id being generated based on the name you provided.)</li>
+        <li>Leave the default "Not right now." (If you already have a Google Analytics account set up, feel free to leave this on. We just won't be exploring it as part of this track.)</li>
+    </ol>
+    <li>Once your project is ready, click "Continue."</li>
+    <li>On the main pane, click on the "&lt;/&gt;" button to add our app.</li>
+        <ul>
+            <li>Alternatively, on the left navigation bar, click on the gear icon and select "Project settings."</li>
+            <li>Scroll to the bottom "Your apps" section and click on the "&lt;/&gt;" button.</li>
+        </ul>
+    <li>Name the app you want to add to this project (in the screenshots, we use "MyVueApp").</li>
+    <li>Click "Register app." After a few seconds, you'll be presented with a code snippet, but don't worry about it for now. Click "Go to console." (The same code snippet will be available here in the console.)</li>
+</ol>
+<h4>Vue Application Setup</h4>
+<ol>
+    <li>Create a new Vue application.</li>
+    <li>Add the Firebase package to your application: <code>npm install firebase --save</code></li>
+    <li>Make sure you are still viewing your Firebase project settings in the Firebase console. (If you navigated away, click on the gear icon and "Project settings." Scroll to the bottom "Your apps" section.) Under "Firebase SDK snippet," select the "Config" radio button.</li>
+    <li>Create a new file called <b>.env.development</b> right inside your project folder. We're going to keep all of the Firebase configuration values in this file. These values, particularly your API key, should be kept secret, so that's why we're separating them into a separate file. Be sure not to put this file anywhere publicly available! For each of the keys in the Firebase config object shown in the Firebase console, add a line to this file. Each variable should begin with <code>VUE_APP</code>:</li>
+    <h4>myvueapp/.env.development</h4>
+    <pre data-language="bash">
+    VUE_APP_APIKEY="yourcodegoeshere"
+    VUE_APP_AUTHDOMAIN="your-project's-unique-id.firebaseapp.com"
+    VUE_APP_DATABASEURL="https://your-project's-unique-id.firebaseio.com"
+    VUE_APP_PROJECTID="your-project's-unique-id"
+    VUE_APP_STORAGEBUCKET=""
+    VUE_APP_MESSAGINGSENDERID="123456789012"
+    VUE_APP_APPID="1:123456789012:web:abcdefgh12345678"
+    </pre>
+    <li>Next, we'll actually use these values in our application setup. Notice we use <code>process.env</code> to access the environmental variables we set up in the previous file:</li>
+    <h4>myvueapp/src/main.js</h4>
+    <pre>
+        // other imports
+        import firebase from 'firebase/app';
+
+        // other Vue setup, including new Vue ...
+
+        // adding to the end:
+        var firebaseConfig = {
+            apiKey: process.env.VUE_APP_APIKEY,
+            authDomain: process.env.VUE_APP_AUTHDOMAIN,
+            databaseURL: process.env.VUE_APP_DATABASEURL,
+            projectId: process.env.VUE_APP_PROJECTID,
+            storageBucket: process.env.VUE_APP_STORAGEBUCKET,
+            messagingSenderId: process.env.VUE_APP_MESSAGINGSENDERID,
+            appId: process.env.VUE_APP_APPID,
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+    </pre>
+</ol>
