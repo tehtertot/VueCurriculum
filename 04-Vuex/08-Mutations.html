@@ -1,0 +1,259 @@
+<h1>Vuex Mutations</h1>
+<h2>Objectives:</h2>
+<ul>
+  <li>Learn about mutating state with Vuex mutations</li>
+  <li>Learn about when to use mutations</li>
+</ul>
+<p>
+  Okay so we know how to use getters and we've refactored our application so
+  that code reuse is optimal. But getting data from the store is only half the
+  battle. Pretty soon, we'll realize that we need to be able to update our
+  application's state. Before, we just made methods in our store object; now,
+  the only difference is that we'll call our update functions "mutations".
+</p>
+<p>
+  Let's imagine a scenario where we want to change our application into a movie
+  ratings application, where users can give each movie upvotes and downvotes in
+  a manner similar to Reddit or Stack Overflow. To do this, we'll need some new
+  features like "upvote" and "downvote" buttons. These buttons need to exist
+  next to each movie, and they should modify the state of their associated
+  movie. Because these buttons are so tightly coupled in both where they appear
+  on the page and how they affect the data, it makes sense to make a new
+  component for movies called <code>MovieListItem</code>. This new component
+  will contain all the code we had in the <code>li</code> elements in our
+  <code>MovieList</code> components as well as the new "upvote" and "downvote"
+  buttons. Let's take a look at how the code might change starting with the
+  <code>MovieList</code> component.
+</p>
+<h4>MovieList.vue--html</h4>
+<pre data-language="html">
+  &lt;template&gt;
+    &lt;div&gt;
+      &lt;h2&gt;{{ genre }}&lt;/h2&gt;
+      &lt;MovieListItem v-for="movie in movies" :movie="movie" :key="movie.id" /&gt;
+    &lt;/div&gt;
+  &lt;/template&gt;
+</pre>
+<p>
+  Okay, so far there isn't much change. Notice the new component
+  <code>MovieListItem</code>. We're passing a <code>key</code> property and a
+  <code>movie</code> property to the component. We know that <code>key</code> is
+  just necessary in order to use <code>v-for</code>. The movie property is the
+  entire movie, enabling the <code>MovieListItem</code> to handle its own data.
+  There will be a few small changes coming up to this component's script, but
+  let's first take a look at what the MovieListItem component looks like.
+</p>
+<h4>MovieListItem.vue--html</h4>
+<pre data-language="html">
+  &lt;template&gt;
+    &lt;div class="movie"&gt;
+      &lt;h5&gt;{{ movie.title }}&lt;/h5&gt;
+      &lt;span class="score"&gt;score: {{ movie.score }}&lt;/span&gt;
+      &lt;div class="voting-buttons-container"&gt;
+        &lt;button @click="onUpvote()"&gt;Upvote&lt;/button&gt;
+        &lt;button @click="onDownvote()"&gt;Downvote&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/template&gt;
+</pre>
+<h4>MovieListItem.vue--script</h4>
+<pre data-language="javascript">
+  export default {
+    name: "MovieListItem",
+    props: {
+      movie: {
+        id: Number,
+        score: Number,
+        title: String,
+        genre: String
+      }
+    },
+    methods: {
+      onUpvote() {
+        this.$store.commit("incrementMovieScore", this.movie.id);
+      },
+      onDownvote() {
+        this.$store.commit("decrementMovieScore", this.movie.id);
+      }
+    }
+  };
+</pre>
+<p>
+  We'll talk about the methods soon, but notice how we're defining the prop
+  types of every key in the expected <code>movie</code> property. This just
+  keeps everything nice and tidy and will help us catch errors moving forward.
+  Now notice that our <code>onUpvote</code> and <code>onDownvote</code> methods
+  are both calling <code>this.$store.commit()</code>. The
+  <code>commit</code> function is how we tell the Vuex store to actually run one
+  of our mutations. Our mutations are just functions (we'll take a look at them
+  in just a moment) and we're calling upon them by name. This allows Vuex to
+  keep a record of all the mutations we've made in order, because it's
+  constantly keeping track of when the <code>commit</code> function is called
+  upon.
+</p>
+<p>Okay, now it's time for the big reveal. Let's take a look at the store.</p>
+<h4>main.js</h4>
+<pre data-language="javascript">
+  const store = new Vuex.Store({
+    state: {
+      movies: [
+        { id: 1, score: 0, title: 'The Hangover', genre: 'Comedy' },
+        { id: 2, score: 0, title: 'I Love You Man', genre: 'Comedy' },
+        { id: 3, score: 0, title: 'Cars', genre: 'Family' },
+        { id: 4, score: 0, title: 'Toy Story', genre: 'Family' },
+      ],
+    },
+    getters: {
+      sortedMoviesByGenre: state => genre => {
+        const filteredMovies = state.movies.filter(
+        movie => movie.genre === genre
+        );
+        return filteredMovies.sort(
+          (movieA, movieB) => movieB.score - movieA.score
+        );
+      },
+    },
+    mutations: {
+      incrementMovieScore(state, movieId) {
+        const movieToIncrement = state.movies.find(movie => movie.id === movieId);
+        const updatedMovie = {
+          ...movieToIncrement,
+          score: movieToIncrement.score + 1,
+        };
+        state.movies = [
+          updatedMovie,
+          ...state.movies.filter(movie => movie.id !== movieId),
+        ];
+      },
+      decrementMovieScore(state, movieId) {
+        const movieToDecrement = state.movies.find(movie => movie.id === movieId);
+        const updatedMovie = {
+          ...movieToDecrement,
+          score: movieToDecrement.score - 1,
+        };
+        state.movies = [
+          updatedMovie,
+          ...state.movies.filter(movie => movie.id !== movieId),
+        ];
+      },
+    },
+  });
+</pre>
+<p>
+  Okay this is a lot of new stuff. It looks like our store is getting to be
+  pretty big, and there is probably some code that looks pretty cryptic. Let's
+  break it down piece by piece.
+</p>
+<h4>state</h4>
+<p>
+  The only thing we changed here is we added a <code>score</code> property to
+  each movie. That way, we can keep track of the sum of all the up/down votes.
+</p>
+<h4>mutations</h4>
+<p>
+  This is the bread and butter of this lesson so reread this section a few times
+  and do your best to understand how the code is actually working. At a high
+  level: we're accepting an id for a movie, finding it in the movies array in
+  state, updating the movie's score, and then updating the movies array with the
+  new movie. We'll dive into the actual code, but we want you to understand
+  <em>why</em> we made the decisions we made here. Remember that when we're
+  dealing with Vuex state, we never want to update an object (or array)
+  directly. Instead, we always want to create a copy of that object, change it,
+  and overwrite it. This is because of how Vue's
+  <a href="https://vuejs.org/v2/guide/reactivity.html">reactivity system</a>
+  works. If you take nothing else away from this let it be that you should
+  <strong>NEVER MUTATE STATE DIRECTLY</strong>. This ensures that our components
+  always update reliably with the correct information.
+</p>
+<p>
+  Here, we're using lots of new javascript features and built-ins to our
+  advantage, so let's deconstruct <code>incrementMovieScore</code> line by line.
+  Take a look at the commented code below.
+</p>
+<pre data-language="javascript">
+  incrementMovieScore(state, movieId) {
+    // use js Array.find() to get the movie object whose id matches movieId
+    const movieToIncrement = state.movies.find(movie => movie.id === movieId);
+    // make a copy of movieToIncrement using the spread operator
+    // update the movie's score to its previous score + 1
+    const updatedMovie = {
+      ...movieToIncrement,
+      score: movieToIncrement.score + 1,
+    };
+    // overwrite state.movies with updatedMovie and all other movies
+    state.movies = [
+      updatedMovie,
+      ...state.movies.filter(movie => movie.id !== movieId),
+    ];
+  }
+</pre>
+<p>
+  Both <code>filter</code> and <code>find</code> are taking advantage of the
+  "concise function body" in their respective callbacks. Check out docs for that
+  <a
+    href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions#Function_body"
+    >here</a
+  >. You can also find the docs for <code>.find()</code>
+  <a
+    href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find"
+    >here</a
+  >
+  and <code>.filter()</code
+  ><a
+    href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter"
+    >here</a
+  >.
+</p>
+<p>
+  Take a glance back at how we're calling our
+  <code>incrementMovieScore</code> function in our
+  <code>MovieListItem</code> component. Vuex passes the state object as the
+  first parameter for us, but we can pass an optional second parameter if we
+  need additional information in our function. This works as-is, but it might be
+  necessary to pass multiple arguments. You can read about how you might
+  accomplish that
+  <a href="https://vuex.vuejs.org/guide/mutations.html#commit-with-payload"
+    >here</a
+  >.
+</p>
+<p>
+  Finally, let's quickly revisit <code>MovieList</code>. Right now, the code
+  just works, but there is some weird behavior. Any time we click one of our
+  buttons, the movies seem to randomly reorganize. What's happening? Whenever we
+  overwrite <code>state.movies</code> we haven't taken into account the new
+  <em>order</em> that those movies will be in. Now that we're building a Reddit
+  style rating app, we might as well sort the movies by their score. We can do
+  that in our MovieList component.
+</p>
+<h4>MovieList.vue--script</h4>
+<pre data-language="javascript">
+  import MovieListItem from "@/components/MovieListItem.vue";
+
+  export default {
+    name: "MovieList",
+    components: {
+      MovieListItem
+    },
+    props: {
+      genre: String
+    },
+    computed: {
+      movies() {
+      return this.$store.getters
+        .moviesByGenre(this.genre)
+        .sort((movieA, movieB) => movieB.score - movieA.score);
+      }
+    }
+  };
+</pre>
+<p>
+  Here, we're chaining our <code>moviesByGenre</code> array into the js
+  <a
+    href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort"
+    >sort function</a
+  >
+  to keep our items in the proper order!
+</p>
+<p>
+  A reference to the fully working source code can be found <a href="">here</a>.
+</p>

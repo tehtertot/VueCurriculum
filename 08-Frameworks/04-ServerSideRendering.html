@@ -1,0 +1,69 @@
+<h1>Server Side Rendering</h1>
+<h2>Objectives:</h2>
+<ul>
+  <li>Understand the limitations of SPAs like Vue</li>
+  <li>Understand when to use SSR</li>
+</ul>
+<h2>A Vue Recap</h2>
+<p>
+  Something you may or may not have been aware of is that when we build a Vue
+  project, our browser isn't interpreting html and css in a traditional way. The
+  beauty of Vue and other frameworks like it is that we can give the
+  responsibility for the entire user interface to the user's browser. This was
+  always the case, but Vue takes things to the next level. We can build entire
+  apps and sub-apps and pages that all work by just rendering one html file and
+  letting Vue do the rest. For instance, let's say we have a "Home" page and an
+  "About" page. If we're using <code>vue-router</code> to render those pages,
+  the actual page changes are a bit of an illusion. Traditionally, if we wanted
+  to load a different page, we'd have to request that page from a server and
+  refresh our browser once that information gets sent back. With Vue, we just
+  use javascript to rip out all the html and put in new html without ever
+  leaving the site. This has many, many performance benefits, and can make
+  websites blazing fast. However, there are some limitations.
+</p>
+<h3>Limitations</h3>
+<p>
+  So what's the downside if our apps are way faster? Unfortunately, search
+  engines like Google request content for web pages in order to do their
+  "indexing" of the internet. If all of your content technically lives in Vue,
+  then it all technically lives in JavaScript land. You're not necessarily
+  sending html to the browser in the traditional sense. Sure, there will be some
+  html on the page, but Vue is responsible for deciding what will be there. If
+  the search engine isn't running JavaScript when it does its indexing, you'll
+  end up with a bunch of empty pages. That's no good. Often times, it's really
+  important to have good search engine optimization or "SEO" so that users can
+  easily find your websites across the web. If you can't Google your website and
+  find it in the first few results, you're in trouble. So what's the solution to
+  this problem?
+</p>
+<h2>Old is the new new</h2>
+<p>
+  To solve for the SEO problem, developers have taken a page out of the old days
+  and begun pre-rendering their Vue apps on their server. This way, we still get
+  to use the expressive Vue framework to build our user interface, but we can
+  have all the benefits of rendering the page on the server. This is called
+  server side rendering, or "SSR". Aside from SEO, there are a couple other
+  benefits. For instance, if we write our code intelligently, we can actually
+  improve how long it takes for a user to be able to see content and interact
+  with a page. Pretty neat!
+</p>
+<h3>Aren't we already using a server?</h3>
+<p>
+  If you remember deployment, you may have noticed that we were already using a
+  server to "serve" our Vue applications on the web, so how is SSR different
+  from what we've already done? The key difference is that instead of sending
+  <strong>all</strong> of the contents of our app all at once, we'll be using a
+  pre-processor to compile our Vue page into pure html, css, and javascript
+  before we send it back to the browser. We typically do this one page at a
+  time. This can complicate our server logic, but luckily there are some pretty
+  robust tools out there for us to do server side rendering.
+</p>
+<h2>When should we use SSR?</h2>
+<p>
+  Server side rendering can be overkill for many projects, and support for
+  properly indexing SPAs (Single Page Applications) is growing. It's best to use
+  SSR when you need more control over your page, if your page load times are
+  starting to slow down, or if SEO is the absolute first priority of your
+  project. Otherwise, it's probably okay to start with an SPA and grow into
+  using SSR down the road.
+</p>

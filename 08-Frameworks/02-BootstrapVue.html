@@ -1,0 +1,69 @@
+<h1>Bootstrap Vue</h1>
+<h2>Objectives:</h2>
+<ul>
+  <li>Learn about using `bootstrap-vue` in a real app</li>
+</ul>
+<h2>Components</h2>
+<p>
+  Like in our normal Vue development proces, much of what we deal with on a
+  regular basis in `bootstrap-vue` is components. Since pretty much every
+  element on the page is liable to be an element in Vue, this should indicate
+  that pretty much anything we can think of in `bootstrap-vue` is a component.
+  There are some custom directives and a host of classes and properties, but at
+  the end of the day, the bulk of our work will be done with components.
+</p>
+<p>
+  Before we start adding components to our app, we need to make an app. Once our
+  new app is created, we can run `npm install boostrap-vue boostrap`. This will
+  install both the `bootstrap` and the `bootstrap-vue` libraries. Now that we
+  have our packages installed, we need to make sure Vue is aware of them and
+  ready to use them. Starting in the <code>main.js</code> file, let's add a few
+  lines of code.
+</p>
+<h4>main.js</h4>
+<pre data-language="javascript">
+  import Vue from "vue";
+  // import bootstrap-vue
+  import BootstrapVue from "bootstrap-vue";
+  import App from "./App.vue";
+  
+  // import css files
+  import "bootstrap/dist/css/bootstrap.css";
+  import "bootstrap-vue/dist/bootstrap-vue.css";
+  
+  Vue.config.productionTip = false;
+  // use bootstrap-vue as Vue middleware
+  Vue.use(BootstrapVue);
+  
+  new Vue({
+    render: h => h(App)
+  }).$mount("#app");
+</pre>
+<p>
+  Notice that there really isn't that much to it; with just a few additional
+  lines of code we're ready to start adding bootstrap components to our app!
+  Let's start with something straightforward. The point of this lesson isn't
+  architecture so let's just use the <code>HelloWorld.vue</code> file to play
+  around with bootstrap elements. Let's start with a simple example from the
+  bootstrap-vue website.
+</p>
+<h4>HelloWorld.vue</h4>
+<pre data-language="html">
+  &lt;template&gt;
+    &lt;div class="hello-world"&gt;
+      &lt;b-button&gt;Button&lt;/b-button&gt;
+      &lt;b-button variant="danger"&gt;Button&lt;/b-button&gt;
+      &lt;b-button variant="success"&gt;Button&lt;/b-button&gt;
+      &lt;b-button variant="outline-primary"&gt;Button&lt;/b-button&gt;
+    &lt;/div&gt;
+  &lt;/template&gt;
+</pre>
+<p>
+  Notice that all bootstrap component names start with <code>b-</code> and end
+  with the bootstrap element name. Instead of attaching classes like with
+  traditional bootstrap, we're using pre-built components and passing properties
+  to them to make things look and feel how we want them. That's really all there
+  is to it. Play with some of the documentation on the
+  <a href="https://bootstrap-vue.js.org/docs">bootstrap-vue website</a> and see
+  what you can make!
+</p>

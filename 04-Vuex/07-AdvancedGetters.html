@@ -1,0 +1,141 @@
+<h1>Advanced Vuex Getters</h1>
+<h2>Objectives:</h2>
+<ul>
+  <li>Learn how to pass arguments to Vuex getters</li>
+</ul>
+<p>
+  Now that we've explored getters, it's time to dive into the true power that
+  we're wielding. If we could rewrite our getter so that we could reuse it just
+  like we're reusing our MovieList component, then our app can truly scale to
+  hundreds of different genres and all we'd have to do is add one line of code
+  to support a new one. That's pretty flippin' awesome.
+</p>
+<p>
+  In order to do this, we'll need our getter to accept an argument, in this case
+  a genre, that we can use to filter the store's list of movies. And in order to
+  do <em>that</em>, we'll need to explore an advanced pattern where we pass a
+  function to our Vuex getter. Check out our new store.
+</p>
+<h4>main.js</h4>
+<pre data-language="javascript">
+  const store = new Vuex.Store({
+    state: {
+      movies: [
+        { id: 1, title: 'The Hangover', genre: 'Comedy' },
+        { id: 2, title: 'I Love You Man', genre: 'Comedy' },
+        { id: 3, title: 'Cars', genre: 'Family' },
+        { id: 4, title: 'Toy Story', genre: 'Family' },
+      ],
+    },
+    getters: {
+      moviesByGenre: state => genre => {
+        return state.movies.filter(movie => movie.genre === genre);
+      },
+    },
+  });
+</pre>
+<p>
+  This may look super weird and confusing (it sort of is), but this works due to
+  a programming technique called "currying". If the sound of that sends shudders
+  down your spine, then for now just know that you can make a getter return a
+  function, and if that's the case you can pass arguments to that function. For
+  those of you who are brave enough to dive into the concept of currying, take a
+  look at
+  <a
+    href="https://blog.bitsrc.io/understanding-currying-in-javascript-ceb2188c339"
+    >this article</a
+  >
+  and talk to your instructor.
+</p>
+<p>
+  Just so that we're all on the same page, <code>moviesByGenre</code> is a
+  property that stores a function. The function takes a parameter, where it will
+  receive the store's state object and it returns a function. The function our
+  function returns (sorry) takes a parameter for genre. Using that
+  <code>genre</code> parameter, we can do our filter.
+</p>
+<p>Whew, okay so how does that change our app?</p>
+<h4>App.vue--html</h4>
+<pre data-language="html">
+  &lt;template&gt;
+    &lt;div id="app"&gt;
+      &lt;MovieList genre="Comedy" /&gt;
+      &lt;MovieList genre="Family" /&gt;
+    &lt;/div&gt;
+  &lt;/template&gt;
+</pre>
+<h4>App.vue--script</h4>
+<pre data-language="javascript">
+  import MovieList from "./components/MovieList.vue";
+  
+  export default {
+    name: "app",
+    components: {
+      MovieList
+    }
+  };
+</pre>
+<p>
+  Looking at our <code>App.vue</code> file we can see we've simplified the code
+  quite a bit. We're only passing one property to the
+  <code>MovieList</code> component, and we're no longer mapping our getters into
+  computed properties. We've transitioned our MovieList components so that
+  they're able to be responsible for their own data. This allows our
+  <code>App.vue</code> to be more or less ignorant of the data used by its
+  children and simplifies the code. Now let's look at <code>MovieList</code>.
+</p>
+<h4>MovieList.vue--html</h4>
+<pre data-language="html">
+  &lt;template&gt;
+    &lt;div&gt;
+      &lt;h2&gt;{{ genre }}&lt;/h2&gt;
+      &lt;ul&gt;
+        &lt;li v-for="movie in movies" :key="movie.id"&gt;{{
+    movie.title
+  }}&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  &lt;/template&gt;
+</pre>
+<p>
+  Notice how the html (or template) hasn't changed at all! Let's move ahead to
+  the script!
+</p>
+<h4>MovieList.vue--script</h4>
+<pre data-language="javascript">
+  export default {
+    name: "MovieList",
+    props: {
+      genre: String
+    },
+    computed: {
+      movies() {
+        return this.$store.getters.moviesByGenre(this.genre);
+      }
+    }
+  };
+</pre>
+<p>
+  Notice again that we only need one property here. We're not using
+  <code>mapGetters</code> because we need to pass our property to the
+  <code>moviesByGenre</code> function. Now that our filter is "genre agnostic",
+  it doesn't matter what genre we're given in our component and it will go find
+  the movies that match! Our component is now fully responsible for itself, and
+  can be reused ad nauseum.
+</p>
+<h2>A final note:</h2>
+<p>
+  We've explored some pretty cool things in this lesson, but it's important to
+  note a couple drabacks with this approach. First, we still have the problem of
+  our <code>MovieList</code> component being "tightly coupled" with an external
+  property. This means, if we decide to change the name of our genre from
+  "Romantic Comedy" to "RomCom" in our store, but we forget to change it in
+  App.vue, we're going to have a broken application. Secondly, something that's
+  important to note is that the performance of getters that return functions is
+  slightly worse than those that do not. Getters that return functions are not
+  able to be as intelligent and trigger a re-render of the component more often.
+  Sometimes this is a tradeoff that we're willing to take on for simpler code,
+  but sometimes it's not. Keep that in mind. You can explore more about all the
+  things you can do with getters in the
+  <a href="https://vuex.vuejs.org/guide/getters.html">documentation</a>.
+</p>

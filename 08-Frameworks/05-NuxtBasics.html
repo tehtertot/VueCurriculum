@@ -1,0 +1,174 @@
+<h1>Nuxt Basics</h1>
+<h2>Objectives:</h2>
+<ul>
+  <li>Learn Nuxt at a high-level</li>
+  <li>Use Nuxt for auto-generating routes</li>
+</ul>
+<h2>What is Nuxt?</h2>
+<p>
+  We've been talking a lot about "frameworks" lately. CSS frameworks, JavaScript
+  frameworks, you name it. Well, Nuxt is a Vue framework. It provides a
+  pre-built structure for Vue apps as well as support for SSR and some other
+  really cool build tools. Nuxt does a ton, and it can take a while to learn all
+  the little nuts and bolts, but let's take a look at it from a high level and
+  talk about next steps.
+</p>
+<p>
+  So what exactly <em>is</em> a Vue framework? Just as a CSS framework gives us
+  a suite of tools that we can use to make our page <em>look</em> a certain way,
+  a Vue framework gives us a suite of tools to make our front-end application
+  <em>work</em> a certain way. Nuxt comes with out-of-the-box support for some
+  of the things that the vue-cli can handle like adding Vuex or vue-router, but
+  it also gives us some additional things like a preset file structure and the
+  ability to tweak our app into being server-side rendered. In fact, aside from
+  some of the more advanced concepts like SSR, most of what Nuxt does should be
+  pretty familiar to us at this point. The big difference we'll notice at the
+  outset is the folder hierarchy. Let's start by building a project and seeing
+  what's new!
+</p>
+<p>
+  First, let's use a new npm feature called npx to create a nuxt application.
+  This allows us to use nuxt without installing it globally to our computer
+  first. Go ahead and run <code>npx create-nuxt-app my-first-nuxt-app</code>.
+  You can select the defaults for the first few prompts, but we'll use
+  <code>npm</code> for this example without any css or server frameworks. When
+  prompted to choose Nuxt.js modules, press spacebar on the Axios bullet point
+  and move along. Don't worry about testing, but definitely choose SSR as your
+  rendering mode. Once you've gone through the prompts, you should have a
+  fully-formed Nuxt app!
+</p>
+<p>
+  Let's start by looking at the folder hierarchy. Holy moly, that's a lot of
+  folders! You can see lots of information about each of the folders
+  <a href="https://nuxtjs.org/guide/directory-structure">here</a>, but we'll
+  mostly just focus on the components and the pages folders. Before we move
+  ahead, just notice that this structure is set up for us to be using a vuex
+  store, components, stylistic layouts, full web pages, and more. Go ahead and
+  run <code>npm run dev</code> to get the app up and running!
+</p>
+<p>
+  You can see right from the outset that Nuxt has set up a page very similar to
+  the page we'd see if we had used the vue-cli, so how is this page getting
+  created? The first place to look is in the pages folder. You can see that the
+  code in <code>index.vue</code> is composing what we see when we're looking at
+  our site in the browser. There are a few things we'd like you to notice about
+  this page:
+</p>
+<ul>
+  <li>The page is a Vue component</li>
+  <li>
+    It can be composed of html attributes or other components, just like any
+    other Vue component
+  </li>
+</ul>
+<p>
+  However, there's something special about pages in Nuxt that is really
+  exciting. Any page in Nuxt is automatically added to the built-in Nuxt router.
+  Try adding a file called <code>about.vue</code> in the pages folder. Include
+  the following code:
+</p>
+<pre data-language="html">
+  &lt;template&gt;
+    &lt;div class="container"&gt;
+      &lt;h1&gt;About&lt;/h1&gt;
+    &lt;/div&gt;
+  &lt;/template&gt;
+  
+  &lt;script&gt;
+  export default {}
+  &lt;/script&gt;  
+</pre>
+<p>
+  Now visit <code>localhost:3000/about</code>. Like magic, our code is displayed
+  in the browser! The thing is, this isn't magic, Nuxt is a framework that uses
+  the pages folder to create routes <strong>for us</strong>. Don't believe us?
+  Check out the documentation
+  <a href="https://nuxtjs.org/guide/routing">here</a>!
+</p>
+<p>
+  Making routes is nice, but that would be pretty useless if we couldn't get to
+  the pages we've created. Instead of using <code>router-link</code>, Nuxt
+  provides a special component called <code>nuxt-link</code>. Let's try adding a
+  Nuxt link to our about page.
+</p>
+<h4>about.vue</h4>
+<pre data-language="html">
+  &lt;template&gt;
+    &lt;div class="container"&gt;
+      &lt;h1&gt;About&lt;/h1&gt;
+      &lt;nuxt-link to="/"&gt;Home page&lt;/nuxt-link&gt;
+    &lt;/div&gt;
+  &lt;/template&gt;
+  
+  &lt;script&gt;
+  export default {}
+  &lt;/script&gt;  
+</pre>
+<p>
+  Try it out! Start at <code>localhost:3000/about</code> and click on the "Home
+  page" button. It navigates back to the home page! For some of you, the concept
+  of creating individual web pages might just make more intuitive sense than
+  composing pages of disparate components as we've been doing. However, most of
+  the time, we still want to modify our content based on specific information
+  that we're given and we need to use a tactic called "dynamic routing". Dynamic
+  routing allows us to render the same overall structure of a page whenever a
+  certain url pattern is given, but change the specific content. For instance,
+  imagine your Facebook profile. It's obviously similar to everyone else's
+  profile, but it's unique to you. Dynamic routes enable us to create something
+  similar! Let's see how it's done in Nuxt!
+</p>
+<p>
+  Nuxt makes it pretty simple for us to enable dynamic routes in our app. All we
+  need to do is prefix the vue filename with an underscore. That's it. We can
+  even define a nested routing structure by making folders in our pages folder.
+  You can see this in action in the documentation
+  <a href="https://nuxtjs.org/guide/routing#dynamic-routes">here</a>. Let's
+  explore this concept by building a fake profile page using an ID as our
+  dynamic information. What we want to be able to do is visit
+  <code>localhost:3000/profile/1</code> and render the profile information for a
+  user with the id of 1. Let's start by making a profile folder in our pages
+  folder. Next, let's make a file called <code>_id.vue</code> inside the profile
+  folder. What we'd like to be able to do is grab the information from the url
+  and make sure we render the right information on the page. We can do that by
+  accessing the route parameters in any of our component's methods. Take a look
+  at the following code.
+</p>
+<h4>profile/_id.vue</h4>
+<pre data-language="html">
+  &lt;template&gt;
+    &lt;div class="container"&gt;
+      &lt;h1&gt;User {{ id }}'s profile&lt;/h1&gt;
+    &lt;/div&gt;
+  &lt;/template&gt;
+  
+  &lt;script&gt;
+  export default {
+    data() {
+      return {
+        id: null,
+      }
+    },
+    created() {
+      const _id = this.$route.params.id
+      this.id = _id
+    }
+  }
+  &lt;/script&gt;
+</pre>
+<p>
+  Notice that when the component is created, we're getting the id parameter from
+  the route and setting it to the id parameter in our data. It's a bit of a
+  roundabout way of getting our data from our url, but this is an incredibly
+  powerful concept. If we can get the information from our route, then we can
+  use that information to get whatever we need from an external server so that
+  we can render content that matches what our user requested. This enables us to
+  use RESTful architecture and to structure our content in a consistent way
+  using Vue so that pages like the Facebook profile look consistent no matter
+  whose profile is being requested. This is possible whether we're using Nuxt or
+  using standard "vanilla" Vue, but Nuxt makes it really easy to set up routing
+  so that it "just works".
+</p>
+<p>
+  Pages are great, but we're really using Nuxt so that we can use SSR. Let's see
+  how SSR works in the next lesson!
+</p>

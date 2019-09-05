@@ -1,0 +1,132 @@
+<h1>Testing Components 2</h1>
+<h2>Objectives:</h2>
+<ul>
+  <li>
+    Learn how to test a component in a Vue app mimicking user interactions
+  </li>
+  <li>Get additional practice with vue-test-utils</li>
+</ul>
+<h2>Simulating user behavior</h2>
+<p>
+  We've learned how to shallowMount a component and create a wrapper, but so far
+  we haven't learned enough tools to test our buttons! We're not writing
+  end-to-end tests yet, so we can't create a browser and actually simulate a
+  button click in the browser, but there is something we can do. In an
+  integration/unit test we can simulate a click <em>event</em> on an element and
+  see if our click handler does the job it's supposed to do!
+</p>
+<h3>setup and teardown</h3>
+<p>
+  So far, it's been pretty easy to just do everything we need to do for a test
+  inside the <code>it</code> block. However, now that we're working on more
+  complex tests and sub-suites, we might have opportunities to make our lives
+  easier by setting up each test in the sub-suite the same way each time. We may
+  also find that we subsequently need to run some code after each test so that
+  the individual tests are running consistently. This is actually a feature of
+  Jasmine, which you can look into
+  <a
+    href="https://jasmine.github.io/2.0/introduction.html#section-Setup_and_Teardown"
+    >here</a
+  >. Let's start by setting up each of our tests for the increment button in the
+  same way. What needs to be the same each time? What things need to change?
+  Let's take a look at test setup using <code>beforeEach</code>.
+</p>
+<h4>counter.spec.js</h4>
+<pre data-language="javascript">
+describe("increment button", () => {
+  let wrapper;
+  beforeEach(() => {
+    wrapper = shallowMount(Counter);
+  });
+  // it blocks start here
+});
+</pre>
+<p>
+  First, we're creating a variable called wrapper in the sub-suite's global
+  scope, then we're creating a new instance of our Counter component and saving
+  it to the wrapper variable. Now, all of our tests can use the wrapper
+  variable. If we wanted anything else to happen before each test, we could do
+  it in the <code>beforeEach</code>! Let's use <code>.find()</code> to get a
+  hold of our increment button by its CSS selector and use
+  <code>.trigger()</code> to trigger a click event on it!
+</p>
+<h4>counter.spec.js</h4>
+<pre data-language="javascript">
+describe("increment button is clicked", () => {
+  let wrapper;
+  beforeEach(() => {
+    wrapper = shallowMount(Counter);
+  });
+
+  it("updates the component's data", () => {
+    const button = wrapper.find("#increment-button");
+    button.trigger("click");
+    expect(wrapper.vm.count).toBe(1);
+  });
+});
+</pre>
+<p>
+  Notice that we're accessing <code>wrapper.vm</code>. This is one of the
+  wrapper's
+  <a href="https://vue-test-utils.vuejs.org/api/wrapper/#properties"
+    >properties</a
+  >
+  that we have access to when we create a wrapper. All instance methods and
+  properties are exposed on <code>wrapper.vm</code>. Now let's try making a new
+  method that tests whether or not our header is updated.
+</p>
+<pre data-language="javascript">
+describe("increment button is clicked", () => {
+  let wrapper;
+  beforeEach(() => {
+    wrapper = shallowMount(Counter);
+  });
+
+  it("updates the component's data", () => {
+    const button = wrapper.find("#increment-button");
+    button.trigger("click");
+    expect(wrapper.vm.count).toBe(1);
+  });
+
+  it("updates the header text", () => {
+    const button = wrapper.find("#increment-button");
+    button.trigger("click");
+    const header = wrapper.find("h1");
+    expect(header.text()).toBe("1");
+  });
+});
+</pre>
+<p>
+  You might notice that we're copying the same code in both tests. If it's not
+  going to change, then we might as well put it in the <code>beforeEach</code>!
+  Here's the new version.
+</p>
+<pre data-language="javascript">
+describe("increment button is clicked", () => {
+  let wrapper;
+  beforeEach(() => {
+    wrapper = shallowMount(Counter);
+    const button = wrapper.find("#increment-button");
+    button.trigger("click");
+  });
+
+  it("updates the component's data", () => {
+    expect(wrapper.vm.count).toBe(1);
+  });
+
+  it("updates the header text", () => {
+    const header = wrapper.find("h1");
+    expect(header.text()).toBe("1");
+  });
+});
+</pre>
+<p>
+  This is pretty awesome, but there's a caveat. As the test suite grows, it can
+  get harder and harder to find the <code>beforeEach</code> block for any given
+  test. Think about the case where your sub-suites are nested multiple levels
+  deep and each one has its own <code>beforeEach</code>. This can cause the
+  <a href="https://thoughtbot.com/blog/mystery-guest">mystery guest problem</a>.
+  There are different philosophies about how to organize a test suite, but you
+  may find that the tradeoff of duplicating the code for each unit test is a
+  worthy tradeoff so that you can increase readability for your code.
+</p>

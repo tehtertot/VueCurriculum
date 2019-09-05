@@ -1,0 +1,146 @@
+<h1>Mocks</h1>
+<h2>Objectives:</h2>
+<ul>
+  <li>Stub and spy on methods using Jest mocks</li>
+</ul>
+<h2>Mocking</h2>
+<p>
+  The following example will use a demo app that can be downloaded
+  <a href="">here</a>. Take a moment to get acclimated with the application by
+  running it locally. Also, take some time to look at the code to really
+  understand what's going on. If you have any questions about how the app works,
+  be sure to ask your classmates first, then talk to your instructor.
+</p>
+<p>
+  We'll eventually end up testing every feature of this app end-to-end, but the
+  easiest way to illustrate mocks is by testing the
+  <code>makeChoice</code> function in the "home" view. Notice how it takes a
+  choice, 'heads' or 'tails', turns the choice into either 0 or 1, and compares
+  that to a random integer. Now let's look at the
+  <code>createRandomInteger()</code> function in
+  <code>src/utils/flip-utils</code>. This is a helper function that randomly
+  returns either 0 or 1. Since we're using JavaScript's built-in Math library
+  and generating something randomly, it's incredibly hard to test. First of all,
+  we'd basically just be testing whether or not JavaScript does what it's
+  supposed to do. Second of all, testing whether or not something is 0 or 1
+  isn't useful because it's true even if the number is always one or the other.
+  Additionally, our <code>makeChoice</code> function relies on the
+  <code>createRandomInteger</code> function in order for it to do its job. This
+  is really problematic because we can't ever predict what the result of
+  <code>createRandomInteger</code> will be!
+</p>
+<p>
+  Now that we know the problem, we need a solution. We mentioned in the last
+  lesson that we can use stubs and spies, and this is a perfect opportunity to
+  use both! Let's first make sure that when we simulate a click on the heads or
+  tails buttons that the <code>makeChoice</code> function gets called. This will
+  give us some practice with mocks!
+</p>
+<h4>home.spec.js</h4>
+<pre data-language="javascript">
+  import { shallowMount } from '@vue/test-utils';
+  import Home from '@/views/Home.vue';
+  
+  describe('Home.vue', () => {
+    describe('user chooses heads', () => {
+      it('calls `makeChoice()`', () => {
+        const makeChoiceMock = jest.fn();
+        
+        const wrapper = shallowMount(Home, {
+          methods: {
+            makeChoice: makeChoiceMock,
+          },
+        });
+        
+        wrapper.find('#heads-button').trigger('click');
+        expect(makeChoiceMock.mock.calls.length).toBe(1);
+      });
+    });
+  });
+</pre>
+<p>
+  The first thing you should notice is the variable <code>makeChoiceMock</code>.
+  It's just a normal variable that's storing something special. It's storing one
+  of Jest's "mock functions". A mock function will keep track of how many times
+  it was called and what arguments were used when calling it. Next, notice that
+  we're using our <code>shallowMount</code> but with options now. The options
+  allow us to do all sorts of things like set initial properties, mock methods,
+  stub slots, and more. Basically, the options for the component allow us to
+  control, like with mocks, the initial inputs for our components so that we can
+  test how they behave in different circumstances. Read about all the options
+  <a href="https://vue-test-utils.vuejs.org/api/options.html">here</a>. Finally,
+  we're simulating a click and seeing whether or not the mock function was ever
+  called. We can do this because Jest mock functions store a special property
+  called <code>mock</code> that gives us a bunch of useful information. Check
+  out what the mock object gives us
+  <a href="https://jestjs.io/docs/en/mock-function-api.html">here</a>!
+</p>
+<p>
+  The issue with this test is that we're pretty much just testing whether or not
+  Vue's click handler works. If <code>makeChoice()</code> is supposed to be
+  called on each <code>click</code>, we should expect that to happen because
+  it's built right into Vue. So what would be a more useful test? What if we
+  could test something that is unique to our particular app? In this case, it
+  would be useful if we could ensure that the <code>makeChoice()</code> function
+  is being passed the string <code>"heads"</code>. Let's modify our test a bit.
+</p>
+<pre data-language="javascript">
+  it('calls `makeChoice()` with "heads"', () => {
+    const makeChoiceMock = jest.fn();
+
+    const wrapper = shallowMount(Home, {
+      methods: {
+        makeChoice: makeChoiceMock,
+      },
+    });
+
+    wrapper.find('#heads-button').trigger('click');
+    expect(makeChoiceMock.mock.calls[0][0]).toBe('heads');
+  });
+</pre>
+<p>
+  Notice that we've only changed one section. See how the
+  <code>mock</code> property has its own property <code>calls</code>. Calls is
+  an array of arrays. The outer array holds an index for each time the function
+  was called. Each index is another array, whose indices are arguments. This is
+  what our <code>calls</code> array may look like after a few calls:
+  <code>[['heads'], ['tails'], ['heads'], ['heads']]</code>. So, if we know that
+  we have one call, with one argument, we can use
+  <code>makeChoiceMock.mock.calls[0][0]</code> to find the first argument of the
+  first call of our mock function. Luckily, we have access to some helpful
+  matchers that can give us some more expressive terms. Check this out! Read up
+  about more Jasmine matchers
+  <a href="https://jasmine.github.io/api/3.4/matchers">here</a>.
+</p>
+<pre data-language="javascript">
+  it('calls `makeChoice()` with "heads"', () => {
+    const makeChoiceMock = jest.fn();
+
+    const wrapper = shallowMount(Home, {
+      methods: {
+        makeChoice: makeChoiceMock,
+      },
+    });
+
+    wrapper.find('#heads-button').trigger('click');
+    expect(makeChoiceMock).toHaveBeenCalledWith('heads');
+  });
+</pre>
+<h4>A Note:</h4>
+<p>
+  It's important to note here that the <code>makeChoice()</code> method in our
+  component has been <em>overwritten</em>. If we had just mounted without
+  options, we wouldn't have been able to tell whether or not
+  <code>makeChoice</code> had been called directly. But what we did was we
+  replaced the method in our component with the method in our
+  <code>shallowMount</code> function. We replaced it with our mock function. In
+  this way, we've stubbed the method, because it doesn't do what it did
+  initially. However, combined with other tests that don't replace
+  <code>makeChoice()</code>, we can test various facets of the functionality,
+  including how the original <code>makeChoice()</code> function actually works.
+  Let's try another example. Wouldn't it be nice if we could test that our
+  <code>makeChoice()</code> function works depending on what our result is from
+  <code>createRandomInteger()</code>? To do that, we'll need to learn how to
+  mock routes and vuex. But first, let's get some practice adding mocks to our
+  test suite.
+</p>

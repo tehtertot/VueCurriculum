@@ -1,0 +1,74 @@
+<h1>Vuex Basics</h1>
+<h2>Objectives:</h2>
+<ul>
+  <li>Learn how to install Vuex</li>
+  <li>Start using Vuex with a simple store example</li>
+</ul>
+<p>Let's start by installing Vuex. We'll go ahead and assume you've created a demo project for this using the vue-cli tool. Once you've navigated into your demo project folder, run the following command.</p>
+<pre data-language="bash">npm install vuex --save</pre>
+<p>Here, we've used "Node Package Manager", or "npm" to install vuex. Where did that go? Vuex and all its associated dependencies are stored inside the <code>node_modules/</code> folder in your project. But you'll also see Vuex listed as a dependency in your <code>package.json</code> file. We won't dwell on this any longer, let's start using Vuex by building a counter app!
+</p>
+<p>Full disclosure, we've taken this example straight from the Vuex documentation. Don't worry, we'll provide some additional explanations that aren't in Vuex's documentation and we'll also provide a fully modularized and working project for you to play with. For now, let's see what Vuex looks like in an application.</p>
+<h4>main.js</h4>
+<pre data-language="javascript">
+  import Vue from 'vue'
+  import Vuex from 'vuex'
+  import App from './App.vue'
+  
+  Vue.config.productionTip = false
+  
+  Vue.use(Vuex)
+  
+  const store = new Vuex.Store({
+    state: {
+      count: 0
+    },
+    mutations: {
+      increment(state) {
+        state.count++
+      }
+    }
+  })
+  
+  new Vue({
+    store,
+    render: h => h(App),
+  }).$mount('#app')
+</pre>
+<p>Now would be a good time to take a look at what we did in chapter 2 and compare notes. The Vuex store is almost identical to the store pattern we used in that chapter. In fact, we can count 5 minor changes:</p>
+<ol>
+  <li>We're importing Vuex</li>
+  <li>We're using the line <code>Vue.use(Vuex)</code></li>
+  <li>We're using a class called <code>Store</code>, which has been provided by the Vuex library</li>
+  <li>There's a key in the store called <code>mutations</code></li>
+  <li>We're passing the store to the Vue instance</li>
+</ol>
+<p>Let's take those one at a time. Importing Vuex is necessary just like importing any other file or package is necessary. We installed it, we should probably use it. <code>Vue.use(Vuex)</code> or more generally <code>Vue.use()</code> allows us to install a plugin. We always call it before we "instantiate" our instance of Vue using <code>new Vue()</code>, and it is essentially giving Vue access to any underlying features of the plugin that it will use later on. Read more about <code>Vue.use()</code> <a href="https://vuejs.org/v2/guide/plugins.html#Using-a-Plugin">here</a>. We're using <code>new Vuex.Store()</code> to create an optimized store that can communicate with Vue. This sets up special rules for things like "mutations" that have special properties and functionality. We'll get to mutations in depth in just a bit, so that just leaves the store being passed to the Vue instance. This is what gives every component easy access to everything we put into it. No more importing store from a global file, Vuex will just inject the store into every component in an intelligent and efficient way.</p>
+<p>Okay, so hopefully you don't feel too overwhelmed by the differences we've seen so far. The biggest thing I'd like to point out is the "mutations" in the Vuex store. These are no different than the functions we used in our own store to mutate state, and they should adhere to the same guidelines. However, Vuex mutations can be tracked through time. Vuex allows us to see what state looks like at any point in time, and exactly which mutations were called in which order. This is a massive improvement for debugging which we'll explore more in detail later. Another difference is how we use state and mutations from our components. Let's take a look at what our counter component might look like.</p>
+<h4>Counter.vue -- html</h4>
+<pre data-language="html">
+  &lt;template&gt;
+    &lt;div class="hello"&gt;
+      &lt;p&gt;{{ count }}&lt;/p&gt;
+      &lt;button @click="onClick()"&gt;Click Me!&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/template&gt;
+</pre>
+<h4>Counter.vue -- script</h4>
+<pre data-language="javascript">
+  export default {
+    name: 'Counter',
+    computed: {
+      count() {
+        return this.$store.state.count
+      }
+    },
+    methods: {
+      onClick() {
+        this.$store.commit('increment')
+      }
+    }
+  }
+</pre>
+<p>The first thing you should notice is that we don't have any imports. Instead, we're using <code>this.$store</code>. <code>this.$store</code> exists because we passed the Vuex store to the root Vue instance in the main.js file. Notice also that we're calling <code>this.$store.commit('increment')</code>. We use <code>commit</code> to commit <em>any</em> mutation in our Vuex store. We can then pass the name of our function to <code>commit</code>. This allows Vuex to do its additional tracking/debugging magic. If you find yourself in need of passing arguments to your mutation, go ahead and refer to <a href="https://vuex.vuejs.org/guide/mutations.html#commit-with-payload">this documentation</a> and ask your instructor if you get lost.</p>
+<p>The last thing you'll probably notice here is that we're using somehting called a computed property. While we could use <code>data</code> in this example, we though we'd show off the computed property feature. This is similar to using <code>data</code>, but there are some key optimizations like <strong>caching</strong>. Essentially, we can refer to our number as <code>count</code> in our template, and our component will only update that value once it knows it has changed. Since it's a function, we can use the computed property function to do all sorts of operations and arrive at some sort of "derived" state. Start a discussion with your instructor about computed properties using <a href="https://vuejs.org/v2/guide/computed.html#Computed-Properties">this documentation</a> as a starting point if you're interested in additional exploration. We'll learn more about computed properties and "getters" in an upcoming lesson, but this is a simple example that you can refer to later.</p>

@@ -1,0 +1,75 @@
+<h1>E2E Testing 2</h1>
+<h2>Objectives:</h2>
+<ul>
+  <li>
+    Learn some advanced techniques for e2e testing
+  </li>
+</ul>
+<h2>A full test</h2>
+<p>
+  Now that we're running e2e tests, we are able to get access to the full
+  application state and use it with its full underlying implementation. That
+  means, we can actually control and use the app as a user and check information
+  about how our state changes or where our page is routed. To get access to
+  things like the store, let's add a few lines to our <code>main.js</code> file.
+  Currently, the code looks like this:
+</p>
+<pre data-language="javascript">
+  import Vue from 'vue'
+  import App from './App.vue'
+  import router from './router'
+  import store from './store'
+  
+  Vue.config.productionTip = false
+  
+  new Vue({
+    router,
+    store,
+    render: h => h(App)
+  }).$mount('#app')
+</pre>
+<p>Let's change it to look like this:</p>
+<pre data-language="javascript">
+  import Vue from 'vue';
+  import App from './App.vue';
+  import router from './router';
+  import store from './store';
+  
+  Vue.config.productionTip = false;
+  
+  const app = new Vue({
+    router,
+    store,
+    render: h => h(App),
+  });
+  
+  app.$mount('#app');
+  
+  // the if check ensures that this only happens in testing
+  // this is a security concern and should always happen
+  if (window.Cypress) {
+    window.app = app;
+  }
+</pre>
+<p>
+  What we've done is made the global Vue component part of the browser's
+  <code>window</code> object. That allows us to access the store and router from
+  our Cypress tests. This works because Cypress is acting as the browser and has
+  access to anything that is globally accessible in the browser. Unfortunately,
+  stubbing our <code>createRandomInteger()</code> function in Cypress is
+  incredibly difficult. We don't get easy access to the internals of our
+  application. We're using all of the internals of our application as they're
+  written, but stubbing dependencies is difficult and not very useful. We need
+  to think about e2e tests as though we're a user using the real app. In this
+  case, we don't have nearly as much control. Open up the
+  <code>tests/e2e/specs/</code> folder to see some e2e tests in action.
+</p>
+<p>
+  The syntax for Cypress is similar but different. It uses Chai's assertion
+  engine behind the scenes instead of Jasmine's. It also heavily uses chaining
+  to deal with asynchronicity. This allows us to mix and match between Chai's
+  assertions and Cypress's where appropriate. Notice how our tests are testing
+  things the user should see and feel. Does the page redirect in real life? Does
+  it render the right things? In this case, some of the tests are a bit of a
+  stretch, but they're useful to illustrate how Cypress works.
+</p>
