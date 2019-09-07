@@ -1,0 +1,100 @@
+<h1>CRUD Operations with Cloud Firestore</h1>
+<h2>Objectives:</h2>
+<ul>
+    <li>Learn how to create a new document from a Firestore database from a Vue application</li>
+    <li>Learn how to retrieve specific document(s) from a Firestore database from a Vue application</li>
+    <li>Learn how to update an existing document from a Firestore database from a Vue application</li>
+    <li>Learn how to delete an existing document from a Firestore database from a Vue application</li>
+</ul>
+<hr>
+<p>Now that we know how to display data from our database, let's learn about more interactive database functionality. Of course, we don't want or expect our users to have direct access to our database, so we're going to want to add functionality to our Vue application that allows users to add, edit, or remove data from our database.</p>
+<h3>Creating</h3>
+<p>Creating, or adding a new document into a database is a very common action. Consider signing up for a new website, posting a review or a message, or uploading a new picture. All of these involve creating new data. In web applications, one very common way for communicating new data needs to be saved is via form input fields and a button. When the user clicks the button, this signals to the server that the information present should be captured. (If you've forgotten about capturing form data, go back to get a refresher.) We'll specify the collection we want to add to, and then use the method <code>add</code>, passing in an object where the keys are the names of the fields for the document.</p>
+<pre data-language="javascript">
+    export default {
+        data() {
+            return {
+                petName: "",
+                petColors: ""
+            }
+        },
+        methods: {
+            addNewPet() {
+                // add item to db
+                db.collection("pets").add({
+                    Name: this.petName,
+                    Colors: this.petColors.split(",")
+                });
+
+                // reset values
+                this.petName = "";
+                this.petColors = "";
+            }
+        }
+    }
+</pre>
+<h3>Reading</h3>
+<p>In the last module, we learned how to retrieve all the documents in a collection. What if we want to retrieve just one? The id is the best way to uniquely identify a document, so we'll use that to request a specific document from the collection.</p>
+<pre data-language="javascript">
+    export default {
+        // other content
+        methods: {
+            // other methods,
+            async viewOne(petId) {
+                try {
+                    let singlePetDoc = await db.collection("pets").doc(petId).get();
+
+                    // once retrieved, the id is at the document level
+                    console.log(singlePetDoc.id);
+
+                    // and the contents of the document are available via data()
+                    let petDetails = singlePetDoc.data();
+                    console.log(petDetails.Name);
+                    console.log(petDetails.Colors);
+                }
+                catch (error) {
+                    console.log(error);
+                }
+            },
+        }
+    }
+</pre>
+<p>It's also possible that you might want to retrieve a subset of documents. For example, maybe you're filtering for pets of a certain color or by name. In this case, instead of using the <code>doc</code> method, we can use the <code>where</code> method and pass in the field name, an evaluator, and a value to use for filtering. Here's the <a href="https://firebase.google.com/docs/firestore/query-data/get-data#get_multiple_documents_from_a_collection" target="_blank">Firestore documentation</a> for an example.</p>
+<h3>Updating</h3>
+<p>Sometimes, we might want to update a value in the database. To do that, we'll need to retrieve the document, and then pass in an object with the values for updating.</p>
+<pre data-language="javascript">
+    export default {
+        // other content
+        methods: {
+            // other methods,
+            async updateOne(petId) {
+                try {
+                    let singlePetDoc = await db.collection("pets").doc(petId).update({
+                        Name: this.petName
+                    });
+                }
+                catch (error) {
+                    console.log(error);
+                }
+            },
+        }
+    }
+</pre>
+<h3>Deleting</h3>
+<p>Similarly, when we want to delete a document, we'll need to retrieve that document by its id and then use the delete method.</p>
+<pre data-language="javascript">
+    export default {
+        // other content
+        methods: {
+            // other methods,
+            async deleteOne(petId) {
+                try {
+                    db.collection("pets").doc(p).delete();
+                }
+                catch (error) {
+                    console.log(error);
+                }
+            },
+        }
+    }
+</pre>
