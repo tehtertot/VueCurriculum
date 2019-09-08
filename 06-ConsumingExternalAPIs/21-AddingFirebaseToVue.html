@@ -44,7 +44,7 @@
     <pre>
         import firebase from 'firebase/app';
 
-        // adding to the end:
+        // referencing configuration values from .env.development
         var firebaseConfig = {
             apiKey: process.env.VUE_APP_APIKEY,
             authDomain: process.env.VUE_APP_AUTHDOMAIN,
@@ -55,7 +55,7 @@
             appId: process.env.VUE_APP_APPID,
         };
         
-        // Initialize Firebase
+        // Initialize Firebase with configurations from above
         firebase.initializeApp(firebaseConfig);
     </pre>
 </ol>

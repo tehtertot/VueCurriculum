@@ -5,13 +5,11 @@
 </ul>
 <hr>
 <p>body</p>
-<!-- https://alligator.io/vuejs/vue-cloud-firestore/ -->
 <ol>
     <li>
         <p>The first thing we'll need to do is install a package that allows us to connect our Vue application to our Firestore account.</p>
         <p><pre>npm install vue-firestore --save</pre>
     </li>
-        <!-- should i be importing namespaced firebase? @firebase/app @firebase/firestore vue-firestore -->
     <li>
         <p>Now that our Firebase app has an associated database, we need to update our Vue app's configurations to include the Firestore account details. In your app's Firestore console, go to the project settings and scroll to the bottom. While the other fields should be the same, we now have a storage bucket value. Open up your .env.development file and update the value for VUE_APP_STORAGEBUCKET with the value found in your Firebase console.</p>
     </li>

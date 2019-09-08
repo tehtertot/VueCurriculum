@@ -5,6 +5,7 @@
     <li>Learn how to authenticate with Firebase</li>
 </ul>
 <hr>
+<p>Up to this point, we haven't been concerned with who is interacting with our applications--anyone could edit, delete, or add new TV shows in our last application. While there may be times where this is desirable, more often we'll likely want to control what users are able to do and see, and so we need a way of knowing who a given user actually is.</p>
 <p>As we develop web applications for users, authentication is a very important process to consider. <b>Authentication</b> is the process of verifying that someone is who they say they are. So far, none of our applications have utilized this process--anyone could walk up and play Ninja Gold or browse through the applications we've made; but suppose we did want it to matter. What if we wanted to keep track of Ninja Gold high scores or a history of game play per user? You have probably used dozens of sites that require you to <em>authenticate</em> by signing in with some combination of username and password or log in via an existing account like Google, Facebook, or GitHub.</p>
 <p>While this is certainly something we could manage internally in our application (by saving usernames and encrypted passwords into a database and then checking that database each time a user logs in), we are going to utilize a third-party API, namely Firebase, to assist us with this process. We can trust a provider like Google to ensure our data is secure, and that way, we don't have to be experts in security; instead, we can focus on the heart of our application!</p>
 <h3>Firebase Setup</h3>
@@ -17,5 +18,18 @@
 <h3>Vue App Setup</h3>
 <p>The Firebase Auth service has several useful methods that abstract away the complexities of login and registration. To follow along in the documentation, you can find it <a href="https://firebase.google.com/docs/reference/js/firebase.auth.Auth.html?authuser=0#createuserwithemailandpassword">here</a>.</p>
 <ol>
-    <li></li>
+    <li><p>First, we'll need to create a registration form for users to enter an email and a password.</p>
+        <pre data-language="html">
+&lt;p&gt;Email: &lt;input type="text" v-model="email"&gt;&lt;/p&gt;
+&lt;p&gt;Password: &lt;input type="password" v-model="password"&gt;&lt;/p&gt;
+&lt;p&gt;&lt;button v-on:click="registerUser"&gt;Register&lt;/button&gt;&lt;/p&gt;
+        </pre>
+    </li>
+    <li>
+        <p>Once a user has completed the form and clicks the "Register" button, we'll call the Firebase method to add this user:</p>
+        <pre data-language="javascript">
+firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
+        </pre>
+    </li>
+    <li><p>If we go back to our Firebase console and look at the list of users, we should see the recently registered user!</p></li>
 </ol>
