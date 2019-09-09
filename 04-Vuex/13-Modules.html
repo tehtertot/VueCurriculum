@@ -1,0 +1,76 @@
+<h1>Vuex Modules</h1>
+<h2>Objectives:</h2>
+<ul>
+  <li>Learn how to use modules in Vuex</li>
+</ul>
+<p>
+  Now that we've been building our own applications in Vuex and working with
+  some examples, it's probably not hard to imagine things getting really out of
+  control when we're writing an app that has a bigger scope. From the very
+  beginning, we've been touting the benefits of modularization, and keeping all
+  of our data management logic stuck inside the <code>main.js</code> file is
+  obviously not very modular. Luckily, Vuex allows us to modularize all our Vuex
+  methods into separate modules. This allows us to split everything up into
+  separate files and folders based on what makes sense for our application. For
+  instance, if we were building Twitter, we might have a "users" module and a
+  "tweets" module, each with their own respective state, getters, mutations, and
+  actions.
+</p>
+<p>
+  Vuex doesn't enforce any rules regarding <em>how</em> we decide to modularize
+  our store, but the package maintainers do recommend a specific application
+  structure. You can find that structure
+  <a href="https://vuex.vuejs.org/guide/structure.html">here</a>. Modules
+  themselves are just normal JavaScript objects that have our familiar keys:
+  "state", "getters", "mutations", and "actions". Let's look at a simple example
+  using our Twitter scenario.
+</p>
+<h4>/store/users.js</h4>
+<pre data-language="javascript">
+  export default {
+    state: {
+      currentUser: {
+        id: 1,
+        name: "Wes Harper"
+      }
+    },
+  }
+</pre>
+<h4>/store/tweets.js</h4>
+<pre data-language="javascript">
+  export default {
+    state: {
+      tweets: [
+        {
+          id: 1,
+          content: "coding is fun!"
+        },
+        {
+          id: 2,
+          content: "Vue is cool!"
+        }
+      ]
+    }
+  }
+</pre>
+<p>And finally...</p>
+<h4>main.js</h4>
+<pre data-language="javascript">
+  import users from "store/users"
+  import tweets from "store/tweets"
+
+  // omitted for brevity
+  const store = new Vuex.Store({
+    modules: {
+      users,
+      tweets
+    }
+  })
+  // omitted for brevity
+</pre>
+<p>
+  Notice that the only real change is the addition of the "modules" key. If we
+  needed or wanted to, we can also include any number of getters, mutations,
+  actions, and even state data to the root of our store directly and use them
+  alongside our modules!
+</p>

@@ -1,0 +1,97 @@
+<h1>Module Namespacing</h1>
+<h2>Objectives:</h2>
+<ul>
+  <li>Learn about namespacing modules for reusability and containment</li>
+</ul>
+<p>
+  By default, Vuex takes all the properties from our modules and attaches them
+  to the root store object. That means that we can access anything from a module
+  the same way we would access anything else. However, this can lead to a few
+  drawbacks. As our app grows, we may find that our mutation and action names
+  are starting to look pretty similar. If we have two that happen to end up with
+  the same name, Vuex will just use the one that was added to the store last.
+  Also, we may find that having everything globally accessible makes things
+  harder to find when we need them. Often, this ends up in certain enforced
+  naming conventions like "usersIncrementCount" vs "tweetsIncrementCount". In
+  these cases, it can be useful to use a Vuex module feature called
+  "namespacing".
+</p>
+<p>
+  Namespacing nests each module within its own unique name and essentially
+  forces us to use the name of the module any time we'd like to use any of its
+  properties. This gives us much more flexibility to write modules freely
+  without worrying about naming conficts and gives us more understandable code
+  over time. Let's see namespacing in action with our Twitter example.
+</p>
+<h4>/store/users.js</h4>
+<pre data-language="javascript">
+  export default {
+    namespaced: true,
+    state: {
+      currentUser: {
+        id: 1,
+        name: "Wes Harper"
+      }
+    },
+  }
+</pre>
+<h4>/store/tweets.js</h4>
+<pre data-language="javascript">
+  export default {
+    namespaced: true,
+    state: {
+      tweets: [
+        {
+          id: 1,
+          content: "coding is fun!"
+        },
+        {
+          id: 2,
+          content: "Vue is cool!"
+        }
+      ]
+    }
+  }
+</pre>
+<p>And finally...</p>
+<h4>main.js</h4>
+<pre data-language="javascript">
+  import users from "store/users"
+  import tweets from "store/tweets"
+
+  // omitted for brevity
+  const store = new Vuex.Store({
+    modules: {
+      users,
+      tweets
+    }
+  })
+  // omitted for brevity
+</pre>
+<p>
+  Notice that the only real change is the addition of the "namespaced" key.
+  There's also one slight change to how we'll access this information from
+  within our components. Let's imagine that we have a Tweet component.
+</p>
+<h4>Tweet.vue</h4>
+<pre data-language="javascript">
+  // imports omitted for brevity
+  export default {
+    name: 'tweet',
+    data() {
+      ...mapState('tweets', ['tweets']),
+      ...mapState(['users/user'])
+    }
+  }
+</pre>
+<p>
+  The above snippet shows two different ways of accessing namespaced state. The
+  first uses the first parameter of the mapState function to define the module
+  that we'll be accessing. In the subsequent array, we only have access to any
+  state that's nested inside the "tweets" module. In the second example, we're
+  prepending the namespace path from the root to the state that we'd like to
+  access. Since the module is called "users", we start with "users/" and since
+  the state we want to access is called "user", we end with "user". Either way
+  is acceptable, but we find that there are typically fewer keystrokes used on
+  the first option.
+</p>
