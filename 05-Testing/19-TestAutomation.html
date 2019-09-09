@@ -1,0 +1,59 @@
+<h1>Test Automation</h1>
+<h2>Objectives:</h2>
+<ul>
+  <li>
+    Learn about CI/CD
+  </li>
+  <li>Learn about some CI/CD tools</li>
+</ul>
+<h2>Continuous Integration/Deployment</h2>
+<p>
+  If you hang around developers for long enough, you're bound to hear about
+  CI/CD. Those acronyms stand for "Continuous Integration" and "Continuous
+  Deployment". Before we can really dive into either, let's talk about some
+  additional tools in the development ecosystem that we could potentially
+  leverage.
+</p>
+<p>
+  CI/CD tools allow us to hook into our code development lifecycle (usually
+  using git) and run a suite of automated tasks before certain actions occur.
+  For instance, before we merge a feature branch into our master branch, let's
+  make sure all of our tests pass. CI/CD tools usually allow us to specify a
+  "build environment" for the tests to run in that mimics the environment the
+  application will be running on when it's out in the wild and they are commonly
+  used to run tests and do other tasks that allow us to see if our app is
+  running properly. They can also automate tasks like deploying our app onto our
+  staging or production servers and any number of things that can be done using
+  the command-line. The idea here is that we should be able to write code, test
+  it, and ship it confidently. Once that code is in our project's repository, it
+  should check itself for flaws and get pushed live as soon as we know it's all
+  safe.
+</p>
+<p>
+  In practice CI/CD can be pretty involved, but some common tools are
+  <a href="https://travis-ci.org/">Travis</a> and
+  <a href="https://circleci.com/">Circle CI</a>. Each of these tools essentially
+  performs the same job, and it will link into your repository. It's worth
+  diving into CI/CD concepts in the future and taking a look at each
+  competitor's website is a good idea, but we're not going to get into the weeds
+  during this course.
+</p>
+<h2>CI vs CD</h2>
+<p>
+  Last, we'd like to fully unpack exactly what CI and CD mean. CI is the process
+  of running all automated tests and processes on a particular development
+  branch so that you and your team can confidently merge the latest code into
+  the application's master code without worrying too much about whether or not
+  it works (this is why good tests are so important). CD means that after a
+  certain action happens - usually pulling a certain feature branch into the
+  master branch - the code should automatically deploy itself to production and
+  be live for all users.
+</p>
+<p>
+  If we automate these processes, it allows our development process to be much
+  simpler. We can spend more time focusing on writing and fixing features and
+  less time worrying about whether or not our feature made it into the
+  production application properly. They are massively helpful tools. Once you're
+  comfortable with Vue, CI/CD should be on your list to learn about once you
+  begin to tackle new projects of your own.
+</p>
