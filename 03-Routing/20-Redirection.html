@@ -1,0 +1,58 @@
+<h1>Programmatic Navigation</h1>
+<h2>Objectives:</h2>
+<ul>
+    <li>Learn how to navigate programmatically</li>
+    <li>Learn what redirecting is and how to do it</li>
+</ul>
+<hr>
+<p>So far we've learned how to manage a user's navigation through our application when they directly manipulate the address bar or click on a link we have provided. Sometimes, however, we may want to send the user to a new location when they've taken a certain action. Consider logging in to an application. If we only used an anchor tag and let the user click to log in, we don't have the opportunity to verify who they are or that their login information is correct. Instead, we want to process that information, and <em>if</em> it is valid, we want to send them on to the next view. This is what we mean when we talk about <em>programmatic navigation</em>.</p>
+<p>The vue-router package makes this relatively simple for us to manage with a <code>push</code> method. We just need to pass the route that we'd like to navigate to after performing whatever logic is required. Even though we aren't actually navigating to a new HTML page, but rather just displaying a different component, this method mimics a traditional browser history so that the browser back and forward buttons act as expected. Here is a simple example, including where in your code you might want to use this method:</p>
+<h4>myvueapp/src/components/SomeComponent.vue -- script</h4>
+<pre data-language="javascript">
+    export default {
+        // other properties
+        methods: {
+            someMethod() {
+                // perform some logic
+
+                this.$router.push('anotherRoute');
+            }
+        }
+    }
+</pre>
+<p>If we're navigating to a simple route, this works great. If you prefer using named routes, or if the route we are navigtaing to requires variable parameters, however, we have other options for passing in those values:</p>
+<pre data-language="javascript">
+    // to pass in the route by name
+    this.$router.push({ name: 'secondRoute' });
+
+    // with parameters
+    this.$router.push({ name: 'secondRoute', params: { id: 123 } });
+</pre>
+<p>When we pass in just a simple string, the router looks for a literal matching route. When we pass in an object, we can use the keys to be more explicit about how we want the router to look up the correct route. By using the <code>name</code> key, we are referring to routes by name rather than literal path. The <code>params</code> key is used when that route has additional parameters. Its value is another object whose key(s) are the names of the parameters specified in the route.</p>
+<h3>Redirecting</h3>
+<p>One more concept to discuss is the idea of redirecting. Sometimes, we don't want the users' actions available in the browser history. For example, if a user just made a purchase, we wouldn't want to have them hit the back button and have their purchase reprocessed. Yikes! This is a situation where redirecting is a good idea. By performing a redirect, we can allow the user to go back to the previous location, but not actually reprocess anything that happened by splitting it into two steps: the actual processing of information (eg. processing a credit card purchase) and the navigating to a new view. We'll only add the second part to our browser history, thus protecting the user from inadvertently making a double purchase.</p>
+<p>To use redirecting, we just need to set up an additional route:</p>
+<h4>myvueapp/src/router/index.js</h4>
+<pre data-language="javascript">
+    routes: [
+        // other routes
+        {
+            path: '/process',
+            redirect: 'anotherRoute'
+        }
+    ]
+</pre>
+<p>Remember, this is most important when we've processed something that we wouldn't want to expose to the user to accidentally happen again. A good rule of thumb is that if it sending/changing data to the backend, we should probably redirect rather than navigate directly. In the generic example provided above (and replicated below), let's suppose that "someMethod" runs when the user clicks the "Register" button. Instead of just processing their registration and displaying another view in the same function, we can instead end the function by sending it to the <code>/process</code> route; after the completion of that function, the user is then sent to <code>anotherRoute</code>, and this is the route that actually gets saved in the browser's history.</p>
+<h4>myvueapp/src/components/SomeComponent.vue -- script</h4>
+<pre data-language="javascript">
+    export default {
+        // other properties
+        methods: {
+            someMethod() {
+                // perform some logic
+
+                this.$router.push('/process');
+            }
+        }
+    }
+</pre>

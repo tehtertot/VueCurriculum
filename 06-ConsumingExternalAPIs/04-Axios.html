@@ -4,8 +4,8 @@
     <li>Learn about axios</li>
 </ul>
 <hr>
-<p>Now that we understand how to make a request to an API, we're going to learn how to have our Vue application make the call rather than manually running them through Postman. To get started, we're going to install a package called <b>axios</b> that will assist us in making the calls. Axios is a promise-based HTTP client. What does that mean?</p>
-<p>In the code we've written to this point, all the code is contained within the application. When we make an external API call, we can't be sure how long it will take to get a response--so how can we make sure something in our code happens only <em>after</em> the call has completed (i.e. we've received a response)? This is where <b>promises</b> and <b>asynchronicity</b> come in. This means we can specify what call we want to make, and then wait until that call is complete before proceeding. To make a call with axios, we'll use the method name associated with request method type, for example:</p>
+<p>Now that we understand how to make a request to an API, we're going to learn how to have our Vue application make the call rather than manually running them through Postman. To get started, we're going to install a node package called <b>axios</b> that will assist us in making the calls. Axios is a promise-based HTTP client. What does that mean?</p>
+<p>In the code we've written to this point, all the code is contained within the application, and so each line runs sequentially. When we make an external API call, we can't be sure how long it will take to get a response--so how can we make sure something in our code happens only <em>after</em> the call has completed (i.e. we've received a response)? This is where <b>promises</b> and <b>asynchronicity</b> come in. This means we can specify what call we want to make and make sure our code waits until that call is complete before proceeding. To make a call with axios, we'll use the method name associated with the request method type, for example:</p>
 <pre data-language="javascript">
     // GET request
     axios.get('the url we want to make a request to')
@@ -13,7 +13,7 @@
     // POST request
     axios.post('url goes here', dataObjectGoesHere)
 </pre>
-<p>Because axios is specifically designed for HTTP requests, its methods reflect the HTTP verbs we've learned about (i.e. GET, POST, etc.) Check out the <a href="https://github.com/axios/axios" target="_blank">axios documentation</a> for a full list of available HTTP methods. With the <code>get</code> function, we need to pass as an argument the string of the url we are trying to request.</p>
+<p>Because axios is specifically designed for HTTP requests, its methods reflect the HTTP verbs we've learned about (i.e. GET, POST, etc.) Check out the <a href="https://github.com/axios/axios" target="_blank">axios documentation</a> for a full list of available HTTP methods. With the <code>get</code> function, we pass in the url we are trying to request as a string, including any query parameters.</p>
 <p>As you learn axios, you may find a couple of different ways of handling these requests. We'll show you both so you can be familiar with whatever you find.</p>
 <h3>Promises</h3>
 <p>Here's a basic breakdown of what an axios promise looks like in code. After making the request, there are 3 common methods to be included:</p>

@@ -1,0 +1,85 @@
+<h1>Vue + Cloud Firestore</h1>
+<h2>Objectives:</h2>
+<ul>
+    <li>Learn how to integrate Cloud Firestore with a Vue application</li>
+</ul>
+<hr>
+<p>body</p>
+<ol>
+    <li>
+        <p>The first thing we'll need to do is install a package that allows us to connect our Vue application to our Firestore account.</p>
+        <p><pre>npm install vue-firestore --save</pre>
+    </li>
+    <li>
+        <p>Now that our Firebase app has an associated database, we need to update our Vue app's configurations to include the Firestore account details. In your app's Firestore console, go to the project settings and scroll to the bottom. While the other fields should be the same, we now have a storage bucket value. Open up your .env.development file and update the value for VUE_APP_STORAGEBUCKET with the value found in your Firebase console.</p>
+    </li>
+    <li>
+        <p>The next thing we need to do is update our Firebase configuration to include the Firestore.</p>
+        <h4>myvueapp/src/firebase.js</h4>
+        <pre data-language="javascript">
+import firebase from 'firebase/app';
+import 'firebase/firestore';    // added this line
+
+var firebaseConfig = {
+    apiKey: process.env.VUE_APP_APIKEY,
+    authDomain: process.env.VUE_APP_AUTHDOMAIN,
+    databaseURL: process.env.VUE_APP_DATABASEURL,
+    projectId: process.env.VUE_APP_PROJECTID,
+    storageBucket: process.env.VUE_APP_STORAGEBUCKET,
+    messagingSenderId: process.env.VUE_APP_MESSAGINGSENDERID,
+    appId: process.env.VUE_APP_APPID,
+};
+
+const firebaseApp = firebase.initializeApp(firebaseConfig);    // capture initialized app in a variable
+
+export const db = firebaseApp.firestore();              // export the db so it can be imported into the components that need it
+        </pre>
+    </li>
+    <li>
+        <p>To finish up the configuration, we need to connect the Firestore to our actual Vue application. This is where the vue-firestore package comes in. We'll do this in the main file where we're setting up our Vue application:</p>
+        <h4>myvueapp/src/main.js</h4>
+        <pre data-language="javascript">
+// other imports
+import VueFirestore from 'vue-firestore';       // adding this import
+
+Vue.config.productionTip = false;
+Vue.use(VueFirestore, {key: 'id'});      // adding this use statement
+
+new Vue({
+    // no changes here
+        </pre>
+        <p>Because we're allowing the database to assign keys automatically, the default name for that field is <code>.key</code>. Because having a symbol in a field name can be a bit clunky, we're specifying in the <code>Vue.use</code> statement that we'd like to use the field name <code>id</code> to refer to each document's unique id.</p>
+    </li>
+    <li>
+        <p>With all the configurations out of the way, we can start interacting with our database by importing the <code>db</code> variable being exported above. Let's start by taking a look at a simple read example. In the last module, you created a collection with a few documents. (In this example, we're going to have a collection of pets.) How can we get those into our Vue components? Let's start with the script section of our component. We're going to add a <code>firestore</code> key to our export, that will look very similar to <code>data</code>:</p>
+        <h4>myvueapp/src/components/MyComponent.vue</h4>
+        <pre data-language="javascript">
+import { db } from '../firebase';  
+
+export default {
+    name: "MyComponent",
+    data() {
+        return {
+            pets: []        // to start, the list is empty
+        }
+    },
+    firestore() {           // adding this key/function
+        return {
+            pets: db.collection('pets')
+        }
+    }
+}
+        </pre>
+        <p>This firestore function binds our pets collection to the pets variable held in data in real time!</p>
+    </li>
+    <li>
+        <p>To see this in action, let's display the data in the template section of our component, just as we have always done. Even though it appears we have set the pets to an empty array, the vue-firestore's firestore function will retrieve the data and update the pets.</p>
+        <h4>myvueapp/src/components/MyComponent.vue</h4>
+        <pre data-language="html">
+&lt;ul&gt;
+    &lt;li v-for="(pet, idx) in pets" v-bind:key="idx"&gt;{{ pet }}&lt;/li&gt;
+&lt;/ul&gt;
+        </pre>
+        <p>Now we can see the data from our database right here in our Vue application!</p>
+    </li>
+</ol>

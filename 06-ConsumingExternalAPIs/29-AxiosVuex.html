@@ -1,0 +1,59 @@
+<h1>Authentication and Vuex</h1>
+<h2>Objectives:</h2>
+<ul>
+    <li>Understand how authentication and Vuex work together</li>
+    <li>Learn how to implement them together</li>
+</ul>
+<hr>
+<p>Remember that Vuex helps us manage <em>state</em>. Remember that by default, web applications are stateless, meaning no interaction is related to any other interaction. Imagine if you had to verify who you are every time you wanted to take an action on a website. Not fun! This is why it's important to consider state when we talk about authentication. That way, as the user navigates throuh our application, we just need to check at the beginning who they are, and then store their information in state.</p>
+<p>To start, we'll assume that a user isn't logged in.</p>
+<h4>myvueapp/src/main.js</h4>
+<pre data-language="javascript">
+    // imports, etc.
+
+    const store = new Vuex.Store({
+        state: {
+            user: null,
+            error: null
+        }
+    })     
+</pre>
+<p>Then we'll want to add an action that will capture a user registering:</p>
+<h4>myvueapp/src/main.js</h4>
+<pre data-language="javascript">
+    // imports, etc.
+    import firebase from 'firebase/app';    // add this import
+
+    const store = new Vuex.Store({
+        state: {
+            user: null
+        },
+        mutations: {
+            setUser(state, payload) {
+                state.user = payload;
+            },
+            setError(state, payload) {
+                state.error = payload;
+            }
+        },
+        actions: {
+            async registerAction(context, payload) {
+                try {
+                    let newUser = await firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password);
+                    context.commit('setUser', newUser);
+                    context.commit('setError', null);
+                }
+                catch(error) {
+                    console.log(error);
+                    context.commit('setError', error);
+                }
+            })
+        }
+    })     
+</pre>
+<p>One great thing about outsourcing this to Firebase is that it will perform some validations for us. If the format of the email isn't correct, for example, an error will be thrown. It also ensures that a given email address is not registered more than once. For a full list of errors, check out <a href="https://firebase.google.com/docs/reference/js/firebase.auth.Auth.html?authuser=0#createuserwithemailandpassword" target="_blank">the documentation</a>.</p>
+<p>The process for logging in will be very similar, but we'll use a different Firebase authentication method:</p>
+<pre data-language="javascript">
+    firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
+</pre>
+<p>Firebase Authentication also takes care of validations like ensuring the email represents an existing user or that the correct password was provided. Again, a full list of errors can be found in <a href="https://firebase.google.com/docs/reference/js/firebase.auth.Auth.html?authuser=0#signinwithemailandpassword" target="_blank">the documentation</a>.</p>

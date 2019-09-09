@@ -1,0 +1,24 @@
+<h1>Cloud Firestore</h1>
+<h2>Objectives:</h2>
+<ul>
+    <li>Understand what Cloud Firestore is</li>
+    <li>Learn how to set up a Cloud Firestore database</li>
+</ul>
+<hr>
+<p>Cloud Firestore is Firebase's NoSQL database. If you've worked with databases using SQL, then you've worked with a <em>relational</em> database. This is where data is stored in tables with columns of data, and those tables have keys that allow the tables to be joined together. In contrast, a NoSQL or <em>non-relational</em> database stores data in <b>documents</b>, which are held in <b>collections</b>. When working with databases, there are some key operations we'll typically use to interact with them:</p>
+<ul>
+    <li><b>C</b>reate - add new data</li>
+    <li><b>R</b>ead - retrieve/view some or all of the data</li>
+    <li><b>U</b>pdate - edit existing data</li>
+    <li><b>D</b>elete - remove existing data</li>
+</ul>
+<h3>Setting up a New Cloud Firestore Database</h3>
+<p>If we want to use the database, we'll first have to set it up in our Firebase console. We've already created our first project. From there:</p>
+<ol>
+    <li>Either click on the Cloud Firestore card in the main window under "Choose a product to add to your app" or click on the "Database" option in the left Develop menu.</li>
+    <li>Click "Create database"</li>
+    <li>Since we're just learning, let's select test mode to start</li>
+    <li>The next screen prompts you to select a location. Since our projects will be relatively light and small, we don't have to worry about location too much, so you can go ahead and select the default. (In the real world, though, you may want to consider choosing a location based on where you anticipate the majority of your users to be located, as physical proximity can result in improved performance.)</li>
+    <li>Click "Done." It may take a minute or two to set up, but that's because Google is managing several configurations so we don't have to worry about it on our end!</li>
+    <li>To get used to the notion of collections and documents, go ahead and add a collection and a few documents to that collection.</li>
+</ol>
