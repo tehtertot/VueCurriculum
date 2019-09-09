@@ -5,8 +5,28 @@
   <li>Learn how to trigger actions with lifecycle methods</li>
 </ul>
 <h2>Component lifecycle</h2>
-<p>Sometimes, user interactioon just isn't enough to get the job done. In those cases, Vue gives us access to a host of what are known as "lifecycle hooks" to perform actions at various points in time. For instance, maybe our user wants to view a certain page, but before we show that page to them, we need to check whether or not they are allowed to view it. We can ask Vue to perform a task every time the component is about to be rendered. Or maybe our user is viewing a form but they decide to cancel; before we destroy the form and render something else, we may want to ask them if they're sure that they want to leave the page. These are two common examples but there are many more lifecycle hooks that we can gain access to if we're in need. Check out the Vue docs <a href="https://vuejs.org/v2/guide/instance.html#Instance-Lifecycle-Hooks">here</a> to see what Vue has to offer. Be sure to check out the lifecycle diagram, it has tons of great information about when lifecycle methods are triggered!</p>
-<p>Let's take a look at a trivial example of what using a lifecycle hook might look like:</p>
+<p>
+  Sometimes, user interactioon just isn't enough to get the job done. In those
+  cases, Vue gives us access to a host of what are known as "lifecycle hooks" to
+  perform actions at various points in time. For instance, maybe our user wants
+  to view a certain page, but before we show that page to them, we need to check
+  whether or not they are allowed to view it. We can ask Vue to perform a task
+  every time the component is about to be rendered. Or maybe our user is viewing
+  a form but they decide to cancel; before we destroy the form and render
+  something else, we may want to ask them if they're sure that they want to
+  leave the page. These are two common examples but there are many more
+  lifecycle hooks that we can gain access to if we're in need. Check out the Vue
+  docs
+  <a href="https://vuejs.org/v2/guide/instance.html#Instance-Lifecycle-Hooks"
+    >here</a
+  >
+  to see what Vue has to offer. Be sure to check out the lifecycle diagram, it
+  has tons of great information about when lifecycle methods are triggered!
+</p>
+<p>
+  Let's take a look at a trivial example of what using a lifecycle hook might
+  look like:
+</p>
 <h4>RandomComponent.vue</h4>
 <pre data-language="javascript">
   export default {
@@ -19,8 +39,20 @@
     }
   }
 </pre>
-<p>First, notice that we're using our standard ES6 method definition syntax here. Vue is looking for methods with a certain name and if it finds them on a component, then it will do something special. So here the names "mounted" and "destroyed" are important to Vue, just like "name", "methods", "data", and other Vue properties' names are important. Secondly, notice that these functions can do anything a JavaScript function can do. We can print something, modify data, etc. We can do whatever we'd like!</p>
-<p>If you read the lifecycle hooks documentation above you're probably already aware, but if you skipped it you'd know that there's a whole list of lifecycle methods to choose from depending on what your needs are.</p>
+<p>
+  First, notice that we're using our standard ES6 method definition syntax here.
+  Vue is looking for methods with a certain name and if it finds them on a
+  component, then it will do something special. So here the names "mounted" and
+  "destroyed" are important to Vue, just like "name", "methods", "data", and
+  other Vue properties' names are important. Secondly, notice that these
+  functions can do anything a JavaScript function can do. We can print
+  something, modify data, etc. We can do whatever we'd like!
+</p>
+<p>
+  If you read the lifecycle hooks documentation above you're probably already
+  aware, but if you skipped it you need to know that there's a whole list of
+  lifecycle methods to choose from depending on what your needs are.
+</p>
 <ul>
   <li>beforeCreate</li>
   <li>created</li>
@@ -31,4 +63,7 @@
   <li>beforeDestroy</li>
   <li>destroyed</li>
 </ul>
-<p>This gives us tons and tons of flexibility. While it might not seem like a big deal at the moment, just know that this is another tool in your arsenal.</p>
+<p>
+  This gives us tons and tons of flexibility. While it might not seem like a big
+  deal at the moment, just know that this is another tool in your arsenal.
+</p>

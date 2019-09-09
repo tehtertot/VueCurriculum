@@ -1,12 +1,20 @@
 <h1>Our First Vue Application</h1>
 <h2>Objectives:</h2>
 <ul>
-    <li>Get started using Vue</li>
-    <li>Learn about the Vue class</li>
+  <li>Get started using Vue</li>
+  <li>Learn about the Vue class</li>
 </ul>
-<hr>
-<p>One of the nice things about Vue is how lightweight it is compared to other front-end frameworks. While we can spin up a server to host our web application, we can also just import it into our HTML file directly (much like adding the jQuery library to our HTML file).</p>
-<p>Let's get started by creating a folder called hello_vue and add one new HTML file to it. Along with the standard head elements, add the following:</p>
+<hr />
+<p>
+  One of the nice things about Vue is how lightweight it is compared to other
+  front-end frameworks. While we can spin up a server to host our web
+  application, we can also just import it into our HTML file directly (much like
+  adding the jQuery library to our HTML file).
+</p>
+<p>
+  Let's get started by creating a folder called hello_vue and add one new HTML
+  file to it. Along with the standard head elements, add the following:
+</p>
 <h4>hello_vue/index.html</h4>
 <pre data-language="html">
     &lt;head&gt;
@@ -19,12 +27,35 @@
         &lt;/div&gt;
     &lt;/body&gt;
 </pre>
-<p>Open this page in your browser. What do you think you'll see? While it may look a little strange to you, the browser just reads all those characters literally.</p>
-<p>In Vue (and in many templating engines), the double curly brackets -- often referred to as <em>moustache</em> syntax :) -- are used to indicate <em><b>data binding</b></em>. This means that the expression inside the curly braces is <em>bound</em> to a value through JavaScript. So let's make that happen and make our first Vue application!</p>
-<p>Create a file called <code>index.js</code> in the same folder. With the import statement added in the head tags, one of the things we now have access to is to a function called Vue, which takes an object as an argument. There are several different values we can initialize, but to start, we'll just focus on two:</p>
+<p>
+  Open this page in your browser. What do you think you'll see? While it may
+  look a little strange to you, the browser just reads all those characters
+  literally.
+</p>
+<p>
+  In Vue (and in many templating engines), the double curly brackets -- often
+  referred to as <em>moustache</em> syntax :) -- are used to indicate
+  <em><b>data binding</b></em
+  >. This means that the expression inside the curly braces is <em>bound</em> to
+  a value through JavaScript. So let's make that happen and make our first Vue
+  application!
+</p>
+<p>
+  Create a file called <code>index.js</code> in the same folder. With the import
+  statement added in the head tags, one of the things we now have access to is
+  to a function called Vue, which takes an object as an argument. There are
+  several different values we can initialize, but to start, we'll just focus on
+  two:
+</p>
 <ul>
-    <li><b>el</b> - a <em>string</em>e of the id of the element to which Vue should be applied, preceded by a # (same format as an id in css)</li>
-    <li><b>data</b> - an <em>object</em> defining any variables being used, where the keys are the variable names</li>
+  <li>
+    <b>el</b> - a <em>string</em> of the id of the element to which Vue should
+    be applied, preceded by a # (same format as an id in css)
+  </li>
+  <li>
+    <b>data</b> - an <em>object</em> defining any variables being used, where
+    the keys are the variable names
+  </li>
 </ul>
 <h4>hello_vue/index.js</h4>
 <pre data-language="javascript">
@@ -35,8 +66,21 @@
         }
     })
 </pre>
-<p>Take a second to break down this code and understand the pieces. Remember: <code>Vue</code> is just the name of a function, and it takes one <em>argument in the form of an object</em>. In the first line, we're creating <em>a new Vue instance</em> and passing in 1 argument. That argument is an object with 2 key-value pairs. The first key, <code>el</code>, indicates this instance is applicable to the HTML element with the id of "app." The second key, <code>data</code>, is an object that has one key-value pair. Since we used the variable name "message" in our HTML (remember the double curly braces?), we use that same name as the key in our data object.</p>
-<p>Before we see this code in action, we'll need to link to this javascript file in our HTML.</p>
+<p>
+  Take a second to break down this code and understand the pieces. Remember:
+  <code>Vue</code> is just the name of a function, and it takes one
+  <em>argument in the form of an object</em>. In the first line, we're creating
+  <em>a new Vue instance</em> and passing in 1 argument. That argument is an
+  object with 2 key-value pairs. The first key, <code>el</code>, indicates this
+  instance is applicable to the HTML element with the id of "app." The second
+  key, <code>data</code>, is an object that has one key-value pair. Since we
+  used the variable name "message" in our HTML (remember the double curly
+  braces?), we use that same name as the key in our data object.
+</p>
+<p>
+  Before we see this code in action, we'll need to link to this javascript file
+  in our HTML.
+</p>
 <h4>hello_vue/index.html</h4>
 <pre data-language="html">
     &lt;!-- previous html... --&gt;
@@ -48,5 +92,11 @@
         &lt;script src="index.js"&gt;&lt;/script&gt;
     &lt;/body&gt;
 </pre>
-<p>Why did we put the script tag inside the body? We need to add it <em>after</em> we've imported the Vue framework, and also after we've defined the element we'll be applying the code to. Code is read from top to bottom, so go ahead and test that line in different places to see if you can get a couple of different errors! (Open your browser's console to see the errors.)</p>
+<p>
+  Why did we put the script tag inside the body? We need to add it
+  <em>after</em> we've imported the Vue framework, and also after we've defined
+  the element we'll be applying the code to. Code is read from top to bottom, so
+  go ahead and test that line in different places to see if you can get a couple
+  of different errors! (Open your browser's console to see the errors.)
+</p>
 <!-- video showing without each of the pieces added, to explain why they are each necessary -->

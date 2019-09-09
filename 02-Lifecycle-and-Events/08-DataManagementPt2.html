@@ -6,11 +6,39 @@
   <li>See a simple implementation of a custom store</li>
 </ul>
 <h2>One way data flow</h2>
-<p>One of the paradigms central to Vue's philosophy is the concept of "one way data flow". This means that rather than our children, or descendent components updating their own data and having their ancestors be aware of the new updates, they should instead trigger a change to data higher up in the ancestry chain. This all sounds a bit convoluted, so let's first understand <em>why</em> this is important in Vue and then we'll revisit this concept.</p>
-<p>Vue is fast and reliable because it only ever updates the components that need to be updated. This means that when I click a button that makes something appear on the screen, the only thing loaded by Vue was the thing that appeared on the screen. The button and all the other visible elements didn't have to be reloaded. This is a huge step-up from clicking, refreshing the page, and then re-rendering all of the elements a user sees. If the page is packed with content that's difficult to load, it could lead to a really disruptive experience. The way Vue works is by watching for changes to data, finding the highest level component relying on that data, and rerendering that component along with all the descendents that need to be updated.</p>
-<p>So why do we care about one way data flow? Well, because triggering a change in our data will cause a chain reaction that results in the necessary components being reloaded. By triggering changes in data from our children to their ancestors, we're allowing Vue to decide which components need to be reloaded. In other words, we're letting Vue do what it does best!</p>
+<p>
+  One of the paradigms central to Vue's philosophy is the concept of "one way
+  data flow". This means that rather than our children, or descendent components
+  updating their own data and having their ancestors be aware of the new
+  updates, they should instead trigger a change to data higher up in the
+  ancestry chain. This all sounds a bit convoluted, so let's first understand
+  <em>why</em> this is important in Vue and then we'll revisit this concept.
+</p>
+<p>
+  Vue is fast and reliable because it only ever updates the components that need
+  to be updated. This means that when I click a button that makes something
+  appear on the screen, the only thing loaded by Vue was the thing that appeared
+  on the screen. The button and all the other visible elements didn't have to be
+  reloaded. This is a huge step-up from clicking, refreshing the page, and then
+  re-rendering all of the elements a user sees. If the page is packed with
+  content that's difficult to load, it could lead to a really disruptive
+  experience. The way Vue works is by watching for changes to data, finding the
+  highest level component relying on that data, and rerendering that component
+  along with all the descendents that need to be updated.
+</p>
+<p>
+  So why do we care about one way data flow? Well, because triggering a change
+  in our data will cause a chain reaction that results in the necessary
+  components being reloaded. By triggering changes in data from our children to
+  their ancestors, we're allowing Vue to decide which components need to be
+  reloaded. In other words, we're letting Vue do what it does best!
+</p>
 <h2>Flux</h2>
-<p>There are a few ways we can trigger changes to our data, but by far the most widely used method is by managing a global store. A store might look something like this:</p>
+<p>
+  There are a few ways we can trigger changes to our data, but by far the most
+  widely used method is by managing a global store. A store might look something
+  like this:
+</p>
 <h4>store.js</h4>
 <pre data-language="javascript">
   export default {
@@ -25,7 +53,21 @@
     }
   }
 </pre>
-<p>If you need a quick refresher on ES6 method definitions syntax check out <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Method_definitions">this link</a>. Notice that we have an exported object in a file called <code>store.js</code>, in this case <code>store.js</code> is a sibling to the <code>main.js</code> file in our Vue app. Inside the store object we have a property called state, which in turn is an object, and a few methods that modify the state object. With this pattern, we can import the store and its associated information in any component. Not just that, we can <em>change</em> any of our store's data from any component, and Vue will intelligently update all the components that should change! Check out how that might work:</p>
+<p>
+  If you need a quick refresher on ES6 method definitions syntax check out
+  <a
+    href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Method_definitions"
+    >this link</a
+  >. Notice that we have an exported object in a file called
+  <code>store.js</code>, in this case <code>store.js</code> is a sibling to the
+  <code>main.js</code> file in our Vue app. Inside the store object we have a
+  property called state, which in turn is an object, and a few methods that
+  modify the state object. With this pattern, we can import the store and its
+  associated information in any component. Not just that, we can
+  <em>change</em> any of our store's data from any component, and Vue will
+  intelligently update all the components that should change! Check out how that
+  might work:
+</p>
 <h4>RandomComponent.vue</h4>
 <h5>html</h5>
 <pre data-language="html">
@@ -50,15 +92,50 @@
     },
     methods: {
       onClick() {
-        store.state.clearMessage();
+        store.clearMessage();
       }
     }
   }
 </pre>
-<p>Notice that the component can have its own local state. This can be useful for storing information that will only ever impact this component and its descendants. <code>localState</code> as a name is completely arbitrary, as well as the data stored inside it. You can deal with it however you wish! What's really important is that with an import of the store object, we can now globally access and manipulate information that's accessible to our entire application!</p>
+<p>
+  Notice that the component can have its own local state. This can be useful for
+  storing information that will only ever impact this component and its
+  descendants. <code>localState</code> as a name is completely arbitrary, as
+  well as the data stored inside it. You can deal with it however you wish!
+  What's really important is that with an import of the store object, we can now
+  globally access and manipulate information that's accessible to our entire
+  application!
+</p>
 <h2>A note about manipulating the store</h2>
-<p>Something that we want to be sure of is that we never manipulate information in the store directly. There are various reasons for this, but mostly it boils down to the ability to audit and debug our code. Before we can get into this, take a minute to review the concept of variables being passed by reference vs. by value <a href="https://codeburst.io/explaining-value-vs-reference-in-javascript-647a975e12a0">here</a>. Okay, now that we have that out of the way, something that we need to realize is that when we directly mutate (change) something that's passed by reference, we're going to open ourselves up to potential bugs. It also makes our code much harder to debug. Let's assume a situation where a Vue app has tons of traffic, or is just really complex. We might have 200 data points changing every second, and if we don't have the ability to audit what changed that data and in what order, then we will have an incredibly hard time debugging our code. The problem is well-illustrated in <a href="https://daveceddia.com/why-not-modify-react-state-directly/">this example</a> using React. While we're not introducing the concept of setState (it doesn't really exist in Vue), we should still adhere to the same rules. In fact, once we start using Vuex, we'll get access to tools that make our code much more auditable.</p>
-<p>A good rule of thumb here is that whenever we want to update state, we should <em>completely overwrite</em> what we're replacing. Below are two examples:</p>
+<p>
+  Something that we want to be sure of is that we never manipulate information
+  in the store directly. There are various reasons for this, but mostly it boils
+  down to the ability to audit and debug our code. Before we can get into this,
+  take a minute to review the concept of variables being passed by reference vs.
+  by value
+  <a
+    href="https://codeburst.io/explaining-value-vs-reference-in-javascript-647a975e12a0"
+    >here</a
+  >. Okay, now that we have that out of the way, something that we need to
+  realize is that when we directly mutate (change) something that's passed by
+  reference, we're going to open ourselves up to potential bugs. It also makes
+  our code much harder to debug. Let's assume a situation where a Vue app has
+  tons of traffic, or is just really complex. We might have 200 data points
+  changing every second, and if we don't have the ability to audit what changed
+  that data and in what order, then we will have an incredibly hard time
+  debugging our code. The problem is well-illustrated in
+  <a href="https://daveceddia.com/why-not-modify-react-state-directly/"
+    >this example</a
+  >
+  using React. While we're not introducing the concept of setState (it doesn't
+  really exist in Vue), we should still adhere to the same rules. In fact, once
+  we start using Vuex, we'll get access to tools that make our code much more
+  auditable.
+</p>
+<p>
+  A good rule of thumb here is that whenever we want to update state, we should
+  <em>completely overwrite</em> what we're replacing. Below are two examples:
+</p>
 <h4>bad</h4>
 <pre data-language="javascript">
   export default {
@@ -82,5 +159,34 @@
     }
   }
 </pre>
-<p>The javascript "spread" operator greatly assists us with our overwriting of reference types. Check out usage of spread syntax for arrays <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax#Spread_in_array_literals">here</a> and for objects <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax#Spread_in_object_literals">here</a>. This pattern of storing data globally, never mutating state directly, and allowing data to flow one direction from top to bottom is called Flux. Flux was originally popularized in React (although it too had its predecessors). You can read more about Flux <a href="https://github.com/facebook/flux/tree/master/examples/flux-concepts">here</a>. It might feel a bit daunting to read the Flux descriptions, they're a bit advanced. Additionally, we're not showing off Flux in it's purest form, but the basic concepts are similar, so you can be confident that if you follow the last few lessons that you'll be getting comfortable using a Flux pattern. Over time, the documentation will be easier to understand, and you'll gain more confidence, but it's okay if it's not all clicking right away. Pick up the pieces that you understand and be sure to ask your instructor for guidance if you feel overwhelmed.</p>
-<p>Armed with this new knowledge of the store pattern we're ready to take on a much bigger and more interesting project! Be sure to reference this pattern for your next assignment!</p>
+<p>
+  The javascript "spread" operator greatly assists us with our overwriting of
+  reference types. Check out usage of spread syntax for arrays
+  <a
+    href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax#Spread_in_array_literals"
+    >here</a
+  >
+  and for objects
+  <a
+    href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax#Spread_in_object_literals"
+    >here</a
+  >. This pattern of storing data globally, never mutating state directly, and
+  allowing data to flow one direction from top to bottom is called Flux. Flux
+  was originally popularized in React (although it too had its predecessors).
+  You can read more about Flux
+  <a href="https://github.com/facebook/flux/tree/master/examples/flux-concepts"
+    >here</a
+  >. It might feel a bit daunting to read the Flux descriptions, they're a bit
+  advanced. Additionally, we're not showing off Flux in it's purest form, but
+  the basic concepts are similar, so you can be confident that if you follow the
+  last few lessons that you'll be getting comfortable using a Flux pattern. Over
+  time, the documentation will be easier to understand, and you'll gain more
+  confidence, but it's okay if it's not all clicking right away. Pick up the
+  pieces that you understand and be sure to ask your instructor for guidance if
+  you feel overwhelmed.
+</p>
+<p>
+  Armed with this new knowledge of the store pattern we're ready to take on a
+  much bigger and more interesting project! Be sure to reference this pattern
+  for your next assignment!
+</p>
