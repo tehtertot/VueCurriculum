@@ -1,10 +1,42 @@
-<h1>title</h1>
+<h1>Final Thoughts</h1>
 <h2>Objectives:</h2>
 <ul>
-<li>obj</li>
+    <li>Consider authenticated routes</li>
+    <li>Encourage continued learning</li>
 </ul>
 <hr>
-<p>We're coming upon the last assignment for this chapter, and it's a big one! So before jumping in, take a deep breath and be proud of how far you've come! After just a few weeks, you're now going to build something akin to Facebook! Pretty amazing, right?</p>
-<p></p>
+<p>We're coming upon the last assignment for this chapter, and it's a big one! So before jumping in, take a deep breath and be proud of how far you've come! After just a few weeks, you're now going to build something the beginning of your very own Facebook-like app! Pretty amazing, right?</p>
+<p>Now that we've learned about routing, authentication, and the request-response cycle as a whole, there are a couple of things to consider. What if we want to make sure the user can't access a page if they aren't logged in? Here's some code to consider:</p>
+<h4>myvueapp/src/router/index.js</h4>
+<pre data-language="javascript">
+    // import statements
 
-<!-- nested documents -->
+    Vue.use(VueRouter);
+
+    // instead of exporting right away, we're going to add some customization to this router, so we need it as a variable
+    let router = new VueRouter({        
+        routes: [
+            // other routes
+            {
+                path: '/secret',
+                component: SpecialContent,
+                name: 'special',
+                meta: {
+                    requiresAuth: true,
+                },
+            },
+        ]
+    })
+    
+    router.beforeEach((to, from, next) => {
+        let currentUser = firebase.auth().currentUser;
+        let requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+        
+        if (requiresAuth && !currentUser) next('/')
+        else next()
+        })
+    
+    export default router;
+</pre>
+<p>In this code snippet, we are revising our router by adding an extra property on certain routes that should only be reachable if the user is logged in. In the actual route, we've added a meta tag with a key "requiresAuth." Then, after we've declared our routes, we are adding functionality so that before any route gets executed, it is run through the <code>beforeEach</code> method shown, where <code>to</code> is the destination path, <code>from</code> is the current path, and <code>next</code> is a method that we can manipulate to set what route will actually happen next. First, we check to see if there is in fact a current user. Then we check if the destination path has the meta property "requiresAuth". If it does and there is no active user, we are forcing the next route to actually be the root route; otherwise, we will allow the next route to proceed as specified.</p>
+<p>We know we have given you a lot to digest in this short time! Hopefully you're not feeling too overwhelmed. A lot of becoming a developer is becoming comfortable with being comfortable with what you know, and even more comfortable with all the things you <em>don't</em> know. We've just scratched the surface, but we are confident that as you practice these skills, you'll be able to understand the fundamental patterns that will help you be successful in whatever role you take on!</p>
