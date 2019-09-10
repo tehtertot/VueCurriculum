@@ -26,11 +26,11 @@
 
     const store = new Vuex.Store({
         state: {
-            user: null
+            userId: null
         },
         mutations: {
-            setUser(state, payload) {
-                state.user = payload;
+            setUserId(state, payload) {
+                state.userId = payload;
             },
             setError(state, payload) {
                 state.error = payload;
@@ -39,8 +39,9 @@
         actions: {
             async registerAction(context, payload) {
                 try {
-                    let newUser = await firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password);
-                    context.commit('setUser', newUser);
+                    await firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password);
+                    let newUser = firebase.auth().currentUser;  // after user is created, it is retrieved
+                    context.commit('setUserId', newUser.uid);   // .uid has the user's unique identifier
                     context.commit('setError', null);
                 }
                 catch(error) {
@@ -57,3 +58,16 @@
     firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
 </pre>
 <p>Firebase Authentication also takes care of validations like ensuring the email represents an existing user or that the correct password was provided. Again, a full list of errors can be found in <a href="https://firebase.google.com/docs/reference/js/firebase.auth.Auth.html?authuser=0#signinwithemailandpassword" target="_blank">the documentation</a>.</p>
+<p>With Firebase authentication, it's not actually required to separately maintain the user id specifically--to retrieve the current user's id you can use the following in your code if a user is logged in:</p>
+<pre data-language="javascript">
+    // retrieves current logged in user
+    firebase.auth().currentUser
+
+    // retrieves current logged in user's id
+    firebase.auth().currentUser.uid
+</pre>
+<p>But sometimes it can be nice to have a quick variable to reference via state. For example, instead of having to make a call to Firebase to display the user's name, we can store it with Vuex and retrieve it that way.</p>
+<p>One more important authentication method is logging out. Again, this is a common activity and Firebase Authentication will set the current user to null upon signing out:</p>
+<pre data-language="javascript">
+    firebase.auth().signOut()
+</pre>
