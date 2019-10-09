@@ -28,14 +28,16 @@
 </ul>
 <p>Each "Genre"MovieList component needs to know about only the movies in its defined genre. In other words, rather than using the whole state object at face value, we're going to modify it for each of our components. This is derived state. Each component needs its own version of state "derived" from the original version of state. This can be as complex or as simple as we need it to be, and we can mix and match getters with state that doesn't need to be derived. Let's see what locally derived state would look like in the FamilyMovieList component.</p>
 <h4>FamilyMovieList.vue--html</h4>
-&lt;template&gt;
-  &lt;div&gt;
-    &lt;h2&gt;Comedy&lt;/h2&gt;
-    &lt;ul&gt;
-      &lt;li v-for="movie in comedyMovies" :key="movie.id"&gt;{{ movie.title }}&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/div&gt;
-</template>
+<pre data-language="html">
+  &lt;template&gt;
+    &lt;div&gt;
+      &lt;h2&gt;Comedy&lt;/h2&gt;
+      &lt;ul&gt;
+        &lt;li v-for="movie in comedyMovies" :key="movie.id"&gt;{{ movie.title }}&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  &lt;/template&gt;
+</pre>
 <h4>FamilyMovieList.vue--script</h4>
 <pre data-language="javascript">
 export default {

@@ -40,22 +40,22 @@
     VUE_APP_APPID="your-app-id"
     </pre>
     <li>Next, we'll actually use these values in our application setup. Notice we use <code>process.env</code> to access the environmental variables we set up in the previous file. To keep our code organized, we'll create a separate file next to our main.js file called firebase.js. This is where we'll initialize the app with our Firebase configuration details.</li>
-    <h4>myvueapp/src/firebase.js</h4>
-    <pre>
-        import firebase from 'firebase/app';
-
-        // referencing configuration values from .env.development
-        var firebaseConfig = {
-            apiKey: process.env.VUE_APP_APIKEY,
-            authDomain: process.env.VUE_APP_AUTHDOMAIN,
-            databaseURL: process.env.VUE_APP_DATABASEURL,
-            projectId: process.env.VUE_APP_PROJECTID,
-            storageBucket: process.env.VUE_APP_STORAGEBUCKET,
-            messagingSenderId: process.env.VUE_APP_MESSAGINGSENDERID,
-            appId: process.env.VUE_APP_APPID,
-        };
-        
-        // Initialize Firebase with configurations from above
-        firebase.initializeApp(firebaseConfig);
-    </pre>
 </ol>
+<h4>myvueapp/src/firebase.js</h4>
+<pre data-language="javascript">
+    import firebase from 'firebase/app';
+
+    // referencing configuration values from .env.development
+    var firebaseConfig = {
+        apiKey: process.env.VUE_APP_APIKEY,
+        authDomain: process.env.VUE_APP_AUTHDOMAIN,
+        databaseURL: process.env.VUE_APP_DATABASEURL,
+        projectId: process.env.VUE_APP_PROJECTID,
+        storageBucket: process.env.VUE_APP_STORAGEBUCKET,
+        messagingSenderId: process.env.VUE_APP_MESSAGINGSENDERID,
+        appId: process.env.VUE_APP_APPID,
+    };
+    
+    // Initialize Firebase with configurations from above
+    firebase.initializeApp(firebaseConfig);
+</pre>
